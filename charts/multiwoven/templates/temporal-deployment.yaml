@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-temporal
+  labels:
+    io.kompose.service: temporal
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.temporal.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: temporal
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: temporal
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: DB
+          value: {{ quote .Values.temporal.temporal.env.db }}
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: DB_PORT
+              name: {{ include "chart.fullname" . }}-multiwoven-config
+        - name: POSTGRES_PWD
+          valueFrom:
+            configMapKeyRef:
+              key: DB_PASSWORD
+              name: {{ include "chart.fullname" . }}-multiwoven-config
+        - name: POSTGRES_SEEDS
+          valueFrom:
+            configMapKeyRef:
+              key: DB_HOST
+              name: {{ include "chart.fullname" . }}-multiwoven-config
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DB_USERNAME
+              name: {{ include "chart.fullname" . }}-multiwoven-config
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag
+          | default .Chart.AppVersion }}
+        name: temporal
+        ports:
+        - containerPort: 7233
+        resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
+      restartPolicy: Always
