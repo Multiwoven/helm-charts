@@ -26,22 +26,22 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PORT
-              name: {{ include "chart.fullname" . }}-multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_PWD
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: {{ include "chart.fullname" . }}-multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_SEEDS
           valueFrom:
             configMapKeyRef:
               key: DB_HOST
-              name: {{ include "chart.fullname" . }}-multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: {{ include "chart.fullname" . }}-multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag

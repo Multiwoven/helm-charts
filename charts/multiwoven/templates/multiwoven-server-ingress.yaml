@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "chart.fullname" . }}-multiwoven-server-ingress
+  name: {{ include "chart.fullname" . }}-server-ingress
   labels:
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
@@ -13,7 +13,7 @@ spec:
       paths:
       - backend:
           service:
-            name: '{{ include "chart.fullname" . }}-multiwoven-server'
+            name: '{{ include "chart.fullname" . }}-server'
             port:
               number: 3000
         path: /

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-multiwoven-server
+  name: {{ include "chart.fullname" . }}-server
   labels:
     app: multiwoven-server
     io.kompose.service: multiwoven-server
@@ -26,7 +26,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-multiwoven-config
+            name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag
           | default .Chart.AppVersion }}
         livenessProbe:

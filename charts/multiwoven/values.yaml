@@ -1,7 +1,7 @@
 kubernetesClusterDomain: cluster.local
 multiwovenConfig:
   apiHost: localhost:3000
-  dbHost: multiwoven-multiwoven-postgresql
+  dbHost: multiwoven-postgresql
   dbPassword: password
   dbPort: "5432"
   dbUsername: multiwoven
