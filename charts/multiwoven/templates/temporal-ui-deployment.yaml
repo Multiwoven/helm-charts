@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-temporal-ui
+  namespace: {{ .Values.kubernetesNamespace }}
+
   labels:
     io.kompose.service: temporal-ui
   {{- include "chart.labels" . | nindent 4 }}

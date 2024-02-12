@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-temporal
+  namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: temporal
   {{- include "chart.labels" . | nindent 4 }}

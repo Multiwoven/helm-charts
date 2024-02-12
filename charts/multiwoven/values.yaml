@@ -1,4 +1,5 @@
 kubernetesClusterDomain: cluster.local
+kubernetesNamespace: multiwoven
 multiwovenConfig:
   apiHost: localhost:3000
   dbHost: multiwoven-postgresql
