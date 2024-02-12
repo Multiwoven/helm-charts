@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chart.fullname" . }}-temporal-ui
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: temporal-ui
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+spec:
+  type: {{ .Values.temporalUi.type }}
+  selector:
+    io.kompose.service: temporal-ui
+  {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.temporalUi.ports | toYaml | nindent 2 -}}

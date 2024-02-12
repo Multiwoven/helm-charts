@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-server
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    app: {{ include "chart.fullname" . }}-server
+    io.kompose.service: {{ include "chart.fullname" . }}-server
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.multiwovenServer.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-server
+      io.kompose.service: {{ include "chart.fullname" . }}-server
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-server
+        io.kompose.service: {{ include "chart.fullname" . }}-server
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "chart.fullname" . }}-config
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        name: {{ include "chart.fullname" . }}-server
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent
+          10 }}
+      restartPolicy: Always

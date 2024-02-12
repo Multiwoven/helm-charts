@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-temporal-ui
+  namespace: {{ .Values.kubernetesNamespace }}
+
+  labels:
+    io.kompose.service: temporal-ui
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.32.0 (HEAD)
+spec:
+  replicas: {{ .Values.temporalUi.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: temporal-ui
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: temporal-ui
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.32.0 (HEAD)
+    spec:
+      containers:
+      - env:
+        - name: TEMPORAL_ADDRESS
+          value: {{ quote .Values.temporalUi.temporalUi.env.temporalAddress }}
+        - name: TEMPORAL_CORS_ORIGINS
+          value: {{ quote .Values.temporalUi.temporalUi.env.temporalCorsOrigins }}
+        - name: TEMPORAL_UI_PORT
+          value: {{ quote .Values.temporalUi.temporalUi.env.temporalUiPort }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag
+          | default .Chart.AppVersion }}
+        name: temporal-ui
+        ports:
+        - containerPort: 8080
+          hostPort: 8080
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always

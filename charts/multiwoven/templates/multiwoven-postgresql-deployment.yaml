@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-postgresql
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.multiwovenPostgresql.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: DB_PASSWORD
+              name: {{ include "chart.fullname" . }}-config
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DB_USERNAME
+              name: {{ include "chart.fullname" . }}-config
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{
+          .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion
+          }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        name: {{ include "chart.fullname" . }}-postgresql
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        resources: {{- toYaml .Values.multiwovenPostgresql.multiwovenPostgresql.resources
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: {{ include "chart.fullname" . }}-postgresql-pvc
+      volumes:
+      - name: {{ include "chart.fullname" . }}-postgresql-pvc
+        persistentVolumeClaim:
+          claimName: {{ include "chart.fullname" . }}-postgresql-pvc
