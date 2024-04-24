@@ -1,7 +1,7 @@
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 multiwovenConfig:
-  apiHost: api.multiwoven.com
+  apiHost: "4.246.245.140"
   dbHost: multiwoven-postgresql
   dbPassword: password
   dbPort: "5432"
@@ -33,7 +33,13 @@ multiwovenConfig:
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
-  uiHost: app.multiwoven.com
+  uiHost: "4.246.245.140"
+  viteApiHost: "4.246.245.140/server"
+  viteBrandName: "AI Squared"
+  viteBrandLogo: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
+  viteLogoUrl: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
+  viteBrandColor: "rgb(0 36 156/1)"
+  viteBrandHoverColor: "rgb(0 29 125/1)"
 multiwovenPostgresql:
   multiwovenPostgresql:
     image:
@@ -47,9 +53,9 @@ multiwovenPostgresql:
         cpu: 500m
         memory: 1Gi
   ports:
-  - name: postgres
-    port: 5432
-    targetPort: 5432
+    - name: postgres
+      port: 5432
+      targetPort: 5432
   replicas: 1
   type: ClusterIP
 multiwovenServer:
@@ -65,18 +71,36 @@ multiwovenServer:
         cpu: "1"
         memory: 1Gi
   ports:
-  - name: "3000"
-    port: 3000
-    targetPort: 3000
+    - name: "3000"
+      port: 3000
+      targetPort: 3000
+  replicas: 1
+  type: ClusterIP
+multiwovenUI:
+  multiwovenUI:
+    image:
+      repository: multiwoven/multiwoven-ui
+      tag: latest
+    resources:
+      limits:
+        cpu: "2"
+        memory: 2Gi
+      requests:
+        cpu: "1"
+        memory: 1Gi
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
   multiwovenWorker:
     args:
-    - sh
-    - -c
-    - |
-      ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
+      - sh
+      - -c
+      - |
+        ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -93,9 +117,9 @@ pvc:
     storageRequest: 100Mi
 temporal:
   ports:
-  - name: "7233"
-    port: 7233
-    targetPort: 7233
+    - name: "7233"
+      port: 7233
+      targetPort: 7233
   replicas: 1
   temporal:
     env:
@@ -113,14 +137,14 @@ temporal:
   type: ClusterIP
 temporalUi:
   ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
   replicas: 1
   temporalUi:
     env:
       temporalAddress: multiwoven-temporal:7233
-      temporalCorsOrigins: http://localhost:3000
+      temporalCorsOrigins: http://4.246.245.140/
       temporalUiPort: "8080"
     image:
       repository: temporalio/ui
