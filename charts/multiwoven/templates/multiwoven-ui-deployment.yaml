@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multiwoven-server
+  name: multiwoven-ui
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    app: multiwoven-server
-    io.kompose.service: multiwoven-server
+    app: multiwoven-ui
+    io.kompose.service: multiwoven-ui
   # {{- include "chart.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.multiwovenServer.replicas }}
+  replicas: {{ .Values.multiwovenUI.replicas }}
   selector:
     matchLabels:
-      app: multiwoven-server
-      io.kompose.service: multiwoven-server
+      app: multiwoven-ui
+      io.kompose.service: multiwoven-ui
     # {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: multiwoven-server
-        io.kompose.service: multiwoven-server
+        app: multiwoven-ui
+        io.kompose.service: multiwoven-ui
       # {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -28,23 +28,23 @@ spec:
         envFrom:
         - configMapRef:
             name: multiwoven-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag
+        image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag
           | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: 8000
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: multiwoven-server
+        name: multiwoven-ui
         ports:
-        - containerPort: 3000
+        - containerPort: 8000
         readinessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent
+        resources: {{- toYaml .Values.multiwovenUI.multiwovenUI.resources | nindent
           10 }}
       restartPolicy: Always

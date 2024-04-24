@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-postgresql
+  name: multiwoven-postgresql
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
-  {{- include "chart.labels" . | nindent 4 }}
+    io.kompose.service: multiwoven-postgresql
+  # {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenPostgresql.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: {{ include "chart.fullname" . }}-postgresql
-    {{- include "chart.selectorLabels" . | nindent 6 }}
+      io.kompose.service: multiwoven-postgresql
+    # {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: {{ include "chart.fullname" . }}-postgresql
-      {{- include "chart.selectorLabels" . | nindent 8 }}
+        io.kompose.service: multiwoven-postgresql
+      # {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - env:
@@ -25,12 +25,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: {{ include "chart.fullname" . }}-config
+              name: multiwoven-config
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: {{ include "chart.fullname" . }}-config
+              name: multiwoven-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{
@@ -41,7 +41,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 5432
-        name: {{ include "chart.fullname" . }}-postgresql
+        name: multiwoven-postgresql
         ports:
         - containerPort: 5432
         readinessProbe:
@@ -53,8 +53,9 @@ spec:
           | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
-          name: {{ include "chart.fullname" . }}-postgresql-pvc
+          subPath: postgres
+          name: multiwoven-postgresql-pvc
       volumes:
-      - name: {{ include "chart.fullname" . }}-postgresql-pvc
+      - name: multiwoven-postgresql-pvc
         persistentVolumeClaim:
-          claimName: {{ include "chart.fullname" . }}-postgresql-pvc
+          claimName: multiwoven-postgresql-pvc

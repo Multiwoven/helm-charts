@@ -1,22 +1,31 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "chart.fullname" . }}-server-ingress
+  name: multiwoven-server-ingress
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
-  {{- include "chart.labels" . | nindent 4 }}
+  # {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # nginx.ingress.kubernetes.io/rewrite-target: /$1
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   rules:
-  - host:  {{ .Values.multiwovenConfig.apiHost }}
-    http:
+  - http:
       paths:
       - backend:
           service:
-            name: '{{ include "chart.fullname" . }}-server'
+            name: 'multiwoven-server'
             port:
               number: 3000
+        path: /server
+        pathType: Prefix
+      - backend:
+          service:
+            name: 'multiwoven-ui'
+            port:
+              number: 8000
         path: /
         pathType: Prefix
+    # host:  {{ .Values.multiwovenConfig.apiHost }}

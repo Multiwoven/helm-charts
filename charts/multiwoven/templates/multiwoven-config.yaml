@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "chart.fullname" . }}-config
+  name: multiwoven-config
   namespace: {{ .Values.kubernetesNamespace }}
   
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-config
-  {{- include "chart.labels" . | nindent 4 }}
+    io.kompose.service: multiwoven-config
+  # {{- include "chart.labels" . | nindent 4 }}
 data:
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
@@ -53,3 +53,9 @@ data:
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize
     | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
+  VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
+  VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
+  VITE_BRAND_LOGO: {{ .Values.multiwovenConfig.viteBrandLogo | quote }}
+  VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}

@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-temporal-ui
+  name: multiwoven-temporal-ui
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
     io.kompose.service: temporal-ui
-  {{- include "chart.labels" . | nindent 4 }}
+  # {{- include "chart.labels" . | nindent 4 }}
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
@@ -15,13 +15,13 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: temporal-ui
-    {{- include "chart.selectorLabels" . | nindent 6 }}
+    # {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
         io.kompose.service: temporal-ui
-      {{- include "chart.selectorLabels" . | nindent 8 }}
+      # {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         kompose.cmd: kompose convert
         kompose.version: 1.32.0 (HEAD)

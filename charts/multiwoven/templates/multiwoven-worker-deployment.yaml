@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-worker
+  name: multiwoven-worker
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
-    app: {{ include "chart.fullname" . }}-worker
-    io.kompose.service: {{ include "chart.fullname" . }}-worker
-  {{- include "chart.labels" . | nindent 4 }}
+    app: multiwoven-worker
+    io.kompose.service: multiwoven-worker
+  # {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenWorker.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-worker
-      io.kompose.service: {{ include "chart.fullname" . }}-worker
-    {{- include "chart.selectorLabels" . | nindent 6 }}
+      app: multiwoven-worker
+      io.kompose.service: multiwoven-worker
+    # {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-worker
-        io.kompose.service: {{ include "chart.fullname" . }}-worker
-      {{- include "chart.selectorLabels" . | nindent 8 }}
+        app: multiwoven-worker
+        io.kompose.service: multiwoven-worker
+      # {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
@@ -29,10 +29,10 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config
+            name: multiwoven-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag
           | default .Chart.AppVersion }}
-        name: {{ include "chart.fullname" . }}-worker
+        name: multiwoven-worker
         resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent
           10 }}
       restartPolicy: Always
