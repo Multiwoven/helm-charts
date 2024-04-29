@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: multiwoven-config
   namespace: {{ .Values.kubernetesNamespace }}
-  
   labels:
     io.kompose.service: multiwoven-config
   # {{- include "chart.labels" . | nindent 4 }}

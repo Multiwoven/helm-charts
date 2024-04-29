@@ -34,7 +34,7 @@ multiwovenConfig:
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
   uiHost: "4.246.245.140"
-  viteApiHost: "4.246.245.140/server"
+  viteApiHost: "http://4.246.245.140"
   viteBrandName: "AI Squared"
   viteBrandLogo: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
   viteLogoUrl: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
@@ -79,7 +79,7 @@ multiwovenServer:
 multiwovenUI:
   multiwovenUI:
     image:
-      repository: multiwoven/multiwoven-ui
+      repository: angeloaisquared/xtqsnrkm3hkyxsx8mtkgacah
       tag: latest
     resources:
       limits:

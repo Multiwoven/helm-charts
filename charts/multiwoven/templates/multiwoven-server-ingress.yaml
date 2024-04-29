@@ -8,10 +8,12 @@ metadata:
   # {{- include "chart.labels" . | nindent 4 }}
   annotations:
     # nginx.ingress.kubernetes.io/rewrite-target: /$1
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # kubernetes.io/ingress.class: nginx
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    kubernetes.io/ingress.class: azure/application-gateway
 spec:
   rules:
+  - host: app.squared.ai
   - http:
       paths:
       - backend:
@@ -19,7 +21,7 @@ spec:
             name: 'multiwoven-server'
             port:
               number: 3000
-        path: /server
+        path: /api
         pathType: Prefix
       - backend:
           service:
