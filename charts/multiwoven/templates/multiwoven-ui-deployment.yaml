@@ -23,13 +23,10 @@ spec:
     spec:
       containers:
       - env:
-        - name: KUBERNETES_CLUSTER_DOMAIN
-          value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
             path: /
@@ -45,6 +42,5 @@ spec:
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenUI.multiwovenUI.resources | nindent
-          10 }}
+        resources: {{- toYaml .Values.multiwovenUI.multiwovenUI.resources | nindent 10 }}
       restartPolicy: Always
