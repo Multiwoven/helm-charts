@@ -72,10 +72,10 @@ multiwovenServer:
         memory: 1Gi
   ports:
     - name: "3000"
-      port: 3000
+      port: 80
       targetPort: 3000
   replicas: 1
-  type: ClusterIP
+  type: LoadBalancer
 multiwovenUI:
   multiwovenUI:
     image:
@@ -90,10 +90,10 @@ multiwovenUI:
         memory: 1Gi
   ports:
     - name: "8000"
-      port: 8000
+      port: 80
       targetPort: 8000
   replicas: 1
-  type: ClusterIP
+  type: LoadBalancer
 multiwovenWorker:
   multiwovenWorker:
     args:

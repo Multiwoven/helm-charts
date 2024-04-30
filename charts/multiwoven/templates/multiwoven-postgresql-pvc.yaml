@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: multiwoven-postgresql-pvc
-  # {{- include "chart.labels" . | nindent 4 }}
+  {{- include "chart.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce

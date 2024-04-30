@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multiwoven-temporal
+  name: {{ include "chart.fullname" . }}-temporal
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: temporal
-  # {{- include "chart.labels" . | nindent 4 }}
+  {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:
     matchLabels:
       io.kompose.service: temporal
-    # {{- include "chart.selectorLabels" . | nindent 6 }}
+    {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
         io.kompose.service: temporal
-      # {{- include "chart.selectorLabels" . | nindent 8 }}
+      {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - env:
@@ -27,22 +27,22 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PORT
-              name: multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_PWD
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_SEEDS
           valueFrom:
             configMapKeyRef:
               key: DB_HOST
-              name: multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: multiwoven-config
+              name: {{ include "chart.fullname" . }}-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag
