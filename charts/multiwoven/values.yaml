@@ -33,8 +33,8 @@ multiwovenConfig:
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
-  uiHost: "app.multiwoven.com"
-  viteApiHost: "api.multiwoven.com"
+  uiHost: app.multiwoven.com
+  viteApiHost: api.multiwoven.com
   viteBrandName: "AI Squared"
   viteBrandLogo: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
   viteLogoUrl: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"

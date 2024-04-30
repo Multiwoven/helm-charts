@@ -12,8 +12,8 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   rules:
-#   - host:  {{ .Values.multiwovenConfig.uiHost }}
-  - http:
+  - host:  {{ .Values.multiwovenConfig.uiHost }}
+    http:
       paths:
       - backend:
           service:

@@ -38,8 +38,7 @@ data:
   TEMPORAL_TASK_QUEUE: {{ .Values.multiwovenConfig.temporalTaskQueue | quote }}
   TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
-  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize
-    | quote }}
+  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
   VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}

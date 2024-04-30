@@ -22,4 +22,3 @@ spec:
               number: 3000
         path: /api
         pathType: Prefix
-    # host:  {{ .Values.multiwovenConfig.apiHost }}
