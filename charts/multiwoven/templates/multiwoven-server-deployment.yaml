@@ -28,8 +28,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
             path: /
@@ -45,6 +44,5 @@ spec:
             port: 3000
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent
-          10 }}
+        resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
       restartPolicy: Always

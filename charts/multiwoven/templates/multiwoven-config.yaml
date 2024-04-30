@@ -19,32 +19,21 @@ data:
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
   SMTP_PORT: {{ .Values.multiwovenConfig.smtpPort | quote }}
   SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
-  SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote
-    }}
-  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.multiwovenConfig.syncExtractorBatchSize |
-    quote }}
-  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncExtractorThreadPoolSize
-    | quote }}
-  SYNC_LOADER_BATCH_SIZE: {{ .Values.multiwovenConfig.syncLoaderBatchSize | quote
-    }}
-  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncLoaderThreadPoolSize
-    | quote }}
-  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalActivityThreadPoolSize
-    | quote }}
-  TEMPORAL_CLIENT_CHAIN: {{ .Values.multiwovenConfig.temporalClientChain | quote
-    }}
+  SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
+  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.multiwovenConfig.syncExtractorBatchSize | quote }}
+  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncExtractorThreadPoolSize | quote }}
+  SYNC_LOADER_BATCH_SIZE: {{ .Values.multiwovenConfig.syncLoaderBatchSize | quote }}
+  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncLoaderThreadPoolSize | quote }}
+  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalActivityThreadPoolSize | quote }}
+  TEMPORAL_CLIENT_CHAIN: {{ .Values.multiwovenConfig.temporalClientChain | quote }}
   TEMPORAL_CLIENT_KEY: {{ .Values.multiwovenConfig.temporalClientKey | quote }}
   TEMPORAL_HOST: {{ .Values.multiwovenConfig.temporalHost | quote }}
   TEMPORAL_NAMESPACE: {{ .Values.multiwovenConfig.temporalNamespace | quote }}
   TEMPORAL_PORT: {{ .Values.multiwovenConfig.temporalPort | quote }}
-  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.multiwovenConfig.temporalPostgresDefaultPort
-    | quote }}
-  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword
-    | quote }}
-  TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote
-    }}
-  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.multiwovenConfig.temporalPostgresqlVersion
-    | quote }}
+  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.multiwovenConfig.temporalPostgresDefaultPort | quote }}
+  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
+  TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
+  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.multiwovenConfig.temporalPostgresqlVersion | quote }}
   TEMPORAL_ROOT_CERT: {{ .Values.multiwovenConfig.temporalRootCert | quote }}
   TEMPORAL_TASK_QUEUE: {{ .Values.multiwovenConfig.temporalTaskQueue | quote }}
   TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
