@@ -35,6 +35,7 @@ multiwovenConfig:
   temporalWorkflowThreadPoolSize: "10"
   uiHost: app.multiwoven.com
 multiwovenPostgresql:
+  enabled: true
   multiwovenPostgresql:
     image:
       repository: postgres
