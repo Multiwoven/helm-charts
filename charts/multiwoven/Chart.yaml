@@ -5,9 +5,6 @@ type: application
 version: 0.2.0
 appVersion: "0.2.0"
 maintainers:
-  - name: Subin Tp
-    email: subin@multiwoven.com
-  - name: Rafael O'Neill
-    email: rafael.oneill@squared.ai
-  - name: Angelo Bradley
-    email: angelo.bradley@squared.ai
+  - name: subintp
+  - name: RafaelOAiSquared
+  - name: AngeloB-AIS
