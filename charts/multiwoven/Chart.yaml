@@ -3,4 +3,8 @@ name: multiwoven
 description: Open-source reverse ETL, an alternative to Hightouch, Census etc. 🔥
 type: application
 version: 0.2.0
-appVersion: "0.1.0"
+appVersion: "0.2.0"
+maintainers:
+  - name: Subin Tp
+  - name: Rafael O'Neill
+  - name: Angelo Bradley
