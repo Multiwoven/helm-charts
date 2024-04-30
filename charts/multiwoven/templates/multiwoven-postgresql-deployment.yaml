@@ -33,8 +33,7 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{ 
-          .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
