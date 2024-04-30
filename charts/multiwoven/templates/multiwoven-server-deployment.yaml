@@ -28,8 +28,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
             path: /
