@@ -37,7 +37,9 @@ jobs:
           changed=$(ct list-changed --target-branch main)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
+            echo "::set-output name=changed_charts::$changed"
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint --target-branch main
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct lint --charts "${{ steps.list-changed.outputs.changed_charts }}"

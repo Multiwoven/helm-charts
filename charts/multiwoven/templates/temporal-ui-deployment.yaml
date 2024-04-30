@@ -36,8 +36,7 @@ spec:
           value: {{ quote .Values.temporalUi.temporalUi.env.temporalUiPort }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
         name: temporal-ui
         ports:
         - containerPort: 8080

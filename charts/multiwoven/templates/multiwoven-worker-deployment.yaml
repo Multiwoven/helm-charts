@@ -30,9 +30,7 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
         name: {{ include "chart.fullname" . }}-worker
-        resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent
-          10 }}
+        resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
       restartPolicy: Always
