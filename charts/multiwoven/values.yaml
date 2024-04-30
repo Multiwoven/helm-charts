@@ -1,7 +1,7 @@
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 multiwovenConfig:
-  apiHost: "4.246.245.140"
+  apiHost: api.multiwoven.com
   dbHost: multiwoven-postgresql
   dbPassword: password
   dbPort: "5432"
@@ -33,7 +33,7 @@ multiwovenConfig:
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
-  uiHost: "4.246.245.140"
+  uiHost: app.multiwoven.com
   viteApiHost: "http://4.246.245.140"
   viteBrandName: "AI Squared"
   viteBrandLogo: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
@@ -72,10 +72,10 @@ multiwovenServer:
         memory: 1Gi
   ports:
     - name: "3000"
-      port: 80
+      port: 3000
       targetPort: 3000
   replicas: 1
-  type: LoadBalancer
+  type: ClusterIP
 multiwovenUI:
   multiwovenUI:
     image:
@@ -90,10 +90,10 @@ multiwovenUI:
         memory: 1Gi
   ports:
     - name: "8000"
-      port: 80
+      port: 8000
       targetPort: 8000
   replicas: 1
-  type: LoadBalancer
+  type: ClusterIP
 multiwovenWorker:
   multiwovenWorker:
     args:
@@ -144,7 +144,7 @@ temporalUi:
   temporalUi:
     env:
       temporalAddress: multiwoven-temporal:7233
-      temporalCorsOrigins: http://4.246.245.140/
+      temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
     image:
       repository: temporalio/ui
