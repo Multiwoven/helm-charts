@@ -1,3 +1,4 @@
+{{ if .Values.temporal.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -51,3 +52,4 @@ spec:
         - containerPort: 7233
         resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
       restartPolicy: Always
+{{ end }}
