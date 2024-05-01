@@ -20,5 +20,5 @@ spec:
             name: '{{ include "chart.fullname" . }}-server'
             port:
               number: 3000
-        path: /(.*)/api
+        path: /(.*)
         pathType: Prefix
