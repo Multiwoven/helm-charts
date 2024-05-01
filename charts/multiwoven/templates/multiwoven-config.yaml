@@ -42,7 +42,6 @@ data:
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
   VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
-  VITE_BRAND_LOGO: {{ .Values.multiwovenConfig.viteBrandLogo | quote }}
   VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
   VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
   VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}
