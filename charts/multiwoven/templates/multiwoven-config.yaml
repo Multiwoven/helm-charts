@@ -40,3 +40,8 @@ data:
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
+  VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
+  VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
+  VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}

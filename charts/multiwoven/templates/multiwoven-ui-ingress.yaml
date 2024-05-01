@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "chart.fullname" . }}-server-ingress
+  name: {{ include "chart.fullname" . }}-ui-ingress
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
@@ -12,13 +12,13 @@ metadata:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   rules:
-  - host: {{ .Values.multiwovenConfig.apiHost }}
+  - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
       paths:
       - backend:
           service:
-            name: '{{ include "chart.fullname" . }}-server'
+            name: '{{ include "chart.fullname" . }}-ui'
             port:
-              number: 3000
+              number: 8000
         path: /(.*)
         pathType: Prefix
