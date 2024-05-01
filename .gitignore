@@ -1,6 +1,7 @@
 cert-manager.sh
 refresh.sh
 .DS_Store
-install.sh
+_install.sh
+_uninstall.sh
 clusterissuer.yaml
 wildcardcert.yaml
