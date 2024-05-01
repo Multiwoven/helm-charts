@@ -50,6 +50,7 @@ spec:
         resources: {{- toYaml .Values.multiwovenPostgresql.multiwovenPostgresql.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
+          subPath: postgres
           name: {{ include "chart.fullname" . }}-postgresql-pvc
       volumes:
       - name: {{ include "chart.fullname" . }}-postgresql-pvc
