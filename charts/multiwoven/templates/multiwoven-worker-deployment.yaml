@@ -26,17 +26,25 @@ spec:
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
+          value: {{ quote .Values.multiwovenWorker.healthPort }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.multiwovenWorker.healthPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
         name: {{ include "chart.fullname" . }}-worker
         ports:
         - containerPort: 4567
         readinessProbe:
           httpGet:
             path: /health
-            port: 4567
+            port: {{ .Values.multiwovenWorker.healthPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}

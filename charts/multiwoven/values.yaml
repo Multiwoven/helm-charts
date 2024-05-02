@@ -95,6 +95,7 @@ multiwovenUI:
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
+  healthPort: 4567
   multiwovenWorker:
     args:
       - sh
