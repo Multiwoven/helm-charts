@@ -33,7 +33,7 @@ multiwovenConfig:
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
-  tlsAdminEmail: admin@squared.ai
+  tlsAdminEmail: admin@multiwoven.com
   tlsCertIssuer: letsencrypt-staging
   uiHost: app.multiwoven.com
   viteApiHost: api.multiwoven.com
