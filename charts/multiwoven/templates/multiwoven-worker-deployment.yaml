@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-worker
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
     app: {{ include "chart.fullname" . }}-worker
     io.kompose.service: {{ include "chart.fullname" . }}-worker
@@ -27,10 +26,26 @@ spec:
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
+          value: {{ quote .Values.multiwovenWorker.healthPort }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.multiwovenWorker.healthPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
         name: {{ include "chart.fullname" . }}-worker
+        ports:
+        - containerPort: {{ .Values.multiwovenWorker.healthPort }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.multiwovenWorker.healthPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
       restartPolicy: Always
