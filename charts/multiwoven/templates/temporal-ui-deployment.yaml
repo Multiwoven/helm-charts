@@ -1,3 +1,4 @@
+{{ if .Values.temporal.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,3 +45,4 @@ spec:
           protocol: TCP
         resources: {}
       restartPolicy: Always
+{{ end }}

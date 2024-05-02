@@ -36,11 +36,10 @@ multiwovenConfig:
   tlsAdminEmail: admin@squared.ai
   uiHost: app.multiwoven.com
   viteApiHost: api.multiwoven.com
-  viteBrandName: "AI Squared"
-  viteBrandLogo: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
-  viteLogoUrl: "https://squared.ai/wp-content/uploads/2024/04/ai-squared-r-logo.png"
-  viteBrandColor: "rgb(0 36 156/1)"
-  viteBrandHoverColor: "rgb(0 29 125/1)"
+  viteBrandName: "Multiwoven"
+  viteLogoUrl: ""
+  viteBrandColor: ""
+  viteBrandHoverColor: ""
 multiwovenPostgresql:
   enabled: true
   multiwovenPostgresql:
@@ -97,6 +96,7 @@ multiwovenUI:
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
+  healthPort: 4567
   multiwovenWorker:
     args:
       - sh
@@ -118,6 +118,7 @@ pvc:
   pvc:
     storageRequest: 100Mi
 temporal:
+  enabled: true
   ports:
     - name: "7233"
       port: 7233
