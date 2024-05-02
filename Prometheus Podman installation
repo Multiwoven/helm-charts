@@ -1,0 +1,25 @@
+# Start Minikube with podman or docker as the specified container:
+
+`minikube start --driver=podman
+
+## Add Prometheus Helm Repository:
+
+`helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+## Update Helm Repositories:
+
+`helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
+
+##Install Prometheus using Helm:
+
+`helm install prometheus prometheus-community/prometheus --namespace= AIS monitoring
+
+## To display ports of all running Prometheus services and get the NodePort for Prometheus service:
+
+'kubectl get svc prometheus-server -n AIS monitoring
+
+## Expose Prometheus Service 
+
+This is required to access prometheus-server using your browser.
+
+`kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext`
