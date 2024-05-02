@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-worker
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
     app: {{ include "chart.fullname" . }}-worker
     io.kompose.service: {{ include "chart.fullname" . }}-worker
@@ -32,5 +31,13 @@ spec:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
         name: {{ include "chart.fullname" . }}-worker
+        ports:
+        - containerPort: 4567
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 4567
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
       restartPolicy: Always
