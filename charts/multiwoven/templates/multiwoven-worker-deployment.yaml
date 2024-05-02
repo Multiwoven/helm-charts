@@ -40,7 +40,7 @@ spec:
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-worker
         ports:
-        - containerPort: 4567
+        - containerPort: {{ .Values.multiwovenWorker.healthPort }}
         readinessProbe:
           httpGet:
             path: /health
