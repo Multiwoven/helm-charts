@@ -117,6 +117,7 @@ pvc:
   pvc:
     storageRequest: 100Mi
 temporal:
+  enabled: true
   ports:
     - name: "7233"
       port: 7233
