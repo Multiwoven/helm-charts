@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "chart.fullname" . }}-ui-ingress
+  name: {{ include "chart.fullname" . }}-ingress
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
@@ -16,7 +16,8 @@ spec:
   tls:
   - hosts:
     - {{ .Values.multiwovenConfig.uiHost }}
-    secretName: ui-tls-cert
+    - {{ .Values.multiwovenConfig.apiHost }}
+    secretName: mw-tls-cert
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
@@ -26,5 +27,15 @@ spec:
             name: '{{ include "chart.fullname" . }}-ui'
             port:
               number: 8000
+        path: /(.*)
+        pathType: Prefix
+  - host: {{ .Values.multiwovenConfig.apiHost }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-server'
+            port:
+              number: 3000
         path: /(.*)
         pathType: Prefix
