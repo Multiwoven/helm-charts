@@ -17,7 +17,7 @@ spec:
   - hosts:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
-    secretName: ui-tls-cert
+    secretName: mw-tls-cert
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
