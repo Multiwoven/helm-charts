@@ -30,6 +30,7 @@ multiwovenConfig:
   temporalPostgresqlVersion: "13"
   temporalRootCert: /certs/temporal.pem
   temporalTaskQueue: sync-dev
+  temporalUiHost: temporal.multiwoven.com
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
