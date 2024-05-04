@@ -20,7 +20,7 @@ spec:
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
-    secretName: ui-tls-cert
+    secretName: mw-tls-cert
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
