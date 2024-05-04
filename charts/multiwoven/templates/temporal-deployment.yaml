@@ -44,6 +44,18 @@ spec:
             configMapKeyRef:
               key: DB_USERNAME
               name: {{ include "chart.fullname" . }}-config
+        {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
+        - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
+          value: 'true'
+        - name: SQL_TLS
+          value: 'true'
+        - name: SQL_TLS_ENABLED
+          value: 'true'
+        - name: SQL_TLS_DISABLE_HOST_VERIFICATION
+          value: 'true'
+        - name: SQL_HOST_VERIFICATION
+          value: 'false'
+        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
