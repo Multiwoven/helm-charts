@@ -17,6 +17,9 @@ spec:
   - hosts:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
+  {{ if .Values.temporal.enabled }}
+    - {{ .Values.multiwovenConfig.temporalUiHost }}
+  {{ end }}
     secretName: mw-tls-cert
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
@@ -39,3 +42,15 @@ spec:
               number: 3000
         path: /(.*)
         pathType: Prefix
+{{ if .Values.temporal.enabled }}
+  - host: {{ .Values.multiwovenConfig.temporalUiHost }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-temporal-ui'
+            port:
+              number: 8080
+        path: /(.*)
+        pathType: Prefix
+{{ end }}
