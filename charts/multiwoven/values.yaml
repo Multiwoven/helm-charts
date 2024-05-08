@@ -9,6 +9,7 @@ multiwovenConfig:
   newRelicKey: yourkey
   privateRepo: false
   railsEnv: development
+  registrySecretName: mwregistrysecret
   smtpAddress: smtp.yourdomain.com
   smtpHost: yourdomain.com
   smtpPassword: yourpassword

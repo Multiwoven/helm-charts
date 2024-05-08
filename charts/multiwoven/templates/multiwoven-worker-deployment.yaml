@@ -67,5 +67,5 @@ spec:
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
-        - name: myregistrykey
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
