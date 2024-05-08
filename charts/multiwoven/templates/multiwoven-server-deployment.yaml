@@ -45,4 +45,19 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
+{{ if not .Values.temporal.enabled }}
+        volumeMounts:
+        - name: ssl
+          mountPath: /certs
+          readOnly: false
+      volumes:
+      - name: ssl
+        secret:
+          secretName: temporal-cloud
+          items:
+          - key: temporal-client-key
+            path: ./temporal.pem
+          - key: temporal-root-cert
+            path: ./temporal.key
+{{ end }}
       restartPolicy: Always
