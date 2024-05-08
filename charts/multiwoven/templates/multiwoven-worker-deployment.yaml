@@ -59,8 +59,8 @@ spec:
           secretName: temporal-cloud
           items:
           - key: temporal-client-key
-            path: ./temporal.pem
-          - key: temporal-root-cert
             path: ./temporal.key
+          - key: temporal-root-cert
+            path: ./temporal.pem
 {{ end }}
       restartPolicy: Always
