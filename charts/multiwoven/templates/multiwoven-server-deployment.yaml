@@ -46,6 +46,7 @@ spec:
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
 {{ if not .Values.temporal.enabled }}
+        imagePullPolicy: Always
         volumeMounts:
         - name: ssl
           mountPath: /certs
@@ -61,3 +62,7 @@ spec:
             path: ./temporal.pem
 {{ end }}
       restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: myregistrykey
+      {{ end }}

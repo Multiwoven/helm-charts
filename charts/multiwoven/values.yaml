@@ -7,6 +7,7 @@ multiwovenConfig:
   dbPort: "5432"
   dbUsername: multiwoven
   newRelicKey: yourkey
+  privateRepo: false
   railsEnv: development
   smtpAddress: smtp.yourdomain.com
   smtpHost: yourdomain.com

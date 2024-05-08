@@ -43,4 +43,9 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenUI.multiwovenUI.resources | nindent 10 }}
+        imagePullPolicy: Always
       restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: myregistrykey
+      {{ end }}
