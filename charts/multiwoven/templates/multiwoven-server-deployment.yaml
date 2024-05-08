@@ -46,6 +46,7 @@ spec:
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
 {{ if not .Values.temporal.enabled }}
+        imagePullPolicy: Always
         volumeMounts:
         - name: ssl
           mountPath: /certs
@@ -56,8 +57,12 @@ spec:
           secretName: temporal-cloud
           items:
           - key: temporal-client-key
-            path: ./temporal.pem
-          - key: temporal-root-cert
             path: ./temporal.key
+          - key: temporal-root-cert
+            path: ./temporal.pem
 {{ end }}
       restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}

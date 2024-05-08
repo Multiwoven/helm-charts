@@ -7,7 +7,9 @@ multiwovenConfig:
   dbPort: "5432"
   dbUsername: multiwoven
   newRelicKey: yourkey
+  privateRepo: false
   railsEnv: development
+  registrySecretName: mwregistrysecret
   smtpAddress: smtp.yourdomain.com
   smtpHost: yourdomain.com
   smtpPassword: yourpassword
@@ -20,7 +22,7 @@ multiwovenConfig:
   syncLoaderThreadPoolSize: "10"
   temporalActivityThreadPoolSize: "20"
   temporalClientChain: /certs/temporal.chain.pem
-  temporalClientKey: /certs/temporal.key
+  temporalClientKey: /certs/temporal.pem
   temporalHost: multiwoven-temporal
   temporalNamespace: multiwoven-dev
   temporalPort: "7233"
@@ -29,7 +31,7 @@ multiwovenConfig:
   temporalPostgresSsl: false
   temporalPostgresUser: multiwoven
   temporalPostgresqlVersion: "13"
-  temporalRootCert: /certs/temporal.pem
+  temporalRootCert: /certs/temporal.key
   temporalTaskQueue: sync-dev
   temporalUiHost: temporal.multiwoven.com
   temporalUiVersion: 2.23.2
