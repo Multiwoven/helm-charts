@@ -5,7 +5,7 @@ helm repo add multiwoven https://multiwoven.github.io/helm-charts
 helm install multiwoven multiwoven/multiwoven
 ```
 
-## Check detailed readme [here](https://docs.multiwoven.com/guides/setup/helm)
+## Check detailed readme [here](https://docs.squared.ai/guides/setup/helm)
 
 
 ## Questions? Feedback?
