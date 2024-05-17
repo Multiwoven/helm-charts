@@ -45,3 +45,4 @@ data:
   VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
   VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
   VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}
+  VITE_FAV_ICON_URL: {{ .Values.multiwovenConfig.viteFavIconUrl | quote }}
