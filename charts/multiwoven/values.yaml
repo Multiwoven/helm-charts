@@ -45,6 +45,7 @@ multiwovenConfig:
   viteLogoUrl: ""
   viteBrandColor: ""
   viteBrandHoverColor: ""
+  viteFavIconUrl: ""
 multiwovenPostgresql:
   enabled: true
   multiwovenPostgresql:
