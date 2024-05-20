@@ -8,6 +8,7 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
+  APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
   APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}

@@ -3,6 +3,7 @@ kubernetesNamespace: multiwoven
 multiwovenConfig:
   apiHost: api.multiwoven.com
   appRevision: unknown
+  appEnv: community
   appsignalPushApiKey: yourkey
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
