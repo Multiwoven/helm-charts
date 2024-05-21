@@ -10,6 +10,7 @@ data:
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
+  APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
