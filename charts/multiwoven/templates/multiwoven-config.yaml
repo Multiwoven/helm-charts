@@ -19,6 +19,7 @@ data:
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
+  RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel }}
   SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
   SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
