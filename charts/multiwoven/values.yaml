@@ -46,6 +46,7 @@ multiwovenConfig:
   tlsCertIssuer: letsencrypt-staging
   uiHost: app.multiwoven.com
   viteApiHost: api.multiwoven.com
+  viteAppsignalPushApiKey: yourkey
   viteBrandName: "Multiwoven"
   viteLogoUrl: ""
   viteBrandColor: ""
