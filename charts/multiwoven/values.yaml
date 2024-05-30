@@ -20,6 +20,7 @@ multiwovenConfig:
   smtpPassword: yourpassword
   smtpPort: "587"
   smtpUsername: yourusername
+  smtpSenderEmail: admin@yourdomain.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
