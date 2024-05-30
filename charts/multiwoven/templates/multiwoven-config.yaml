@@ -12,6 +12,7 @@ data:
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
   APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
+  BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
   DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
@@ -25,6 +26,7 @@ data:
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
   SMTP_PORT: {{ .Values.multiwovenConfig.smtpPort | quote }}
   SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
+  SMTP_SENDER_EMAIL: {{ .Values.multiwovenConfig.smtpSenderEmail | quote }}
   SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
   SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.multiwovenConfig.syncExtractorBatchSize | quote }}
   SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncExtractorThreadPoolSize | quote }}
