@@ -5,6 +5,7 @@ multiwovenConfig:
   appRevision: unknown
   appEnv: community
   appsignalPushApiKey: yourkey
+  brandName: Multiwoven
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
   dbPassword: password
