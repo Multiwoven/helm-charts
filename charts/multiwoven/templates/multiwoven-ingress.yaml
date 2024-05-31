@@ -11,6 +11,8 @@ metadata:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     cert-manager.io/issuer: {{ .Values.multiwovenConfig.tlsCertIssuer }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   tls:
@@ -25,23 +27,37 @@ spec:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
       paths:
-      - backend:
+      - path: /.well-known/acme-challenge/
+        pathType: Prefix
+        backend:
+          service:
+            name: acme-challenge-service
+            port:
+              number: {{ (index .Values.acmeChallenge.ports 0).port }}
+      - path: /(.*)
+        pathType: Prefix
+        backend:
           service:
             name: '{{ include "chart.fullname" . }}-ui'
             port:
-              number: 8000
-        path: /(.*)
-        pathType: Prefix
+              number: {{ (index .Values.multiwovenUI.ports 0).port }}
   - host: {{ .Values.multiwovenConfig.apiHost }}
     http:
       paths:
-      - backend:
+      - path: /.well-known/acme-challenge/
+        pathType: Prefix
+        backend:
+          service:
+            name: acme-challenge-service
+            port:
+              number: {{ (index .Values.acmeChallenge.ports 0).port }}
+      - path: /(.*)
+        pathType: Prefix
+        backend:
           service:
             name: '{{ include "chart.fullname" . }}-server'
             port:
-              number: 3000
-        path: /(.*)
-        pathType: Prefix
+              number: {{ (index .Values.multiwovenServer.ports 0).port }}
 {{ if .Values.temporal.enabled }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:
@@ -50,7 +66,7 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-temporal-ui'
             port:
-              number: 8080
+              number: {{ (index .Values.temporalUi.ports 0).port }}
         path: /(.*)
         pathType: Prefix
 {{ end }}

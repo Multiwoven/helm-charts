@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-acme-challenge
+  namespace: {{ .Values.kubernetesNamespace }}
+spec:
+  replicas: {{ .Values.acmeChallenge.acmeChallenge.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-acme-challenge
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-acme-challenge
+    spec:
+      containers:
+        - name: {{ include "chart.fullname" . }}-acme-challenge
+          image: {{ .Values.acmeChallenge.acmeChallenge.image.repository }}:{{ .Values.acmeChallenge.acmeChallenge.image.tag | default .Chart.AppVersion }}
+          ports:
+            - containerPort: {{ (index .Values.acmeChallenge.ports 0).port }}
+          volumeMounts:
+            - name: acme-challenge
+              mountPath: /usr/share/nginx/html/.well-known/acme-challenge
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ (index .Values.acmeChallenge.ports 0).port }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ (index .Values.acmeChallenge.ports 0).port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources: {{- toYaml .Values.acmeChallenge.acmeChallenge.resources | nindent 10 }}
+      volumes:
+        - name: acme-challenge
+          emptyDir: {}
