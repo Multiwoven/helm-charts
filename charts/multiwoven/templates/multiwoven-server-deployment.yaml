@@ -32,16 +32,16 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: {{ (index .Values.multiwovenServer.ports 0).port }}
           initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-server
         ports:
-        - containerPort: 3000
+        - containerPort: {{ (index .Values.multiwovenServer.ports 0).port }}
         readinessProbe:
           httpGet:
             path: /
-            port: 3000
+            port: {{ (index .Values.multiwovenServer.ports 0).port }}
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
