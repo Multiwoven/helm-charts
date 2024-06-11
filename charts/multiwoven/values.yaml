@@ -15,6 +15,7 @@ multiwovenConfig:
   railsEnv: development
   railsLogLevel: info
   registrySecretName: mwregistrysecret
+  secretKeyBase: ""
   smtpAddress: smtp.yourdomain.com
   smtpBrandName: Multiwoven
   smtpHost: yourdomain.com
