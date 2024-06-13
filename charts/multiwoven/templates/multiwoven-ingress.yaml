@@ -31,7 +31,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: acme-challenge-service
+            name: '{{ include "chart.fullname" . }}-acme-challenge-service'
             port:
               number: {{ (index .Values.acmeChallenge.ports 0).port }}
       - path: /(.*)
@@ -48,7 +48,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: acme-challenge-service
+            name: '{{ include "chart.fullname" . }}-acme-challenge-service'
             port:
               number: {{ (index .Values.acmeChallenge.ports 0).port }}
       - path: /(.*)
