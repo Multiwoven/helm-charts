@@ -12,6 +12,8 @@ data:
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
   APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
+  AWS_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.awsAccessKeyId | quote }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
