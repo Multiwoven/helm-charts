@@ -7,6 +7,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-config
   {{- include "chart.labels" . | nindent 4 }}
 data:
+  ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
@@ -20,6 +21,7 @@ data:
   DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
+  JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
