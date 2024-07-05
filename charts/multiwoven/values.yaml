@@ -1,6 +1,7 @@
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 multiwovenConfig:
+  allowedHost: ""
   apiHost: api.multiwoven.com
   appRevision: unknown
   appEnv: community
@@ -12,6 +13,7 @@ multiwovenConfig:
   dbPassword: password
   dbPort: "5432"
   dbUsername: multiwoven
+  jwtSecret: ""
   newRelicKey: yourkey
   privateRepo: false
   railsEnv: development
