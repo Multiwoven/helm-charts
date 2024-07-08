@@ -21,6 +21,7 @@ data:
   DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
+  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
