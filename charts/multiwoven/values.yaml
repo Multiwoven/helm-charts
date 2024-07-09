@@ -13,6 +13,7 @@ multiwovenConfig:
   dbPassword: password
   dbPort: "5432"
   dbUsername: multiwoven
+  grpcEnableForkSupport: 1
   jwtSecret: ""
   newRelicKey: yourkey
   privateRepo: false
