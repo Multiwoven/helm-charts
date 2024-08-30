@@ -28,22 +28,22 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PORT
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         - name: POSTGRES_PWD
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         - name: POSTGRES_SEEDS
           valueFrom:
             configMapKeyRef:
               key: DB_HOST
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
         - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
           value: 'true'

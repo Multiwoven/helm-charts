@@ -26,12 +26,12 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: {{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion }}

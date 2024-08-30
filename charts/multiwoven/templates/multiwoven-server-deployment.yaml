@@ -27,7 +27,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config
+            name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
