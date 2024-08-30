@@ -2,6 +2,7 @@ kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 multiwovenConfig:
   allowedHost: ""
+  allowedSourceIP: "0.0.0.0/0"
   apiHost: api.multiwoven.com
   appRevision: unknown
   appEnv: community
