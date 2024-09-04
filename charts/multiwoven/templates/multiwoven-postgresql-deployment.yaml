@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-postgresql
-  namespace: {{ .Values.kubernetesNamespace }}
+  name: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenPostgresql.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+      io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+        io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -40,7 +40,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 5432
-        name: {{ include "chart.fullname" . }}-postgresql
+        name: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
         ports:
         - containerPort: 5432
         readinessProbe:
@@ -52,9 +52,9 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           subPath: postgres
-          name: {{ include "chart.fullname" . }}-postgresql-pvc
+          name: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
       volumes:
-      - name: {{ include "chart.fullname" . }}-postgresql-pvc
+      - name: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
         persistentVolumeClaim:
-          claimName: {{ include "chart.fullname" . }}-postgresql-pvc
+          claimName: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
 {{ end }}

@@ -2,15 +2,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "chart.fullname" . }}-postgresql
-  namespace: {{ .Values.kubernetesNamespace }}
+  name: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.multiwovenPostgresql.type }}
   selector:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
 	{{- .Values.multiwovenPostgresql.ports | toYaml | nindent 2 -}}
