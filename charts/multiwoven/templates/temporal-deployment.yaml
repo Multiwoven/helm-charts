@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-temporal
+  name: {{ include "chart.fullname" . }}-temporal-{{ .Values.multiwovenConfig.appEnv }}
   namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
   labels:
     io.kompose.service: temporal

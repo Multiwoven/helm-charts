@@ -65,7 +65,7 @@ spec:
       paths:
       - backend:
           service:
-            name: '{{ include "chart.fullname" . }}-temporal-ui'
+            name: '{{ include "chart.fullname" . }}-temporal-ui-{{ .Values.multiwovenConfig.appEnv }}'
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
         path: /(.*)
