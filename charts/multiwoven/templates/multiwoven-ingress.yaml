@@ -56,7 +56,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: '{{ include "chart.fullname" . }}-server'
+            name: '{{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}'
             port:
               number: {{ (index .Values.multiwovenServer.ports 0).port }}
 {{ if .Values.temporal.enabled }}

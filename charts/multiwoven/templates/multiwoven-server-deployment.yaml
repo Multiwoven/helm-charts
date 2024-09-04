@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-server
+  name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
   namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
   labels:
-    app: {{ include "chart.fullname" . }}-server
-    io.kompose.service: {{ include "chart.fullname" . }}-server
+    app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+    io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenServer.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-server
-      io.kompose.service: {{ include "chart.fullname" . }}-server
+      app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+      io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-server
-        io.kompose.service: {{ include "chart.fullname" . }}-server
+        app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+        io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -35,7 +35,7 @@ spec:
             port: {{ (index .Values.multiwovenServer.ports 0).port }}
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: {{ include "chart.fullname" . }}-server
+        name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
         ports:
         - containerPort: {{ (index .Values.multiwovenServer.ports 0).port }}
         readinessProbe:
