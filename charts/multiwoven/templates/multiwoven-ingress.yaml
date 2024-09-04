@@ -28,13 +28,6 @@ spec:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
       paths:
-      - path: /.well-known/acme-challenge/
-        pathType: Prefix
-        backend:
-          service:
-            name: '{{ include "chart.fullname" . }}-acme-challenge-service'
-            port:
-              number: {{ (index .Values.acmeChallenge.ports 0).port }}
       - path: /(.*)
         pathType: Prefix
         backend:
@@ -45,13 +38,6 @@ spec:
   - host: {{ .Values.multiwovenConfig.apiHost }}
     http:
       paths:
-      - path: /.well-known/acme-challenge/
-        pathType: Prefix
-        backend:
-          service:
-            name: '{{ include "chart.fullname" . }}-acme-challenge-service'
-            port:
-              number: {{ (index .Values.acmeChallenge.ports 0).port }}
       - path: /(.*)
         pathType: Prefix
         backend:
