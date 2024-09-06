@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
-    io.kompose.service:  {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+    io.kompose.service:  {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
     kompose.cmd: kompose convert
@@ -13,7 +13,7 @@ metadata:
 spec:
   type: {{ .Values.multiwovenServer.type }}
   selector:
-    io.kompose.service:  {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+    io.kompose.service:  {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
 	{{- .Values.multiwovenServer.ports | toYaml | nindent 2 -}}
