@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
-  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
+  namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
-    io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+    app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
+    io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenServer.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
-      io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+      app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
+      io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
-        io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+        app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
+        io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -27,7 +27,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
+            name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
@@ -35,7 +35,7 @@ spec:
             port: {{ (index .Values.multiwovenServer.ports 0).port }}
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
+        name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
         ports:
         - containerPort: {{ (index .Values.multiwovenServer.ports 0).port }}
         readinessProbe:
