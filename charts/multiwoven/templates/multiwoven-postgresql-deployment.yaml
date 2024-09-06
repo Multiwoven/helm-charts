@@ -52,9 +52,9 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           subPath: postgres
-          name: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
+          name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql-pvc
       volumes:
-      - name: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
+      - name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql-pvc
         persistentVolumeClaim:
-          claimName: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
+          claimName: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql-pvc
 {{ end }}

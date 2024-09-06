@@ -2,10 +2,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql-pvc
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-pvc-{{ .Values.multiwovenConfig.appEnv }}
+    io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql-pvc
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   accessModes:
