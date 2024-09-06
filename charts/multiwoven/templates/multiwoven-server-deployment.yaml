@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
-  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
+  namespace: {{ .Values.kubernetesNamespace }}
   labels:
     app: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}
     io.kompose.service: {{ include "chart.fullname" . }}-server-{{ .Values.multiwovenConfig.appEnv }}

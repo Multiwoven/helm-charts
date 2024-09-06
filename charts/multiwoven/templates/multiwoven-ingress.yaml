@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "chart.fullname" . }}-ingress-{{ .Values.multiwovenConfig.appEnv }}
-  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
+  namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
   {{- include "chart.labels" . | nindent 4 }}

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-acme-challenge
-  namespace: {{ .Values.kubernetesNamespace }}-{{ .Values.multiwovenConfig.appEnv }}
+  namespace: {{ .Values.kubernetesNamespace }}
 spec:
   replicas: {{ .Values.acmeChallenge.acmeChallenge.replicas }}
   selector:
