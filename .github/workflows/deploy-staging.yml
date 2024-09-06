@@ -3,8 +3,6 @@ name: Deploy to Staging
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "ui/**"
     types:
       - labeled
 
