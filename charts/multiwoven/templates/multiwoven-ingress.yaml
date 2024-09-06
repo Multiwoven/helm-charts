@@ -39,7 +39,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: '{{ include "chart.fullname" . }}-ui-{{ .Values.multiwovenConfig.appEnv }}'
+            name: '{{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-ui'
             port:
               number: {{ (index .Values.multiwovenUI.ports 0).port }}
   - host: {{ .Values.multiwovenConfig.apiHost }}
