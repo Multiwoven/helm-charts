@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+    io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenPostgresql.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+      io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+        io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -40,7 +40,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 5432
-        name: {{ include "chart.fullname" . }}-postgresql-{{ .Values.multiwovenConfig.appEnv }}
+        name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-postgresql
         ports:
         - containerPort: 5432
         readinessProbe:
