@@ -1,0 +1,48 @@
+name: Deploy UI to Staging
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "ui/**"
+    types:
+      - labeled
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    if: ${{ github.event.label.name == 'deploy-to-staging' || contains( github.event.pull_request.labels.*.name, 'deploy-to-staging') }}
+    environment: staging
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: azure/setup-helm@v4.2.0
+        with:
+          version: 'latest'
+        id: install
+
+      - name: Azure Login
+        uses: Azure/login@v2.1.0
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Setup kubelogin
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.1.3'
+
+      - name: Gets K8s context
+        uses: azure/aks-set-context@v3
+        with:
+            resource-group: ${{ vars.RESOURCE_GROUP }}
+            cluster-name: ${{ vars.CLUSTER_NAME }}
+            admin: 'false'
+            use-kubelogin: 'true'
+
+      - name: Deploy chart to staging
+        run: |
+          helm upgrade -i --reuse-values multiwoven ./helm-charts/charts/multiwoven
