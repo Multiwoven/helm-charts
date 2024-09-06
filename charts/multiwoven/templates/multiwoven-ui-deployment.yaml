@@ -25,7 +25,7 @@ spec:
       - env:
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
+            name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:

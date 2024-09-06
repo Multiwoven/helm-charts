@@ -30,7 +30,7 @@ spec:
           value: {{ quote .Values.multiwovenWorker.healthPort }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config-{{ .Values.multiwovenConfig.appEnv }}
+            name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
