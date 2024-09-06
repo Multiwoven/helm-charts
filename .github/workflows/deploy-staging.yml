@@ -43,4 +43,4 @@ jobs:
 
       - name: Deploy chart to staging
         run: |
-          helm upgrade -i --reuse-values multiwoven ./helm-charts/charts/multiwoven
+          helm upgrade -i --reuse-values multiwoven ./charts/multiwoven
