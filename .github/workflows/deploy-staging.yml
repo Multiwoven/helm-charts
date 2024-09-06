@@ -1,10 +1,8 @@
-name: Deploy UI to Staging
+name: Deploy to Staging
 
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "ui/**"
     types:
       - labeled
 
