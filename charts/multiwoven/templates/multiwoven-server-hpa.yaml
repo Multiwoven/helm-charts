@@ -4,6 +4,9 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "chart.fullname" . }}-server-hpa
   namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
