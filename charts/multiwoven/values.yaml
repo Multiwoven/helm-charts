@@ -98,7 +98,7 @@ hpa:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
-    memoryAverageUtilizationPercentageThreshold: 50
+    memoryAverageUtilizationPercentageThreshold: 60
     behavior:
       scaleDown:
         stabilizationWindowSeconds: 300
@@ -128,7 +128,7 @@ hpa:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
-    memoryAverageUtilizationPercentageThreshold: 75
+    memoryAverageUtilizationPercentageThreshold: 50
     behavior:
       scaleDown:
         stabilizationWindowSeconds: 300
