@@ -8,18 +8,18 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "chart.fullname" . }}-server
-  minReplicas: 1
-  maxReplicas: 10
+  minReplicas: {{ .Values.multiwovenServer.hpa.minReplicas }}
+  maxReplicas: {{ .Values.multiwovenServer.hpa.maxReplicas }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 80  # Target average CPU utilization percentage
+        averageUtilization: {{ .Values.multiwovenServer.hpa.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 75  # Target average memory utilization percentage
+        averageUtilization: {{ .Values.multiwovenServer.hpa.memoryAverageUtilizationPercentageThreshold }}
