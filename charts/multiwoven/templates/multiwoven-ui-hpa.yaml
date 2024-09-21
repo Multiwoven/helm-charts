@@ -1,3 +1,4 @@
+{{ if .Values.hpa.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -8,18 +9,19 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "chart.fullname" . }}-ui
-  minReplicas: {{ .Values.multiwovenUI.hpa.minReplicas }}
-  maxReplicas: {{ .Values.multiwovenUI.hpa.maxReplicas }}
+  minReplicas: {{ .Values.hpa.multiwovenUI.minReplicas }}
+  maxReplicas: {{ .Values.hpa.multiwovenUI.maxReplicas }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.multiwovenUI.hpa.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.multiwovenUI.hpa.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.memoryAverageUtilizationPercentageThreshold }}
+{{ end }}

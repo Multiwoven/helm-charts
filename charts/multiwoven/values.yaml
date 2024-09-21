@@ -61,6 +61,25 @@ multiwovenConfig:
   viteBrandColor: ""
   viteBrandHoverColor: ""
   viteFavIconUrl: ""
+
+hpa:
+  enabled: true
+  multiwovenUI:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 75
+  multiwovenServer:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 75
+  multiwovenWorker:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 75
+
 multiwovenPostgresql:
   enabled: true
   multiwovenPostgresql:
@@ -97,11 +116,6 @@ multiwovenServer:
       port: 3000
       targetPort: 3000
   replicas: 1
-  hpa:
-    minReplicas: 1
-    maxReplicas: 10
-    cpuAverageUtilizationPercentageThreshold: 80
-    memoryAverageUtilizationPercentageThreshold: 75
   type: ClusterIP
 multiwovenUI:
   multiwovenUI:
