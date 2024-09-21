@@ -1,4 +1,4 @@
-{{ if .Values.hpa.enabled }}
+{{ if .Values.hpa.multiwovenServer.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -11,17 +11,34 @@ spec:
     name: {{ include "chart.fullname" . }}-server
   minReplicas: {{ .Values.hpa.multiwovenServer.minReplicas }}
   maxReplicas: {{ .Values.hpa.multiwovenServer.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.selectPolicy }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenServer.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenServer.multiwovenServer.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenServer.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenServer.multiwovenServer.memoryAverageUtilizationPercentageThreshold }}
 {{ end }}

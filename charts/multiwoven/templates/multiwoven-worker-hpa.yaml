@@ -11,6 +11,23 @@ spec:
     name: {{ include "chart.fullname" . }}-worker
   minReplicas: {{ .Values.hpa.multiwovenWorker.minReplicas }}
   maxReplicas: {{ .Values.hpa.multiwovenWorker.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenWorker.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenWorker.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenWorker.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenWorker.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.multiwovenWorker.behavior.scaleUp.policies.selectPolicy }}
   metrics:
   - type: Resource
     resource:

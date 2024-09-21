@@ -1,4 +1,4 @@
-{{ if .Values.hpa.enabled }}
+{{ if .Values.hpa.multiwovenUI.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -11,17 +11,34 @@ spec:
     name: {{ include "chart.fullname" . }}-ui
   minReplicas: {{ .Values.hpa.multiwovenUI.minReplicas }}
   maxReplicas: {{ .Values.hpa.multiwovenUI.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenUI.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenUI.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenUI.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenUI.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.multiwovenUI.behavior.scaleUp.policies.selectPolicy }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenUI.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.multiwovenUI.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenUI.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.multiwovenUI.memoryAverageUtilizationPercentageThreshold }}
 {{ end }}
