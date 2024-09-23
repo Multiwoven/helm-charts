@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-worker
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    app: {{ include "chart.fullname" . }}-worker
-    io.kompose.service: {{ include "chart.fullname" . }}-worker
+    app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
+    io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenWorker.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-worker
-      io.kompose.service: {{ include "chart.fullname" . }}-worker
+      app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
+      io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-worker
-        io.kompose.service: {{ include "chart.fullname" . }}-worker
+        app: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
+        io.kompose.service: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -30,7 +30,7 @@ spec:
           value: {{ quote .Values.multiwovenWorker.healthPort }}
         envFrom:
         - configMapRef:
-            name: {{ include "chart.fullname" . }}-config
+            name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
@@ -38,7 +38,7 @@ spec:
             port: {{ .Values.multiwovenWorker.healthPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: {{ include "chart.fullname" . }}-worker
+        name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-worker
         ports:
         - containerPort: {{ .Values.multiwovenWorker.healthPort }}
         readinessProbe:

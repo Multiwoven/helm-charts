@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-temporal-ui
+  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-temporal-ui
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
