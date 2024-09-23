@@ -37,11 +37,11 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenUI.multiwovenUI.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenUI.multiwovenUI.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.multiwovenUI.memoryAverageUtilizationPercentageThreshold }}
 {{ end }}
