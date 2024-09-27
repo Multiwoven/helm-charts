@@ -182,10 +182,10 @@ multiwovenServer:
     resources:
       limits:
         cpu: "2"
-        memory: 2Gi
+        memory: "3Gi"
       requests:
         cpu: "1"
-        memory: 1Gi
+        memory: "1Gi"
   ports:
     - name: "3000"
       port: 3000
@@ -199,11 +199,11 @@ multiwovenUI:
       tag: latest
     resources:
       limits:
-        cpu: "2"
-        memory: 4Gi
+        cpu: "200m"
+        memory: "512Mi"
       requests:
-        cpu: "1"
-        memory: 2Gi
+        cpu: "100m"
+        memory: "256Mi"
   ports:
     - name: "8000"
       port: 8000
@@ -226,7 +226,7 @@ multiwovenWorker:
         cpu: "1"
         memory: 2Gi
       requests:
-        cpu: 500m
+        cpu: "500m"
         memory: 1Gi
   replicas: 1
 pvc:
