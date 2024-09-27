@@ -44,6 +44,6 @@ jobs:
       - name: Deploy chart to staging
         run: |
           helm upgrade -i --reuse-values multiwoven ./charts/multiwoven
-          kubectl rollout restart deployment multiwoven-worker -n multiwoven
-          kubectl rollout restart deployment multiwoven-server -n multiwoven
-          kubectl rollout restart deployment multiwoven-ui -n multiwoven
+          kubectl rollout restart deployment/multiwoven-worker -n multiwoven
+          kubectl rollout restart deployment/multiwoven-server -n multiwoven
+          kubectl rollout restart deployment/multiwoven-ui -n multiwoven
