@@ -271,7 +271,7 @@ temporalUi:
   replicas: 1
   temporalUi:
     env:
-      temporalAddress: community-multiwoven-temporal:7233
+      temporalAddress: multiwoven-temporal:7233
       temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
     image:
