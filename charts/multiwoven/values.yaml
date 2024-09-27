@@ -209,11 +209,6 @@ multiwovenUI:
       port: 8000
       targetPort: 8000
   replicas: 1
-  hpa:
-    minReplicas: 1
-    maxReplicas: 10
-    cpuAverageUtilizationPercentageThreshold: 80
-    memoryAverageUtilizationPercentageThreshold: 75
   type: ClusterIP
 multiwovenWorker:
   healthPort: 4567
@@ -234,11 +229,6 @@ multiwovenWorker:
         cpu: 500m
         memory: 512Mi
   replicas: 1
-  hpa:
-    minReplicas: 1
-    maxReplicas: 10
-    cpuAverageUtilizationPercentageThreshold: 80
-    memoryAverageUtilizationPercentageThreshold: 75
 pvc:
   pvc:
     storageRequest: 100Mi
