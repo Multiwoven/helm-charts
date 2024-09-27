@@ -10,7 +10,7 @@ multiwovenConfig:
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
-  dbHost: "multiwoven-postgresql"
+  dbHost: multiwoven-postgresql
   dbPassword: password
   dbPort: "5432"
   dbUsername: multiwoven
@@ -37,7 +37,7 @@ multiwovenConfig:
   temporalActivityThreadPoolSize: "20"
   temporalClientChain: /certs/temporal.chain.pem
   temporalClientKey: /certs/temporal.pem
-  temporalHost: "multiwoven-temporal"
+  temporalHost: multiwoven-temporal
   temporalNamespace: multiwoven-dev
   temporalPort: "7233"
   temporalPostgresDefaultPort: "5432"
