@@ -83,7 +83,7 @@ hpa:
             periodSeconds: 15
           selectPolicy: Max
       scaleUp:
-        stabilizationWindowSeconds: 300
+        stabilizationWindowSeconds: 45
         policies:
           percentPolicy:
             type: Percent
@@ -113,7 +113,7 @@ hpa:
             periodSeconds: 15
           selectPolicy: Max
       scaleUp:
-        stabilizationWindowSeconds: 300
+        stabilizationWindowSeconds: 45
         policies:
           percentPolicy:
             type: Percent
@@ -143,7 +143,7 @@ hpa:
             periodSeconds: 15
           selectPolicy: Max
       scaleUp:
-        stabilizationWindowSeconds: 300
+        stabilizationWindowSeconds: 45
         policies:
           percentPolicy:
             type: Percent
@@ -200,10 +200,10 @@ multiwovenUI:
     resources:
       limits:
         cpu: "2"
-        memory: 2Gi
+        memory: 4Gi
       requests:
         cpu: "1"
-        memory: 1Gi
+        memory: 2Gi
   ports:
     - name: "8000"
       port: 8000
@@ -224,10 +224,10 @@ multiwovenWorker:
     resources:
       limits:
         cpu: "1"
-        memory: 1Gi
+        memory: 2Gi
       requests:
         cpu: 500m
-        memory: 512Mi
+        memory: 1Gi
   replicas: 1
 pvc:
   pvc:
