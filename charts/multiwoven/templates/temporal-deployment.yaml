@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-temporal
+  name: {{ include "chart.fullname" . }}-temporal
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: temporal
@@ -28,22 +28,22 @@ spec:
           valueFrom:
             configMapKeyRef:
               key: DB_PORT
-              name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_PWD
           valueFrom:
             configMapKeyRef:
               key: DB_PASSWORD
-              name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_SEEDS
           valueFrom:
             configMapKeyRef:
               key: DB_HOST
-              name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
               key: DB_USERNAME
-              name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-config
+              name: {{ include "chart.fullname" . }}-config
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
         - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
           value: 'true'

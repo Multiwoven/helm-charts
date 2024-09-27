@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-ingress
+  name: {{ include "chart.fullname" . }}-ingress
   namespace: {{ .Values.kubernetesNamespace }}
 
   labels:
@@ -32,7 +32,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: '{{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-ui'
+            name: '{{ include "chart.fullname" . }}-ui'
             port:
               number: {{ (index .Values.multiwovenUI.ports 0).port }}
   - host: {{ .Values.multiwovenConfig.apiHost }}
@@ -42,7 +42,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: '{{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server'
+            name: '{{ include "chart.fullname" . }}-server'
             port:
               number: {{ (index .Values.multiwovenServer.ports 0).port }}
 {{ if .Values.temporal.enabled }}
@@ -51,7 +51,7 @@ spec:
       paths:
       - backend:
           service:
-            name: '{{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-temporal-ui'
+            name: '{{ include "chart.fullname" . }}-temporal-ui'
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
         path: /(.*)
