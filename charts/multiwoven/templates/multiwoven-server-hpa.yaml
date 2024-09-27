@@ -11,7 +11,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ .Values.multiwovenConfig.appEnv }}-{{ include "chart.fullname" . }}-server
+    name: {{ include "chart.fullname" . }}-server
   minReplicas: {{ .Values.hpa.multiwovenServer.minReplicas }}
   maxReplicas: {{ .Values.hpa.multiwovenServer.maxReplicas }}
   behavior:
