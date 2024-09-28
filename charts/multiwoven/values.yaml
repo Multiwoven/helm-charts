@@ -6,7 +6,7 @@ multiwovenConfig:
   apiHost: api.multiwoven.com
   appRevision: unknown
   appEnv: community
-  appsignalPushApiKey: "" # Replace with your actual Appsignal Push API key
+  appsignalPushApiKey: "Replace with your actual Appsignal Push API key"
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
