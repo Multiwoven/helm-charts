@@ -61,6 +61,100 @@ multiwovenConfig:
   viteBrandColor: ""
   viteBrandHoverColor: ""
   viteFavIconUrl: ""
+
+hpa:
+  enabled: true
+  multiwovenUI:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 75
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  multiwovenServer:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  multiwovenWorker:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+
 multiwovenPostgresql:
   enabled: true
   multiwovenPostgresql:
@@ -88,10 +182,10 @@ multiwovenServer:
     resources:
       limits:
         cpu: "2"
-        memory: 2Gi
+        memory: "3Gi"
       requests:
         cpu: "1"
-        memory: 1Gi
+        memory: "1Gi"
   ports:
     - name: "3000"
       port: 3000
@@ -105,11 +199,11 @@ multiwovenUI:
       tag: latest
     resources:
       limits:
-        cpu: "2"
-        memory: 2Gi
+        cpu: "200m"
+        memory: "512Mi"
       requests:
-        cpu: "1"
-        memory: 1Gi
+        cpu: "100m"
+        memory: "256Mi"
   ports:
     - name: "8000"
       port: 8000
@@ -130,10 +224,10 @@ multiwovenWorker:
     resources:
       limits:
         cpu: "1"
-        memory: 1Gi
+        memory: 2Gi
       requests:
-        cpu: 500m
-        memory: 512Mi
+        cpu: "500m"
+        memory: 1Gi
   replicas: 1
 pvc:
   pvc:

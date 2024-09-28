@@ -2,8 +2,8 @@ apiVersion: v2
 name: multiwoven
 description: Open-source reverse ETL, an alternative to Hightouch, Census etc. 🔥
 type: application
-version: 0.25.0
-appVersion: "0.25.0"
+version: 0.27.0
+appVersion: "0.27.0"
 maintainers:
   - name: subintp
   - name: RafaelOAiSquared
