@@ -268,20 +268,3 @@ temporalUi:
       repository: temporalio/ui
       tag: 2.22.3
   type: ClusterIP
-acmeChallenge:
-  ports:
-    - name: "80"
-      port: 80
-      targetPort: 80
-  replicas: 1
-  acmeChallenge:
-    image:
-      repository: nginx
-      tag: alpine
-    resources:
-      limits:
-        cpu: "64Mi"
-        memory: "250m"
-      requests:
-        cpu: "128Mi"
-        memory: "500m"
