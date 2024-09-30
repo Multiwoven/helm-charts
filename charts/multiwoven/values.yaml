@@ -7,6 +7,7 @@ multiwovenConfig:
   appRevision: unknown
   appEnv: community
   appsignalPushApiKey: yourkey
+  appVersion: 0.28.0
   awsAccessKeyId: ""
   awsSecretAccessKey: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
