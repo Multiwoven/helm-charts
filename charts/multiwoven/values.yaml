@@ -285,3 +285,36 @@ acmeChallenge:
       requests:
         cpu: "128Mi"
         memory: "500m"
+
+grafana:
+  enabled: true
+  adminPassword: "s3ecu3rep3ass1wor7d"
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClassName: "standard"
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 250m
+  ingress:
+    enabled: true
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+      nginx.ingress.kubernetes.io/use-regex: "true"
+    hosts:
+      - "staging.squared.ai"
+    paths:
+      - /grafana(/|$)(.*)
+    pathType: Prefix
+    tls:
+      - secretName: mw-tls-cert
+        hosts:
+          - "staging.squared.ai"
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana/"
+      serve_from_sub_path: true

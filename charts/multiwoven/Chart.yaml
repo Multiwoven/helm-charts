@@ -2,9 +2,14 @@ apiVersion: v2
 name: multiwoven
 description: Open-source reverse ETL, an alternative to Hightouch, Census etc. 🔥
 type: application
-version: 0.27.0
-appVersion: "0.27.0"
+version: 0.29.0
+appVersion: "0.29.0"
 maintainers:
   - name: subintp
   - name: RafaelOAiSquared
   - name: AngeloB-AIS
+dependencies:
+  - name: grafana
+    version: "8.5.1"
+    repository: "https://grafana.github.io/helm-charts"
+    condition: grafana.enabled
