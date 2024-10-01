@@ -44,6 +44,7 @@ jobs:
       - name: Deploy chart to staging
         run: |
           helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
           helm upgrade dependencies
           helm upgrade -i --reuse-values multiwoven ./charts/multiwoven
           kubectl rollout restart deployment/multiwoven-worker -n multiwoven
