@@ -268,9 +268,10 @@ temporalUi:
       repository: temporalio/ui
       tag: 2.22.3
   type: ClusterIP
+
 grafana:
   enabled: true
-  adminPassword: "s3ecu3rep3ass1wor7d"
+  adminPassword: "your_secure_password"
   persistence:
     enabled: true
     size: 10Gi
@@ -288,14 +289,14 @@ grafana:
       nginx.ingress.kubernetes.io/rewrite-target: /$2
       nginx.ingress.kubernetes.io/use-regex: "true"
     hosts:
-      - "staging.squared.ai"
+      - ""
     paths:
       - /grafana(/|$)(.*)
     pathType: Prefix
     tls:
-      - secretName: mw-tls-cert
+      - secretName: "mw-tls-cert"
         hosts:
-          - "staging.squared.ai"
+          - ""
   grafana.ini:
     server:
       root_url: "%(protocol)s://%(domain)s/grafana/"
