@@ -54,7 +54,7 @@ multiwovenConfig:
   tlsAdminEmail: admin@multiwoven.com
   tlsCertIssuer: letsencrypt-staging
   uiHost: app.multiwoven.com
-  userEmailVerification: false
+  userEmailVerification: "false"
   viteApiHost: api.multiwoven.com
   viteAppsignalPushApiKey: yourkey
   viteBrandName: "Multiwoven"
