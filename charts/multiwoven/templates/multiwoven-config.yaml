@@ -54,6 +54,7 @@ data:
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
+  USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
   VITE_APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.viteAppsignalPushApiKey | quote }}
   VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
