@@ -45,6 +45,16 @@ spec:
             name: '{{ include "chart.fullname" . }}-server'
             port:
               number: {{ (index .Values.multiwovenServer.ports 0).port }}
+  - host: {{ .Values.multiwovenConfig.workerHost }}
+    http:
+      paths:
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-server'
+            port:
+              number: {{ .Values.multiwovenWorker.healthPort }}
 {{ if .Values.temporal.enabled }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:

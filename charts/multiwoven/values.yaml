@@ -62,6 +62,7 @@ multiwovenConfig:
   viteBrandColor: ""
   viteBrandHoverColor: ""
   viteFavIconUrl: ""
+  workerHost: worker.multiwoven.com
 
 hpa:
   enabled: true
