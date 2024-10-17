@@ -20,6 +20,7 @@ spec:
   - hosts:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
+    - {{ .Values.multiwovenConfig.workerHost }}
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
