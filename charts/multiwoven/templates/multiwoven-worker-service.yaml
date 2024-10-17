@@ -16,4 +16,4 @@ spec:
     io.kompose.service:  {{ include "chart.fullname" . }}-server
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.multiwovenWorker.healthPort | toYaml | nindent 2 -}}
+  {{- .Values.multiwovenWorker.healthPort | toYaml | nindent 2 -}}
