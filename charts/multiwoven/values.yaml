@@ -230,6 +230,10 @@ multiwovenWorker:
       requests:
         cpu: "500m"
         memory: 1Gi
+  ports:
+    - name: "4567"
+      port: 4567
+      targetPort: 4567 
   replicas: 1
   type: ClusterIP
 pvc:

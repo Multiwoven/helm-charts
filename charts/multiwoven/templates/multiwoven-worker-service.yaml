@@ -13,7 +13,7 @@ metadata:
 spec:
   type: {{ .Values.multiwovenWorker.type }}
   selector:
-    io.kompose.service:  {{ include "chart.fullname" . }}-server
+    io.kompose.service:  {{ include "chart.fullname" . }}-worker
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-  {{- .Values.multiwovenWorker.healthPort | toYaml | nindent 2 -}}
+  {{- .Values.multiwovenWorker.ports | toYaml | nindent 2 -}}
