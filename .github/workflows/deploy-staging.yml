@@ -42,8 +42,11 @@ jobs:
             use-kubelogin: 'true'
 
       - name: Deploy chart to staging
+        env:
+          WORKER_HOST: ${{ vars.WORKER_HOST }}
         run: |
-          helm upgrade -i --reuse-values multiwoven ./charts/multiwoven
+          helm upgrade -i --reuse-values multiwoven ./charts/multiwoven \
+            --set multiwovenConfig.workerHost=$WORKER_HOST
           kubectl rollout restart deployment/multiwoven-worker -n multiwoven
           kubectl rollout restart deployment/multiwoven-server -n multiwoven
           kubectl rollout restart deployment/multiwoven-ui -n multiwoven
