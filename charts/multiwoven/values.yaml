@@ -231,6 +231,7 @@ multiwovenWorker:
         cpu: "500m"
         memory: 1Gi
   replicas: 1
+  type: ClusterIP
 pvc:
   pvc:
     storageRequest: 100Mi
