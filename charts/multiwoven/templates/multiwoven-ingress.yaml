@@ -53,7 +53,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: '{{ include "chart.fullname" . }}-server'
+            name: '{{ include "chart.fullname" . }}-worker'
             port:
               number: {{ .Values.multiwovenWorker.healthPort }}
 {{ if .Values.temporal.enabled }}
