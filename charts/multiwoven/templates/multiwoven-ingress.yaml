@@ -49,7 +49,7 @@ spec:
   - host: {{ .Values.multiwovenConfig.workerHost }}
     http:
       paths:
-      - path: /(.*)
+      - path: /health
         pathType: Prefix
         backend:
           service:
