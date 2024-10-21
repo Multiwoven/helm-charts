@@ -20,6 +20,7 @@ spec:
   - hosts:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
+    - {{ .Values.multiwovenConfig.workerHost }}
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
@@ -45,6 +46,16 @@ spec:
             name: '{{ include "chart.fullname" . }}-server'
             port:
               number: {{ (index .Values.multiwovenServer.ports 0).port }}
+  - host: {{ .Values.multiwovenConfig.workerHost }}
+    http:
+      paths:
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-worker'
+            port:
+              number: {{ .Values.multiwovenWorker.healthPort }}
 {{ if .Values.temporal.enabled }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:
