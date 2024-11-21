@@ -6,7 +6,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: ["secrets"]
-    verbs: ["get", "create", "update", "list", "watch"]
+    verbs: ["get", "create", "update", "watch"]
 
 ---
 
@@ -22,5 +22,4 @@ subjects:
   - kind: ServiceAccount
     name: secrets-store-csi-driver
     namespace: kube-system
-
 {{ end }}
