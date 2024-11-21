@@ -17,10 +17,12 @@ data:
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
-  DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
-  DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
+  DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
+  {{ if not .Values.secretsStore.enabled }}
+  DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
+  {{ end }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
