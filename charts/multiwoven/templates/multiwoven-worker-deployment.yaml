@@ -21,6 +21,9 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
+      {{ if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
         env:
@@ -28,6 +31,18 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
           value: {{ quote .Values.multiwovenWorker.healthPort }}
+        {{ if .Values.secretsStore.enabled }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              key: DB_PASSWORD
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              key: DB_USERNAME
+        {{ end }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
@@ -48,13 +63,20 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
-{{ if not .Values.temporal.enabled }}
         imagePullPolicy: Always
         volumeMounts:
+        {{ if not .Values.temporal.enabled }}
         - name: ssl
           mountPath: /certs
           readOnly: false
+        {{ end }}
+        {{ if .Values.secretsStore.enabled }}
+        - name: multiwoven-secrets-store
+          mountPath: /run/secrets/store
+          readOnly: true
+        {{ end }}
       volumes:
+      {{ if not .Values.temporal.enabled }}
       - name: ssl
         secret:
           secretName: temporal-cloud
@@ -63,7 +85,15 @@ spec:
             path: ./temporal.key
           - key: temporal-root-cert
             path: ./temporal.pem
-{{ end }}
+      {{ end }}
+      {{ if .Values.secretsStore.enabled }}
+      - name: multiwoven-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

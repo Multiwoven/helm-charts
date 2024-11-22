@@ -64,6 +64,17 @@ multiwovenConfig:
   viteFavIconUrl: ""
   workerHost: worker.multiwoven.com
 
+serviceAccount:
+  enabled: false
+  name: multiwoven-service-account
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
+
+secretsStore:
+  enabled: false
+  aws:
+    dbCredsSecretName: ""
+
 hpa:
   enabled: true
   multiwovenUI:

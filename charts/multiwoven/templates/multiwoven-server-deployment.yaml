@@ -21,8 +21,23 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-server
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
+      {{ if .Values.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      {{ end }}
       containers:
       - env:
+        {{ if .Values.secretsStore.enabled }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              key: DB_PASSWORD
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              key: DB_USERNAME
+        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
@@ -45,13 +60,20 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
-{{ if not .Values.temporal.enabled }}
         imagePullPolicy: Always
         volumeMounts:
+        {{ if .Values.secretsStore.enabled }}
+        - name: multiwoven-secrets-store
+          mountPath: /run/secrets/store
+          readOnly: true
+        {{ end }}
+        {{ if not .Values.temporal.enabled }}
         - name: ssl
           mountPath: /certs
           readOnly: false
+        {{ end }}
       volumes:
+      {{ if not .Values.temporal.enabled }}
       - name: ssl
         secret:
           secretName: temporal-cloud
@@ -60,7 +82,15 @@ spec:
             path: ./temporal.key
           - key: temporal-root-cert
             path: ./temporal.pem
-{{ end }}
+      {{ end }}
+      {{ if .Values.secretsStore.enabled }}
+      - name: multiwoven-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
