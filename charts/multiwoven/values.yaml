@@ -64,6 +64,11 @@ multiwovenConfig:
   viteFavIconUrl: ""
   workerHost: worker.multiwoven.com
 
+externalDNS:
+  enabled: false
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: ""
+
 serviceAccount:
   enabled: false
   name: multiwoven-service-account

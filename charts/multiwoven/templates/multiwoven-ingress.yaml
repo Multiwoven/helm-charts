@@ -13,6 +13,13 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
+    {{ if .Values.externalDNS.enabled}}
+    {{ if .Values.externalDNS.annotations }}
+    {{ range $key, $value := .Values.serviceAccount.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{ end }}
+    {{ end }}
+    {{ end }}
 spec:
   ingressClassName: nginx
   tls:
