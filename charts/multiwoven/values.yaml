@@ -66,8 +66,12 @@ multiwovenConfig:
 
 externalDNS:
   enabled: false
-  annotations:
-    external-dns.alpha.kubernetes.io/hostname: ""
+
+kongHQ:
+  enabled: false
+  plugins:
+    prometheus:
+      enabled: false
 
 serviceAccount:
   enabled: false

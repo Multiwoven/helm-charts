@@ -3,24 +3,32 @@ kind: Ingress
 metadata:
   name: {{ include "chart.fullname" . }}-ingress
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
+    {{ if .Values.externalDNS.enabled }}
+    {{ if .Values.temporal.enabled }}
+      external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.temporalUiHost }}"
+    {{ end }}
+    {{ if not .Values.temporal.enabled }}
+      external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }}"
+    {{ end }}
+    {{ end }}
+    {{ if .Values.kongHQ.enabled }}
+    {{ if .Values.kongHQ.plugins.prometheus.enabled }}
+      konghq.com/plugins: 'prometheus-metrics'
+    {{ end }}
+    {{ end }}
+    {{ if not .Values.externalDNS.enabled }}
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     cert-manager.io/issuer: {{ .Values.multiwovenConfig.tlsCertIssuer }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
-    {{ if .Values.externalDNS.enabled}}
-    {{ if .Values.externalDNS.annotations }}
-    {{ range $key, $value := .Values.serviceAccount.annotations }}
-    {{ $key }}: {{ $value | quote }}
-    {{ end }}
-    {{ end }}
     {{ end }}
 spec:
+  {{ if not .Values.kongHQ.enabled }}
   ingressClassName: nginx
   tls:
   - hosts:
@@ -31,6 +39,10 @@ spec:
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
     secretName: mw-tls-cert
+  {{ end }}
+  {{ if .Values.kongHQ.enabled }}
+    ingressClassName: kong
+  {{ end }}
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
