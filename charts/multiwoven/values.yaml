@@ -64,6 +64,18 @@ multiwovenConfig:
   viteFavIconUrl: ""
   workerHost: worker.multiwoven.com
 
+externalDNS:
+  enabled: false
+
+nginxIngress:
+  enabled: true
+
+kongIngress:
+  enabled: false
+  plugins:
+    prometheus:
+      enabled: false
+
 serviceAccount:
   enabled: false
   name: multiwoven-service-account
