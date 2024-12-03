@@ -15,8 +15,8 @@ metadata:
       {{- end }}
     {{ end }}
     
-    {{ if .Values.kongHqIngress.enabled }}
-      {{- if .Values.kongHqIngress.plugins.prometheus.enabled }}
+    {{ if .Values.kongIngress.enabled }}
+      {{- if .Values.kongIngress.plugins.prometheus.enabled }}
         konghq.com/plugins: 'prometheus-metrics'
       {{- end }}
     {{ end }}
@@ -29,7 +29,7 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
     {{ end }}
-    
+
 spec:
   {{ if .Values.nginxIngress.enabled }}
   ingressClassName: nginx
@@ -44,7 +44,7 @@ spec:
     secretName: mw-tls-cert
   {{ end }}
   
-  {{ if .Values.kongHqIngress.enabled }}
+  {{ if .Values.kongIngress.enabled }}
     ingressClassName: kong
   {{ end }}
   rules:
