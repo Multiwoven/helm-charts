@@ -67,7 +67,10 @@ multiwovenConfig:
 externalDNS:
   enabled: false
 
-kongHQ:
+nginxIngress:
+  enabled: true
+
+kongHqIngress:
   enabled: false
   plugins:
     prometheus:
