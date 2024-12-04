@@ -45,7 +45,7 @@ spec:
   {{ end }}
   
   {{ if .Values.kongIngress.enabled }}
-    ingressClassName: kong
+  ingressClassName: kong
   {{ end }}
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
