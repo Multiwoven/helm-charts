@@ -1,3 +1,4 @@
+{{ if .Values.nginxIngress.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -17,4 +18,4 @@ spec:
       - http01:
           ingress:
             ingressClassName: nginx
-            
+{{ end }}
