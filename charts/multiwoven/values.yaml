@@ -65,16 +65,16 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 externalDNS:
-  enabled: true
-
-nginxIngress:
   enabled: false
 
-kongIngress:
+nginxIngress:
   enabled: true
+
+kongIngress:
+  enabled: false
   plugins:
     prometheus:
-      enabled: true
+      enabled: false
 
 serviceAccount:
   enabled: false

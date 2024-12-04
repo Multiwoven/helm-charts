@@ -14,11 +14,13 @@ metadata:
         external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }}"
       {{- end }}
     {{ end }}
+    
     {{ if .Values.kongIngress.enabled }}
       {{- if .Values.kongIngress.plugins.prometheus.enabled }}
         konghq.com/plugins: 'prometheus-metrics'
       {{- end }}
     {{ end }}
+    
     {{ if .Values.nginxIngress.enabled }}
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -43,7 +45,7 @@ spec:
   {{ end }}
   
   {{ if .Values.kongIngress.enabled }}
-  ingressClassName: kong
+    ingressClassName: kong
   {{ end }}
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
