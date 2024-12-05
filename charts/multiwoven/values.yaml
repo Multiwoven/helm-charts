@@ -85,6 +85,7 @@ serviceAccount:
 
 secretsStore:
   enabled: false
+  secretAlias: dbsecret-f01dd256e712
   aws:
     dbCredsSecretName: ""
 
