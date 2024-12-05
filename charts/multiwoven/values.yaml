@@ -66,7 +66,7 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 automountServiceAccountToken:
-  enabled: true # k8s default is true
+  enabled: true
 
 externalDNS:
   enabled: false
