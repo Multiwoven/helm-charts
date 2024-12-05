@@ -17,6 +17,7 @@ multiwovenConfig:
   grpcEnableForkSupport: 1
   jwtSecret: ""
   newRelicKey: yourkey
+  nginxProxyBodySize: 2m
   privateRepo: false
   railsEnv: development
   railsLogLevel: info
