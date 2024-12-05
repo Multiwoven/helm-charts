@@ -35,12 +35,12 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              name: {{ .Values.secretsStore.secretAlias }}
               key: DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.aws.dbCredsSecretName }}
+              name: {{ .Values.secretsStore.secretAlias }}
               key: DB_USERNAME
         {{ end }}
         envFrom:
