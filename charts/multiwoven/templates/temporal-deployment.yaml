@@ -41,7 +41,7 @@ spec:
             {{ end }}
             {{ if .Values.secretsStore.enabled}}
             secretKeyRef:
-              name: dbcredsfile
+              name: {{ .Values.secretsStore.secretAlias }}
               key: DB_PASSWORD
             {{ end }}
         - name: POSTGRES_SEEDS
@@ -58,7 +58,7 @@ spec:
             {{ end }}
             {{ if .Values.secretsStore.enabled}}
             secretKeyRef:
-              name: dbcredsfile
+              name: {{ .Values.secretsStore.secretAlias }}
               key: DB_USERNAME
             {{ end }}
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
