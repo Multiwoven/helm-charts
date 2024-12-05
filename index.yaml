@@ -2,6 +2,21 @@ apiVersion: v1
 entries:
   multiwoven:
   - apiVersion: v2
+    appVersion: 0.37.0
+    created: "2024-12-05T20:18:05.51242855Z"
+    description: "Open-source reverse ETL, an alternative to Hightouch, Census etc.
+      \U0001F525"
+    digest: 2c8848b564639bee3fd77cc83774f5ebecdb6fed70c9e0c537382e6a1839d2bb
+    maintainers:
+    - name: subintp
+    - name: RafaelOAiSquared
+    - name: AngeloB-AIS
+    name: multiwoven
+    type: application
+    urls:
+    - https://github.com/Multiwoven/helm-charts/releases/download/multiwoven-0.37.0/multiwoven-0.37.0.tgz
+    version: 0.37.0
+  - apiVersion: v2
     appVersion: 0.36.0
     created: "2024-12-05T15:23:47.421933561Z"
     description: "Open-source reverse ETL, an alternative to Hightouch, Census etc.
@@ -522,4 +537,4 @@ entries:
     urls:
     - https://github.com/Multiwoven/helm-charts/releases/download/multiwoven-0.1.0/multiwoven-0.1.0.tgz
     version: 0.1.0
-generated: "2024-12-05T15:23:47.422250976Z"
+generated: "2024-12-05T20:18:05.5127883Z"
