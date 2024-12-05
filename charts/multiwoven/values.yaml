@@ -64,6 +64,9 @@ multiwovenConfig:
   viteFavIconUrl: ""
   workerHost: worker.multiwoven.com
 
+automountServiceAccountToken:
+  enabled: true # k8s default is true
+
 externalDNS:
   enabled: false
 
