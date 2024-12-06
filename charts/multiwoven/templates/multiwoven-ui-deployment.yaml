@@ -21,6 +21,7 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-ui
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
         envFrom:
