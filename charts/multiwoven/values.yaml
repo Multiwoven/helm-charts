@@ -92,6 +92,15 @@ secretsStore:
   aws:
     dbCredsSecretName: ""
 
+securityContext:
+  enabled: false
+  capabilities:
+    enabled: false
+    drop:
+      enabled: false
+      permissions:
+        - "ALL"
+
 hpa:
   enabled: true
   multiwovenUI:
