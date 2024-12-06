@@ -76,6 +76,20 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
+        {{ if .Values.securityContext.enabled }}
+        securityContext:
+          {{ if .Values.securityContext.capabilities.enabled }}
+          capabilities:
+            {{ if .Values.securityContext.capabilities.drop.enabled }}
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+          {{ end }}
+          {{ end }}
+        {{ end }}
         name: temporal
         ports:
         - containerPort: 7233
