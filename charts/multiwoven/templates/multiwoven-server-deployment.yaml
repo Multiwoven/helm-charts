@@ -44,6 +44,20 @@ spec:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        {{ if .Values.securityContext.enabled }}
+        securityContext:
+          {{ if .Values.securityContext.capabilities.enabled }}
+          capabilities:
+            {{ if .Values.securityContext.capabilities.drop.enabled }}
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+          {{ end }}
+          {{ end }}
+        {{ end }}
         livenessProbe:
           httpGet:
             path: /
