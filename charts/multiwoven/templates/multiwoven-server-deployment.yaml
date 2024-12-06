@@ -24,6 +24,7 @@ spec:
       {{ if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       {{ end }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
