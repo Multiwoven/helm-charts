@@ -29,7 +29,6 @@ spec:
     spec:
       securityContext:
         fsGroup: {{ .Values.temporalUi.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
@@ -46,6 +45,7 @@ spec:
         securityContext:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
+          privileged: {{ .Values.securityContext.privileged }}
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
@@ -62,7 +62,7 @@ spec:
         name: temporal-ui
         ports:
         - containerPort: 8080
-          hostPort: 8080
+          # hostPort: 8080 
           protocol: TCP
         resources: {}
       restartPolicy: Always

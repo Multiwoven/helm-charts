@@ -24,7 +24,6 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenUI.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
       containers:
       - env:
         envFrom:
@@ -35,6 +34,7 @@ spec:
         securityContext:
           runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}
+          privileged: {{ .Values.securityContext.privileged }}
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:

@@ -23,6 +23,9 @@ spec:
       {{ if .Values.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
       {{ end }}
+      securityContext:
+        fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
+        runAsNonRoot: true # DO NOT REMOVE. The behavior of temporal can be a bit unpredictable if this is not explicitly set, causing the pod to fail if a non-root user is specified below as runAsUser.
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
@@ -79,6 +82,9 @@ spec:
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
         {{ if .Values.securityContext.enabled }}
         securityContext:
+          runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
+          privileged: {{ .Values.securityContext.privileged }}
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
@@ -113,3 +119,7 @@ spec:
       {{ end }}
       restartPolicy: Always
 {{ end }}
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}

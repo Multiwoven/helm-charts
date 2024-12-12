@@ -96,7 +96,8 @@ secretsStore:
 
 securityContext:
   enabled: false
-  allowPrivilegeEscalation: false
+  privileged: false
+  allowPrivilegeEscalation: true
   capabilities:
     enabled: false
     drop:
@@ -295,6 +296,8 @@ pvc:
   pvc:
     storageRequest: 100Mi
 temporal:
+  podSecurityContext:
+    fsGroup: 1000
   enabled: true
   ports:
     - name: "7233"
@@ -302,6 +305,9 @@ temporal:
       targetPort: 7233
   replicas: 1
   temporal:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     env:
       db: postgresql
     image:
