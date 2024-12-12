@@ -22,6 +22,9 @@ spec:
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.multiwovenUI.podSecurityContext.fsGroup }}
+        runAsNonRoot: true
       containers:
       - env:
         envFrom:
@@ -30,6 +33,9 @@ spec:
         image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
         {{ if .Values.securityContext.enabled }}
         securityContext:
+          runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
             {{ if .Values.securityContext.capabilities.drop.enabled }}

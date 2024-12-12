@@ -27,6 +27,9 @@ spec:
         kompose.cmd: kompose convert
         kompose.version: 1.32.0 (HEAD)
     spec:
+      securityContext:
+        fsGroup: {{ .Values.temporalUi.podSecurityContext.fsGroup }}
+        runAsNonRoot: true
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
@@ -41,6 +44,9 @@ spec:
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
         {{ if .Values.securityContext.enabled }}
         securityContext:
+          runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
             {{ if .Values.securityContext.capabilities.drop.enabled }}
@@ -61,3 +67,7 @@ spec:
         resources: {}
       restartPolicy: Always
 {{ end }}
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}

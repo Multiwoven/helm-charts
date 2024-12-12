@@ -17,6 +17,7 @@ multiwovenConfig:
   grpcEnableForkSupport: 1
   jwtSecret: ""
   newRelicKey: yourkey
+  newRelicAgentEnabled: "false"
   nginxProxyBodySize: 2m
   privateRepo: false
   railsEnv: development
@@ -54,6 +55,7 @@ multiwovenConfig:
   temporalWorkflowThreadPoolSize: "10"
   tlsAdminEmail: admin@multiwoven.com
   tlsCertIssuer: letsencrypt-staging
+  track: "no"
   uiHost: app.multiwoven.com
   userEmailVerification: "false"
   viteApiHost: api.multiwoven.com
@@ -94,6 +96,7 @@ secretsStore:
 
 securityContext:
   enabled: false
+  allowPrivilegeEscalation: false
   capabilities:
     enabled: false
     drop:
@@ -214,7 +217,12 @@ multiwovenPostgresql:
   replicas: 1
   type: ClusterIP
 multiwovenServer:
+  podSecurityContext:
+    fsGroup: 10002
   multiwovenServer:
+    containerSecurityContext:
+      runAsUser: 10002
+      runAsGroup: 10002
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -232,7 +240,12 @@ multiwovenServer:
   replicas: 1
   type: ClusterIP
 multiwovenUI:
+  podSecurityContext:
+    fsGroup: 1000
   multiwovenUI:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     image:
       repository: multiwoven/multiwoven-ui
       tag: latest
@@ -251,7 +264,12 @@ multiwovenUI:
   type: ClusterIP
 multiwovenWorker:
   healthPort: 4567
+  podSecurityContext:
+    fsGroup: 1000
   multiwovenWorker:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     args:
       - sh
       - -c
@@ -298,17 +316,23 @@ temporal:
         memory: 1Gi
   type: ClusterIP
 temporalUi:
+  podSecurityContext:
+    fsGroup: 5000
   ports:
     - name: "8080"
       port: 8080
       targetPort: 8080
   replicas: 1
   temporalUi:
+    containerSecurityContext:
+      runAsUser: 5000
+      runAsGroup: 5000
     env:
       temporalAddress: multiwoven-temporal:7233
       temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
     image:
       repository: temporalio/ui
-      tag: 2.22.3
+      # tag: 2.22.3
+      tag: 2.32.0
   type: ClusterIP

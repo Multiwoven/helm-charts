@@ -12,7 +12,7 @@ data:
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
   APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
-  APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
+  # APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
   AWS_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.awsAccessKeyId | quote }}
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
@@ -25,7 +25,8 @@ data:
   {{ end }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
-  NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  # NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  NEW_RELIC_AGENT_ENABLED: {{ .Values.multiwovenConfig.newRelicAgentEnabled | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
@@ -55,6 +56,7 @@ data:
   TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
+  TRACK: {{ .Values.multiwovenConfig.track | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}

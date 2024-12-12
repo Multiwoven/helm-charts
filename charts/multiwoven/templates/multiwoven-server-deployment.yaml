@@ -25,6 +25,9 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       {{ end }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
+        runAsNonRoot: true
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
@@ -47,6 +50,9 @@ spec:
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         {{ if .Values.securityContext.enabled }}
         securityContext:
+          runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
             {{ if .Values.securityContext.capabilities.drop.enabled }}

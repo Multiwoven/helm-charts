@@ -79,6 +79,7 @@ spec:
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
         {{ if .Values.securityContext.enabled }}
         securityContext:
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
             {{ if .Values.securityContext.capabilities.drop.enabled }}
