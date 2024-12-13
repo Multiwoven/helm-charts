@@ -293,7 +293,6 @@ pvc:
 temporal:
   podSecurityContext:
     fsGroup: 1000
-    runAsNonRoot: false
   enabled: true
   ports:
     - name: "7233"
