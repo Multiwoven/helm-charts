@@ -54,7 +54,6 @@ multiwovenConfig:
   temporalWorkflowThreadPoolSize: "10"
   tlsAdminEmail: admin@multiwoven.com
   tlsCertIssuer: letsencrypt-staging
-  track: "no"
   uiHost: app.multiwoven.com
   userEmailVerification: "false"
   viteApiHost: api.multiwoven.com
