@@ -26,7 +26,6 @@ data:
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
-  NEW_RELIC_AGENT_ENABLED: {{ .Values.multiwovenConfig.newRelicAgentEnabled | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
