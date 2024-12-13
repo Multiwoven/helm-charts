@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-        # runAsNonRoot: true # DO NOT REMOVE. The behavior of temporal can be a bit unpredictable if this is not explicitly set, causing the pod to fail if a non-root user is specified below as runAsUser. 
+        runAsNonRoot: {{ .Values.temporal.podSecurityContext.runAsNonRoot }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
