@@ -4,7 +4,6 @@ kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-temporal-ui
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
     io.kompose.service: temporal-ui
   {{- include "chart.labels" . | nindent 4 }}
@@ -41,6 +40,7 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}

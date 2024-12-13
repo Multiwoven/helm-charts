@@ -30,6 +30,7 @@ spec:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
           runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}

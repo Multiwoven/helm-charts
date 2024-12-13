@@ -100,6 +100,8 @@ securityContext:
       permissions:
         - "ALL"
 
+globalImagePullPolicy: Always
+
 hpa:
   enabled: true
   multiwovenUI:
@@ -335,6 +337,5 @@ temporalUi:
       temporalUiPort: "8080"
     image:
       repository: temporalio/ui
-      # tag: 2.22.3
-      tag: 2.32.0
+      tag: 2.22.3
   type: ClusterIP
