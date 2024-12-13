@@ -45,7 +45,7 @@ spec:
         securityContext:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
-          privileged: {{ .Values.securityContext.privileged }}
+          privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           capabilities:
             drop:

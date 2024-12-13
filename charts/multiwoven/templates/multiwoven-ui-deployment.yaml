@@ -35,7 +35,7 @@ spec:
         securityContext:
           runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}
-          privileged: {{ .Values.securityContext.privileged }}
+          privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           capabilities:
             drop:

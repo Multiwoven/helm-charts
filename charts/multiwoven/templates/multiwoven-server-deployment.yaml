@@ -50,7 +50,7 @@ spec:
         securityContext:
           runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
-          privileged: {{ .Values.securityContext.privileged }}
+          privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           capabilities:
             drop:
