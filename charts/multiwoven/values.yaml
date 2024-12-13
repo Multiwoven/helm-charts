@@ -216,11 +216,11 @@ multiwovenPostgresql:
   type: ClusterIP
 multiwovenServer:
   podSecurityContext:
-    fsGroup: 10002
+    fsGroup: 1000
   multiwovenServer:
     containerSecurityContext:
-      runAsUser: 10002
-      runAsGroup: 10002
+      runAsUser: 1000
+      runAsGroup: 1000
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
