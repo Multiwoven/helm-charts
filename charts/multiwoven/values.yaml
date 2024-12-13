@@ -83,7 +83,7 @@ kongIngress:
       enabled: false
 
 serviceAccount:
-  enabled: false
+  create: false
   name: multiwoven-service-account
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
@@ -95,13 +95,10 @@ secretsStore:
     dbCredsSecretName: ""
 
 securityContext:
-  enabled: false
   privileged: false
   allowPrivilegeEscalation: true
   capabilities:
-    enabled: false
     drop:
-      enabled: false
       permissions:
         - "ALL"
 

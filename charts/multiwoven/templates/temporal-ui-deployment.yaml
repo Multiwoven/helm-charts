@@ -41,33 +41,26 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
-        {{ if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
           privileged: {{ .Values.securityContext.privileged }}
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-          {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
-            {{ if .Values.securityContext.capabilities.drop.enabled }}
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
             {{- range .Values.securityContext.capabilities.drop.permissions }}
               - {{ . }}
             {{- end }}
             {{- end }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
         name: temporal-ui
         ports:
         - containerPort: 8080
-          # hostPort: 8080 
           protocol: TCP
         resources: {}
       restartPolicy: Always
-{{ end }}
-      {{ if .Values.multiwovenConfig.privateRepo }}
+       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
+{{ end }}

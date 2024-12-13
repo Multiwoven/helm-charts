@@ -20,12 +20,10 @@ spec:
         io.kompose.service: temporal
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
-      {{ if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{ end }}
+      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-        runAsNonRoot: true # DO NOT REMOVE. The behavior of temporal can be a bit unpredictable if this is not explicitly set, causing the pod to fail if a non-root user is specified below as runAsUser.
+        # runAsNonRoot: true # DO NOT REMOVE. The behavior of temporal can be a bit unpredictable if this is not explicitly set, causing the pod to fail if a non-root user is specified below as runAsUser. 
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
@@ -80,24 +78,18 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
-        {{ if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
           privileged: {{ .Values.securityContext.privileged }}
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-          {{ if .Values.securityContext.capabilities.enabled }}
           capabilities:
-            {{ if .Values.securityContext.capabilities.drop.enabled }}
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
             {{- range .Values.securityContext.capabilities.drop.permissions }}
               - {{ . }}
             {{- end }}
             {{- end }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
         name: temporal
         ports:
         - containerPort: 7233
@@ -118,8 +110,9 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
       {{ end }}
       restartPolicy: Always
-{{ end }}
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
+{{ end }}
+
