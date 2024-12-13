@@ -57,7 +57,7 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
-        resources: {}
+        resources: {{- toYaml .Values.temporalUi.temporalUi.resources | nindent 10 }}
       restartPolicy: Always
        {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
