@@ -54,7 +54,7 @@ spec:
           runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
           privileged: false
-          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          allowPrivilegeEscalation: false
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
