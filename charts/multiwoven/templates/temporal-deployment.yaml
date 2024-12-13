@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-        runAsNonRoot: {{ .Values.temporal.podSecurityContext.runAsNonRoot }}
+        runAsNonRoot: true
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:

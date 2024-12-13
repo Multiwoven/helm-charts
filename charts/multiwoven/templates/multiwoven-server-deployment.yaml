@@ -25,6 +25,7 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
+        runAsNonRoot: true
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
