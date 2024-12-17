@@ -35,7 +35,7 @@ spec:
             mkdir -p /mnt/temporal-config
             chmod 755 /mnt/temporal-config
             echo "Copying /etc/temporal to /mnt/temporal-config"
-            cp -r /etc/temporal/* /mnt/temporal-config/
+            cp -r /etc/temporal/* /mnt/temporal-config/ || echo "/etc/temporal directory is empty or missing"
             chown -R {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}:{{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }} /mnt/temporal-config
             chmod -R u+w /mnt/temporal-config
         volumeMounts:
