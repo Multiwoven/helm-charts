@@ -42,7 +42,7 @@ spec:
             echo "Copying /home/ui-server to /mnt/home/ui-server"
             cp -r /home/ui-server/* /mnt/home/ui-server/
             chown -R {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}:{{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }} /mnt/home/ui-server/
-            chmod -R +w /mnt/home/ui-server/
+            chmod -R u+w /mnt/home/ui-server/
         volumeMounts:
           - name: temporal-config
             mountPath: /mnt/home/ui-server

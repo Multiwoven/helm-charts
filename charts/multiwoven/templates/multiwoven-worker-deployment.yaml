@@ -38,7 +38,7 @@ spec:
             echo "Copying /rails to /mnt/rails"
             cp -r /rails/* /mnt/rails/
             chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
-            chmod -R +w /mnt/rails
+            chmod -R u+w /mnt/rails
         volumeMounts:
           - name: rails-config
             mountPath: /mnt/rails
