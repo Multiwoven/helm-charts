@@ -25,7 +25,6 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenWorker.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
         env:
