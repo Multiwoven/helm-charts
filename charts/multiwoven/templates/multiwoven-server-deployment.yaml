@@ -25,7 +25,22 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
+      initContainers:
+      - name: copy-config
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /mnt/rails
+            chmod 755 /mnt/rails
+            echo "Copying /rails to /mnt/rails"
+            cp -r /rails/* /mnt/rails/
+            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
+            chmod -R +w /mnt/rails
+        volumeMounts:
+          - name: rails-config
+            mountPath: /mnt/rails
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
@@ -52,6 +67,7 @@ spec:
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true 
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -87,6 +103,8 @@ spec:
           mountPath: /certs
           readOnly: false
         {{ end }}
+        - name: rails-config
+          mountPath: /rails
       volumes:
       {{ if not .Values.temporal.enabled }}
       - name: ssl
@@ -106,6 +124,8 @@ spec:
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
       {{ end }}
+      - name: rails-config
+        emptyDir: {}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

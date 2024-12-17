@@ -23,8 +23,23 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      initContainers:
+      - name: copy-config
+        image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /mnt/temporal-config
+            chmod 755 /mnt/temporal-config
+            echo "Copying /etc/temporal to /mnt/temporal-config"
+            cp -r /etc/temporal/* /mnt/temporal-config/
+            chown -R {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}:{{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }} /mnt/temporal-config
+            chmod -R +w /mnt/temporal-config
+        volumeMounts:
+          - name: temporal-config
+            mountPath: /mnt/temporal-config
       containers:
       - env:
         - name: DB
@@ -84,6 +99,7 @@ spec:
           runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -101,6 +117,8 @@ spec:
           mountPath: /run/secrets/store
           readOnly: true
         {{ end }}
+        - name: temporal-config
+          mountPath: /etc/temporal/
       volumes:
       {{ if .Values.secretsStore.enabled }}
       - name: multiwoven-secrets-store
@@ -110,6 +128,8 @@ spec:
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
       {{ end }}
+      - name: temporal-config
+        emptyDir: {}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

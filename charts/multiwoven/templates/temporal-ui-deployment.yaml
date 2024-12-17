@@ -28,8 +28,23 @@ spec:
     spec:
       securityContext:
         fsGroup: {{ .Values.temporalUi.podSecurityContext.fsGroup }}
-        runAsNonRoot: true
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      initContainers:
+      - name: copy-config
+        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /mnt/home/ui-server
+            chmod 755 /mnt/home/ui-server
+            echo "Copying /home/ui-server to /mnt/home/ui-server"
+            cp -r /home/ui-server/* /mnt/home/ui-server/
+            chown -R {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}:{{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }} /mnt/home/ui-server/
+            chmod -R +w /mnt/home/ui-server/
+        volumeMounts:
+          - name: temporal-config
+            mountPath: /mnt/home/ui-server
       containers:
       - env:
         - name: TEMPORAL_ADDRESS
@@ -47,6 +62,7 @@ spec:
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true 
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -59,6 +75,12 @@ spec:
         - containerPort: 8080
           protocol: TCP
         resources: {{- toYaml .Values.temporalUi.temporalUi.resources | nindent 10 }}
+        volumeMounts:
+          - name: temporal-config
+            mountPath: /home/ui-server/
+      volumes:
+        - name: temporal-config
+          emptyDir: {}
       restartPolicy: Always
        {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
