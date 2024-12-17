@@ -30,6 +30,7 @@ spec:
         fsGroup: {{ .Values.temporalUi.podSecurityContext.fsGroup }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       initContainers:
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
         command:
@@ -45,6 +46,7 @@ spec:
         volumeMounts:
           - name: temporal-config
             mountPath: /mnt/home/ui-server
+      {{ end }}
       containers:
       - env:
         - name: TEMPORAL_ADDRESS
@@ -61,8 +63,8 @@ spec:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
           privileged: false
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true 
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -76,11 +78,15 @@ spec:
           protocol: TCP
         resources: {{- toYaml .Values.temporalUi.temporalUi.resources | nindent 10 }}
         volumeMounts:
+          {{ if .Values.securityContext.readOnlyRootFilesystem }}
           - name: temporal-config
             mountPath: /home/ui-server/
+          {{ end }}
       volumes:
+        {{ if .Values.securityContext.readOnlyRootFilesystem }}
         - name: temporal-config
           emptyDir: {}
+        {{ end }}
       restartPolicy: Always
        {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

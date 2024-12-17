@@ -26,6 +26,7 @@ spec:
       securityContext:
         fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
       initContainers:
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         command:
@@ -41,6 +42,7 @@ spec:
         volumeMounts:
           - name: rails-config
             mountPath: /mnt/rails
+      {{ end }}
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
@@ -66,8 +68,8 @@ spec:
           runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
           privileged: false
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true 
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -103,8 +105,10 @@ spec:
           mountPath: /certs
           readOnly: false
         {{ end }}
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
         - name: rails-config
           mountPath: /rails
+      {{ end }}
       volumes:
       {{ if not .Values.temporal.enabled }}
       - name: ssl
@@ -124,8 +128,10 @@ spec:
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
       {{ end }}
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config
         emptyDir: {}
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

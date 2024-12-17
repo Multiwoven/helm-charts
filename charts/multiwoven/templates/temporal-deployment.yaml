@@ -25,6 +25,7 @@ spec:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       initContainers:
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
         command:
@@ -40,6 +41,7 @@ spec:
         volumeMounts:
           - name: temporal-config
             mountPath: /mnt/temporal-config
+      {{ end }}
       containers:
       - env:
         - name: DB
@@ -98,8 +100,8 @@ spec:
           runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
           privileged: false
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -117,8 +119,10 @@ spec:
           mountPath: /run/secrets/store
           readOnly: true
         {{ end }}
+        {{ if .Values.securityContext.readOnlyRootFilesystem }}
         - name: temporal-config
           mountPath: /etc/temporal/
+        {{ end }}
       volumes:
       {{ if .Values.secretsStore.enabled }}
       - name: multiwoven-secrets-store
@@ -128,8 +132,10 @@ spec:
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
       {{ end }}
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: temporal-config
         emptyDir: {}
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
