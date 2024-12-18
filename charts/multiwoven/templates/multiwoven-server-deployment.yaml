@@ -64,6 +64,7 @@ spec:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
           runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}

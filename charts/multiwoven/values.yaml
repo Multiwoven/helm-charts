@@ -100,7 +100,7 @@ securityContext:
       permissions:
         - "ALL"
 
-globalImagePullPolicy: Always
+globalImagePullPolicy: IfNotPresent
 
 hpa:
   enabled: true
