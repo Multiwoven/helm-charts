@@ -22,26 +22,27 @@ spec:
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.multiwovenUI.podSecurityContext.fsGroup }}
       containers:
       - env:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
-        {{ if .Values.securityContext.enabled }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          {{ if .Values.securityContext.capabilities.enabled }}
+          runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: false
           capabilities:
-            {{ if .Values.securityContext.capabilities.drop.enabled }}
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
             {{- range .Values.securityContext.capabilities.drop.permissions }}
               - {{ . }}
             {{- end }}
             {{- end }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
         livenessProbe:
           httpGet:
             path: /

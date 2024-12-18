@@ -4,7 +4,6 @@ kind: Deployment
 metadata:
   name: {{ include "chart.fullname" . }}-temporal-ui
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
     io.kompose.service: temporal-ui
   {{- include "chart.labels" . | nindent 4 }}
@@ -27,6 +26,8 @@ spec:
         kompose.cmd: kompose convert
         kompose.version: 1.32.0 (HEAD)
     spec:
+      securityContext:
+        fsGroup: {{ .Values.temporalUi.podSecurityContext.fsGroup }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       containers:
       - env:
@@ -39,25 +40,27 @@ spec:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
-        {{ if .Values.securityContext.enabled }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          {{ if .Values.securityContext.capabilities.enabled }}
+          runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: false
           capabilities:
-            {{ if .Values.securityContext.capabilities.drop.enabled }}
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
             {{- range .Values.securityContext.capabilities.drop.permissions }}
               - {{ . }}
             {{- end }}
             {{- end }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
         name: temporal-ui
         ports:
         - containerPort: 8080
-          hostPort: 8080
           protocol: TCP
-        resources: {}
+        resources: {{- toYaml .Values.temporalUi.temporalUi.resources | nindent 10 }}
       restartPolicy: Always
+       {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
 {{ end }}

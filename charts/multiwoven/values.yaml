@@ -81,7 +81,7 @@ kongIngress:
       enabled: false
 
 serviceAccount:
-  enabled: false
+  create: false
   name: multiwoven-service-account
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
@@ -93,13 +93,12 @@ secretsStore:
     dbCredsSecretName: ""
 
 securityContext:
-  enabled: false
   capabilities:
-    enabled: false
     drop:
-      enabled: false
       permissions:
         - "ALL"
+
+globalImagePullPolicy: IfNotPresent
 
 hpa:
   enabled: true
@@ -214,7 +213,12 @@ multiwovenPostgresql:
   replicas: 1
   type: ClusterIP
 multiwovenServer:
+  podSecurityContext:
+    fsGroup: 1000
   multiwovenServer:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -232,7 +236,12 @@ multiwovenServer:
   replicas: 1
   type: ClusterIP
 multiwovenUI:
+  podSecurityContext:
+    fsGroup: 1000
   multiwovenUI:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     image:
       repository: multiwoven/multiwoven-ui
       tag: latest
@@ -251,7 +260,12 @@ multiwovenUI:
   type: ClusterIP
 multiwovenWorker:
   healthPort: 4567
+  podSecurityContext:
+    fsGroup: 1000
   multiwovenWorker:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     args:
       - sh
       - -c
@@ -277,6 +291,8 @@ pvc:
   pvc:
     storageRequest: 100Mi
 temporal:
+  podSecurityContext:
+    fsGroup: 1000
   enabled: true
   ports:
     - name: "7233"
@@ -284,6 +300,9 @@ temporal:
       targetPort: 7233
   replicas: 1
   temporal:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
     env:
       db: postgresql
     image:
@@ -298,12 +317,17 @@ temporal:
         memory: 1Gi
   type: ClusterIP
 temporalUi:
+  podSecurityContext:
+    fsGroup: 5000
   ports:
     - name: "8080"
       port: 8080
       targetPort: 8080
   replicas: 1
   temporalUi:
+    containerSecurityContext:
+      runAsUser: 5000
+      runAsGroup: 5000
     env:
       temporalAddress: multiwoven-temporal:7233
       temporalCorsOrigins: http://localhost:3000
@@ -311,4 +335,11 @@ temporalUi:
     image:
       repository: temporalio/ui
       tag: 2.22.3
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
   type: ClusterIP

@@ -21,10 +21,10 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-server
       {{- include "chart.selectorLabels" . | nindent 8 }}
     spec:
-      {{ if .Values.serviceAccount.enabled }}
-      serviceAccountName: {{ .Values.serviceAccount.name }}
-      {{ end }}
+      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
       containers:
       - env:
         {{ if .Values.secretsStore.enabled }}
@@ -45,20 +45,19 @@ spec:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
-        {{ if .Values.securityContext.enabled }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          {{ if .Values.securityContext.capabilities.enabled }}
+          runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: false
           capabilities:
-            {{ if .Values.securityContext.capabilities.drop.enabled }}
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
             {{- range .Values.securityContext.capabilities.drop.permissions }}
               - {{ . }}
             {{- end }}
             {{- end }}
-          {{ end }}
-          {{ end }}
-        {{ end }}
         livenessProbe:
           httpGet:
             path: /
