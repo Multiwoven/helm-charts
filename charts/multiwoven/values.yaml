@@ -93,6 +93,8 @@ secretsStore:
     dbCredsSecretName: ""
 
 securityContext:
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: true
   capabilities:
     drop:
       permissions:

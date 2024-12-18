@@ -25,6 +25,24 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenWorker.podSecurityContext.fsGroup }}
+      initContainers:
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
+      - name: copy-config
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /mnt/rails
+            chmod 755 /mnt/rails
+            echo "Copying /rails to /mnt/rails"
+            cp -r /rails/* /mnt/rails/ || echo "/rails/ directory is empty or missing"
+            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
+            chmod -R u+w /mnt/rails
+        volumeMounts:
+          - name: rails-config
+            mountPath: /mnt/rails
+      {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
         env:
@@ -53,7 +71,8 @@ spec:
           runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
           privileged: false
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -89,6 +108,10 @@ spec:
           mountPath: /run/secrets/store
           readOnly: true
         {{ end }}
+        {{ if .Values.securityContext.readOnlyRootFilesystem }}
+        - name: rails-config
+          mountPath: /rails
+        {{ end }}
       volumes:
       {{ if not .Values.temporal.enabled }}
       - name: ssl
@@ -107,6 +130,10 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+      {{ end }}
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
+      - name: rails-config
+        emptyDir: {}
       {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
