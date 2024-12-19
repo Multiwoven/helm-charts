@@ -24,6 +24,8 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenUI.podSecurityContext.fsGroup }}
+        runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
+        runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
       containers:
       - env:
         envFrom:

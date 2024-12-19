@@ -31,16 +31,26 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
+        securityContext:
+          runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
         command:
           - /bin/sh
           - -c
           - |
             mkdir -p /mnt/temporal-config
-            chmod 755 /mnt/temporal-config
             echo "Copying /etc/temporal to /mnt/temporal-config"
             cp -r /etc/temporal/* /mnt/temporal-config/ || echo "/etc/temporal directory is empty or missing"
-            chown -R {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}:{{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }} /mnt/temporal-config
-            chmod -R u+w /mnt/temporal-config
         volumeMounts:
           - name: temporal-config
             mountPath: /mnt/temporal-config
