@@ -31,6 +31,8 @@ multiwovenConfig:
   smtpUsername: yourusername
   smtpSenderEmail: admin@yourdomain.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
+  storageAccessKey: ""
+  storageAccountName: ""
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
   syncLoaderBatchSize: "1000"
