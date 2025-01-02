@@ -36,6 +36,8 @@ data:
   SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
   SMTP_SENDER_EMAIL: {{ .Values.multiwovenConfig.smtpSenderEmail | quote }}
   SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
+  STORAGE_ACCESS_KEY: {{ .Values.multiwovenConfig.storageAccessKey }}
+  STORAGE_ACCOUNT_NAME: {{ .Values.multiwovenConfig.storageAccountName }}
   SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.multiwovenConfig.syncExtractorBatchSize | quote }}
   SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncExtractorThreadPoolSize | quote }}
   SYNC_LOADER_BATCH_SIZE: {{ .Values.multiwovenConfig.syncLoaderBatchSize | quote }}
