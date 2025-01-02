@@ -45,7 +45,6 @@ spec:
       {{ end }}
       containers:
       - env:
-        - name: DB_NAME
         {{ if .Values.secretsStore.enabled }}
         - name: DB_PASSWORD
           valueFrom:
@@ -58,7 +57,12 @@ spec:
               name: {{ .Values.secretsStore.secretAlias }}
               key: MW_DB_USERNAME
         {{ end }}
+        {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
+          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+        - name: DB_NAME
+          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:

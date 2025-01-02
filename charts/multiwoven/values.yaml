@@ -106,6 +106,10 @@ globalImagePullPolicy: IfNotPresent
 
 multipleDbHosts:
   enabled: false
+
+  multiwovenDBHost: ""
+  multiwovenDBName: ""
+
   temporalDbName: ""
   temporalDbHost: ""
   temporalDbUsername: ""

@@ -62,7 +62,12 @@ spec:
               name: {{ .Values.secretsStore.secretAlias }}
               key: MW_DB_USERNAME
         {{ end }}
+        {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
+          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+        - name: DB_NAME
+          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+        {{ end }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
