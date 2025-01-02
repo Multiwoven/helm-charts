@@ -45,18 +45,22 @@ spec:
       {{ end }}
       containers:
       - env:
+        - name: DB_NAME
+          value: postgres
         {{ if .Values.secretsStore.enabled }}
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_PASSWORD
+              key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_USERNAME
+              key: MW_DB_USERNAME
         {{ end }}
+        - name: DB_HOST
+          value: devclusterdbmain1.cojeqgahjyc5.us-east-1.rds.amazonaws.com
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
