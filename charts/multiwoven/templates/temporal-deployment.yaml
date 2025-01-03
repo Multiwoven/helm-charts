@@ -47,6 +47,7 @@ spec:
       {{ end }}
       containers:
       - env:
+        {{ if not .Values.multipleDbHosts.enabled }}
         - name: DB
           value: {{ quote .Values.temporal.temporal.env.db }}
         - name: DB_PORT
@@ -64,7 +65,7 @@ spec:
             {{ if .Values.secretsStore.enabled}}
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_PASSWORD
+              key: TP_DB_PASSWORD
             {{ end }}
         - name: POSTGRES_SEEDS
           valueFrom:
@@ -81,8 +82,9 @@ spec:
             {{ if .Values.secretsStore.enabled}}
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_USERNAME
+              key: TP_DB_USERNAME
             {{ end }}
+        {{ end }}
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
         - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
           value: 'true'
@@ -94,10 +96,67 @@ spec:
           value: 'true'
         - name: SQL_HOST_VERIFICATION
           value: 'false'
-        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        {{ end }}
+        {{ if .Values.multipleDbHosts.enabled }}
+        - name: SKIP_DB_CREATE
+          value: "true"
+        - name: SKIP_SCHEMA_SETUP
+          value: "true"
+        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
+          value: "true"
+        - name: TEMPORAL_DEFAULT_DB_NAME
+          value: {{ .Values.multipleDbHosts.temporalDbName }}
+        - name: TEMPORAL_DEFAULT_CONNECT_ADDR
+          value: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
+        - name: TEMPORAL_DEFAULT_USER
+          {{ if not .Values.secretsStore.enabled }}
+          value: {{ .Values.multipleDbHosts.temporalDbUsername }}
+          {{ end }}
+          {{ if .Values.secretsStore.enabled }}
+          valueFrom:
+            secretKeyRef:
+                name: {{ .Values.secretsStore.secretAlias }}
+                key: TP_DB_USERNAME
+          {{end }}
+        - name: TEMPORAL_DEFAULT_PASSWORD
+          {{ if not .Values.secretsStore.enabled }}
+          value: {{ .Values.multipleDbHosts.temporalDbPassword }}
+          {{ end }}
+          {{ if .Values.secretsStore.enabled }}
+          valueFrom:
+            secretKeyRef:
+                name: {{ .Values.secretsStore.secretAlias }}
+                key: TP_DB_PASSWORD
+          {{end }}
+        - name: TEMPORAL_VISIBILITY_DB_NAME
+          value: {{ .Values.multipleDbHosts.temporalVisibilityDbName }}
+        - name: TEMPORAL_VISIBILITY_CONNECT_ADDR
+          value: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
+        - name: TEMPORAL_VISIBILITY_USER
+          {{ if not .Values.secretsStore.enabled }}
+          value: {{ .Values.multipleDbHosts.temporalVisibilityDbUsername }}
+          {{ end }}
+          {{ if .Values.secretsStore.enabled }}
+          valueFrom:
+            secretKeyRef:
+                name: {{ .Values.secretsStore.secretAlias }}
+                key: TPV_DB_USERNAME
+          {{end }}
+        - name: TEMPORAL_VISIBILITY_PASSWORD
+          {{ if not .Values.secretsStore.enabled }}
+          value: {{ .Values.multipleDbHosts.temporalVisibilityDbPassword }}
+          {{ end }}
+          {{ if .Values.secretsStore.enabled }}
+          valueFrom:
+            secretKeyRef:
+                name: {{ .Values.secretsStore.secretAlias }}
+                key: TPV_DB_PASSWORD
+          {{end }}
+        {{ end }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
+        # command: ["sleep", "3600"] # Prevent the container from crashing
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
           runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
@@ -126,6 +185,11 @@ spec:
         - name: temporal-config
           mountPath: /etc/temporal/
         {{ end }}
+        {{ if .Values.multipleDbHosts.enabled }}
+        - name: config
+          mountPath: /etc/temporal/config/config_template.yaml
+          subPath: config_template.yaml
+        {{ end }}
       volumes:
       {{ if .Values.secretsStore.enabled }}
       - name: multiwoven-secrets-store
@@ -138,6 +202,11 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: temporal-config
         emptyDir: {}
+      {{ end }}
+      {{ if .Values.multipleDbHosts.enabled }}
+      - name: config
+        configMap:
+          name: "{{ include "chart.fullname" . }}-temporal-config"
       {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}

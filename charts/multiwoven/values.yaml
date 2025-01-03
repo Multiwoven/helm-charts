@@ -92,7 +92,9 @@ secretsStore:
   enabled: false
   secretAlias: dbsecret-f01dd256e712
   aws:
-    dbCredsSecretName: ""
+    MWCredsSecretName: ""
+    TemporalCredsSecretName: ""
+    TemporalVisibilityCredsSecretName: ""
 
 securityContext:
   readOnlyRootFilesystem: false
@@ -103,6 +105,22 @@ securityContext:
         - "ALL"
 
 globalImagePullPolicy: IfNotPresent
+
+multipleDbHosts:
+  enabled: false
+
+  multiwovenDBHost: ""
+  multiwovenDBName: ""
+
+  temporalDbName: ""
+  temporalDbHost: ""
+  temporalDbUsername: ""
+  temporalDbPassword: ""
+
+  temporalVisibilityDbName: ""
+  temporalVisibilityDbHost: ""
+  temporalVisibilityDbUsername: ""
+  temporalVisibilityDbPassword: ""
 
 hpa:
   enabled: true
