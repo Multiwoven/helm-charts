@@ -48,8 +48,8 @@ spec:
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        # - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
-        #   value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
+        - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
+          value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
         {{ if .Values.secretsStore.enabled }}
         - name: DB_PASSWORD
           valueFrom:
