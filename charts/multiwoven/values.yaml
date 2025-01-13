@@ -323,7 +323,7 @@ multiwovenSolidWorker:
       - sh
       - -c
       - |
-        ./bin/rails solid_queue:start
+        ./app/solid_queue/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
