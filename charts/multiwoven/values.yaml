@@ -30,6 +30,7 @@ multiwovenConfig:
   smtpPort: "587"
   smtpUsername: yourusername
   smtpSenderEmail: admin@yourdomain.com
+  solidWorkerHost: solid.multiwoven.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
   storageAccessKey: ""
   storageAccountName: ""
@@ -184,6 +185,36 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
+  multiwovenSolidWorker:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
   multiwovenWorker:
     minReplicas: 1
     maxReplicas: 10
@@ -278,6 +309,35 @@ multiwovenUI:
     - name: "8000"
       port: 8000
       targetPort: 8000
+  replicas: 1
+  type: ClusterIP
+multiwovenSolidWorker:
+  healthPort: 9999
+  podSecurityContext:
+    fsGroup: 1000
+  multiwovenSolidWorker:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    args:
+      - sh
+      - -c
+      - |
+        ./bin/rails solid_queue:start
+    image:
+      repository: multiwoven/multiwoven-server
+      tag: latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: "500m"
+        memory: 1Gi
+  ports:
+    - name: "9999"
+      port: 9999
+      targetPort: 9999
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
