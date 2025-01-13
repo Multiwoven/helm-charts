@@ -39,6 +39,7 @@ spec:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
     - {{ .Values.multiwovenConfig.workerHost }}
+    - {{ .Values.multiwovenConfig.solidWorkerHost }}
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
