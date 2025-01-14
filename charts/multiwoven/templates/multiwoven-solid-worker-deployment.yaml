@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-solid-worker
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    app: {{ include "chart.fullname" . }}-solid-worker
+    io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.multiwovenSolidWorker.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-solid-worker
+      io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-solid-worker
+        io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.multiwovenSolidWorker.podSecurityContext.fsGroup }}
+      initContainers:
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
+      - name: copy-config
+        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /mnt/rails
+            chmod 755 /mnt/rails
+            echo "Copying /rails to /mnt/rails"
+            cp -r /rails/* /mnt/rails/ || echo "/rails/ directory is empty or missing"
+            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
+            chmod -R u+w /mnt/rails
+        volumeMounts:
+          - name: rails-config
+            mountPath: /mnt/rails
+      {{ end }}
+      containers:
+      - args: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.args | nindent 8 }}
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
+          value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
+        {{ if .Values.secretsStore.enabled }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.secretAlias }}
+              key: DB_PASSWORD
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.secretAlias }}
+              key: DB_USERNAME
+        {{ end }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "chart.fullname" . }}-config
+        image: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.repository }}:{{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
+        securityContext:
+          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.multiwovenSolidWorker.healthPort }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        name: {{ include "chart.fullname" . }}-solid-worker
+        ports:
+        - containerPort: {{ .Values.multiwovenSolidWorker.healthPort }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.multiwovenSolidWorker.healthPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.resources | nindent 10 }}
+        imagePullPolicy: Always
+        volumeMounts:
+        {{ if not .Values.temporal.enabled }}
+        - name: ssl
+          mountPath: /certs
+          readOnly: false
+        {{ end }}
+        {{ if .Values.secretsStore.enabled }}
+        - name: multiwoven-secrets-store
+          mountPath: /run/secrets/store
+          readOnly: true
+        {{ end }}
+        {{ if .Values.securityContext.readOnlyRootFilesystem }}
+        - name: rails-config
+          mountPath: /rails
+        {{ end }}
+      volumes:
+      {{ if not .Values.temporal.enabled }}
+      - name: ssl
+        secret:
+          secretName: temporal-cloud
+          items:
+          - key: temporal-client-key
+            path: ./temporal.key
+          - key: temporal-root-cert
+            path: ./temporal.pem
+      {{ end }}
+      {{ if .Values.secretsStore.enabled }}
+      - name: multiwoven-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+      {{ end }}
+      {{ if .Values.securityContext.readOnlyRootFilesystem }}
+      - name: rails-config
+        emptyDir: {}
+      {{ end }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}

@@ -8,10 +8,10 @@ metadata:
   annotations:
     {{ if .Values.externalDNS.enabled }}
       {{- if .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.temporalUiHost }}"
+        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }},{{ .Values.multiwovenConfig.temporalUiHost }}"
       {{- end }}
       {{- if not .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }}"
+        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }}"
       {{- end }}
     {{ end }}
     
@@ -39,6 +39,7 @@ spec:
     - {{ .Values.multiwovenConfig.uiHost }}
     - {{ .Values.multiwovenConfig.apiHost }}
     - {{ .Values.multiwovenConfig.workerHost }}
+    - {{ .Values.multiwovenConfig.solidWorkerHost }}
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
@@ -79,6 +80,16 @@ spec:
             name: '{{ include "chart.fullname" . }}-worker'
             port:
               number: {{ .Values.multiwovenWorker.healthPort }}
+  - host: {{ .Values.multiwovenConfig.solidWorkerHost }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-solid-worker'
+            port:
+              number: {{ .Values.multiwovenSolidWorker.healthPort }}
 {{ if .Values.temporal.enabled }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:
