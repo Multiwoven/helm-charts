@@ -23,6 +23,7 @@ multiwovenConfig:
   railsLogLevel: info
   registrySecretName: mwregistrysecret
   secretKeyBase: ""
+  skipDbMigration: "false"
   smtpAddress: smtp.yourdomain.com
   smtpBrandName: Multiwoven
   smtpHost: yourdomain.com
@@ -32,7 +33,7 @@ multiwovenConfig:
   smtpSenderEmail: admin@yourdomain.com
   solidWorkerHost: solid.multiwoven.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
-  storageAccessKey: ""
+  storageAccessKey: "myaccesskey"
   storageAccountName: ""
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"

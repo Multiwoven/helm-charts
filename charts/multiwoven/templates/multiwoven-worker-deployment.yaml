@@ -34,14 +34,24 @@ spec:
           - -c
           - |
             mkdir -p /mnt/rails
-            chmod 755 /mnt/rails
             echo "Copying /rails to /mnt/rails"
             cp -r /rails/* /mnt/rails/ || echo "/rails/ directory is empty or missing"
-            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
-            chmod -R u+w /mnt/rails
         volumeMounts:
           - name: rails-config
             mountPath: /mnt/rails
+        securityContext:
+          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
       {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
