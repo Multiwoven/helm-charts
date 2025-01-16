@@ -84,6 +84,12 @@ kongIngress:
     prometheus:
       enabled: false
 
+awsIngress:
+  enabled: false
+  acmCertificateArn: ""
+  albScheme: internet-facing
+  sslPolicy: ELBSecurityPolicy-2016-08
+
 serviceAccount:
   create: false
   name: multiwoven-service-account
