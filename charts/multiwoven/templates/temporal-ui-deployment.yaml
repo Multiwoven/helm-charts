@@ -33,19 +33,30 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
           - -c
           - |
             mkdir -p /mnt/home/ui-server
-            chmod 755 /mnt/home/ui-server
             echo "Copying /home/ui-server to /mnt/home/ui-server"
             cp -r /home/ui-server/* /mnt/home/ui-server/ || echo "/homes/ui-server directory is empty or missing"
-            chown -R {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}:{{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }} /mnt/home/ui-server/
-            chmod -R u+w /mnt/home/ui-server/
         volumeMounts:
           - name: temporal-config
             mountPath: /mnt/home/ui-server
+        securityContext:
+          runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
       {{ end }}
       containers:
       - env:

@@ -29,6 +29,7 @@ data:
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
+  SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
   SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
   SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}

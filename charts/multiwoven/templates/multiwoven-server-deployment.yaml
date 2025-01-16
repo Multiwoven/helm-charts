@@ -29,19 +29,30 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
           - -c
           - |
             mkdir -p /mnt/rails
-            chmod 755 /mnt/rails
             echo "Copying /rails to /mnt/rails"
             cp -r /rails/* /mnt/rails/ || echo "/rails/ directory is empty or missing"
-            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
-            chmod -R u+w /mnt/rails
         volumeMounts:
           - name: rails-config
             mountPath: /mnt/rails
+        securityContext:
+            runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
+            runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
+            privileged: false
+            allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
+            capabilities:
+              drop:
+              {{- if .Values.securityContext.capabilities.drop.permissions }}
+              {{- range .Values.securityContext.capabilities.drop.permissions }}
+                - {{ . }}
+              {{- end }}
+              {{- end }}
       {{ end }}
       containers:
       - env:

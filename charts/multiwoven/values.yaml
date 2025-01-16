@@ -23,6 +23,7 @@ multiwovenConfig:
   railsLogLevel: info
   registrySecretName: mwregistrysecret
   secretKeyBase: ""
+  skipDbMigration: "false"
   smtpAddress: smtp.yourdomain.com
   smtpBrandName: Multiwoven
   smtpHost: yourdomain.com

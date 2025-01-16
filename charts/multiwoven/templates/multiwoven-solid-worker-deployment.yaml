@@ -29,19 +29,30 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
           - -c
           - |
             mkdir -p /mnt/rails
-            chmod 755 /mnt/rails
             echo "Copying /rails to /mnt/rails"
             cp -r /rails/* /mnt/rails/ || echo "/rails/ directory is empty or missing"
-            chown -R {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}:{{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }} /mnt/rails
-            chmod -R u+w /mnt/rails
         volumeMounts:
           - name: rails-config
             mountPath: /mnt/rails
+        securityContext:
+          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
       {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.args | nindent 8 }}
@@ -55,13 +66,21 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_PASSWORD
+              key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
-              key: DB_USERNAME
+              key: MW_DB_USERNAME
         {{ end }}
+        {{ if .Values.multipleDbHosts.enabled }}
+        - name: DB_HOST
+          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+        - name: DB_NAME
+          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+        {{ end }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
