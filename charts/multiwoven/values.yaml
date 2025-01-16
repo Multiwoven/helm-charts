@@ -33,7 +33,7 @@ multiwovenConfig:
   smtpSenderEmail: admin@yourdomain.com
   solidWorkerHost: solid.multiwoven.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
-  storageAccessKey: "myaccesskey"
+  storageAccessKey: ""
   storageAccountName: ""
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
