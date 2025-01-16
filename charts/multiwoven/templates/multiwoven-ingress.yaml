@@ -30,6 +30,14 @@ metadata:
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.multiwovenConfig.nginxProxyBodySize }}
     {{ end }}
+    
+    {{ if .Values.awsIngress.enabled }}
+    alb.ingress.kubernetes.io/certificate-arn: "{{ .Values.awsIngress.acmCertificateArn }}"
+    alb.ingress.kubernetes.io/scheme: {{ .Values.awsIngress.albScheme }}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/ssl-policy: {{ .Values.awsIngress.sslPolicy }}
+    alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+    {{ end }}
 
 spec:
   {{ if .Values.nginxIngress.enabled }}
@@ -48,6 +56,9 @@ spec:
   
   {{ if .Values.kongIngress.enabled }}
   ingressClassName: kong
+  {{ end }}
+  {{ if .Values.awsIngress.enabled }}
+  ingressClassName: alb
   {{ end }}
   rules:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
