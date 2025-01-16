@@ -33,6 +33,7 @@ spec:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
         image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
           - -c
