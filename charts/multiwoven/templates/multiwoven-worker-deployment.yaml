@@ -54,6 +54,22 @@ spec:
             {{- end }}
             {{- end }}
       {{ end }}
+      {{ if .Values.multiwovenConfig.azureSpot }}
+        tolerations:
+        - key: "kubernetes.azure.com/scalesetpriority"
+          operator: "Equal"
+          value: "spot"
+          effect: "NoSchedule"
+        affinity:
+          nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpression:
+                - key: "kubernetes.azure.com/scalesetpriority"
+                  operator: In
+                  values:
+                  - "spot":
+      {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
         env:
