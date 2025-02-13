@@ -63,12 +63,13 @@ spec:
       affinity:
         nodeAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpression:
+          - weight: 1
+            preference:
+              matchExpressions:
               - key: "kubernetes.azure.com/scalesetpriority"
                 operator: In
                 values:
-                - "spot"
+                - spot
       {{ end }}
       containers:
       - args: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.args | nindent 8 }}
