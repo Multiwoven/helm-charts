@@ -22,14 +22,14 @@ jobs:
         with:
           cmd: yq '.version' latest.yaml
 
-      - name: get current version
+      - name: Get current version
         id: currentVersion
         uses: mikefarah/yq@v4.44.3
         with:
           cmd: yq '.version' ./charts/multiwoven/Chart.yaml
 
-      - name: get current version
-        id: currentVersion
+      - name: Get app version
+        id: appVersion
         uses: mikefarah/yq@v4.44.3
         with:
           cmd: yq '.version' ./charts/multiwoven/Chart.yaml
