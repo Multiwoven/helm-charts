@@ -14,7 +14,7 @@ jobs:
         id: install
 
       - name: Set env
-        run: echo "CHART_INFO=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+        run: echo "CHART_INFO=$(helm show chart multiwoven --repo https://multiwoven.github.io/helm-charts)" >> $GITHUB_ENV
 
       - name: Get latest version
         id: latestVersion
@@ -25,3 +25,4 @@ jobs:
       - name: Compare versions
         run: |
           echo ${{ steps.latestVersion.outputs.result }}
+          echo $CHART_INFO
