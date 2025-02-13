@@ -13,11 +13,14 @@ jobs:
           version: 'latest'
         id: install
 
+      - name: Set env
+        run: echo "CHART_INFO=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+
       - name: Get latest version
         id: latestVersion
         uses: mikefarah/yq@v4.44.3
         with:
-          cmd: helm show chart multiwoven --repo https://multiwoven.github.io/helm-charts | yq '.version'
+          cmd: echo $CHART_INFO | yq '.version'
 
       - name: Compare versions
         run: |
