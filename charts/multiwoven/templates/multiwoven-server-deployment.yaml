@@ -68,7 +68,7 @@ spec:
               - key: "kubernetes.azure.com/scalesetpriority"
                 operator: In
                 values:
-                - "spot":
+                - "spot"
       {{ end }}
       containers:
       - env:
