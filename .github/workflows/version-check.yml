@@ -42,8 +42,6 @@ jobs:
           CURRENT: ${{ steps.currentVersion.outputs.result }}
           APP_VERSION: ${{ steps.appVersion.outputs.result }}
         run: |
-          echo "Latest version:\nchart $LATEST\n"
-          echo "Current version:\nversion $CURRENT\nappVersion $APP_VERSION"
           if [ $LATEST = $CURRENT ] || [ $LATEST = $APP_VERSION ]; then
               echo "Chart version has not been updated!"
               exit 1
