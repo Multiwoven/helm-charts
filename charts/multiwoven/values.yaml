@@ -36,7 +36,6 @@ multiwovenConfig:
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
   storageAccessKey: ""
   storageAccountName: ""
-  storageClassName:
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
   syncLoaderBatchSize: "1000"
