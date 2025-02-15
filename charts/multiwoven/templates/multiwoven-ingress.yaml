@@ -64,7 +64,7 @@ spec:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
       paths:
-      - path: /*
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -74,7 +74,7 @@ spec:
   - host: {{ .Values.multiwovenConfig.apiHost }}
     http:
       paths:
-      - path: /*
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -84,7 +84,7 @@ spec:
   - host: {{ .Values.multiwovenConfig.workerHost }}
     http:
       paths:
-      - path: /*
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -94,7 +94,7 @@ spec:
   - host: {{ .Values.multiwovenConfig.solidWorkerHost }}
     http:
       paths:
-      - path: /*
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -110,6 +110,6 @@ spec:
             name: '{{ include "chart.fullname" . }}-temporal-ui'
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
-        path: /*
+        path: /
         pathType: Prefix
 {{ end }}
