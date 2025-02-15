@@ -13,4 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.pvc.storageRequest | quote }}
+  storageClassName: gp2
 {{ end }}

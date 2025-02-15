@@ -64,8 +64,8 @@ spec:
   - host:  {{ .Values.multiwovenConfig.uiHost }}
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: /*
+        pathType: ImplementationSpecific
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-ui'
@@ -74,8 +74,8 @@ spec:
   - host: {{ .Values.multiwovenConfig.apiHost }}
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: /*
+        pathType: ImplementationSpecific
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-server'
@@ -84,8 +84,8 @@ spec:
   - host: {{ .Values.multiwovenConfig.workerHost }}
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: /*
+        pathType: ImplementationSpecific
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-worker'
@@ -94,8 +94,8 @@ spec:
   - host: {{ .Values.multiwovenConfig.solidWorkerHost }}
     http:
       paths:
-      - path: /
-        pathType: Prefix
+      - path: /*
+        pathType: ImplementationSpecific
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-solid-worker'
@@ -110,6 +110,6 @@ spec:
             name: '{{ include "chart.fullname" . }}-temporal-ui'
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
-        path: /
-        pathType: Prefix
+        path: /*
+        pathType: ImplementationSpecific
 {{ end }}
