@@ -36,6 +36,7 @@ multiwovenConfig:
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
   storageAccessKey: ""
   storageAccountName: ""
+  storageClassName:
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
   syncLoaderBatchSize: "1000"
@@ -380,6 +381,7 @@ multiwovenWorker:
 pvc:
   pvc:
     storageRequest: 100Mi
+    storageClassName: "default"
 temporal:
   podSecurityContext:
     fsGroup: 1000
