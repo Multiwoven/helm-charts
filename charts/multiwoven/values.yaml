@@ -281,7 +281,7 @@ multiwovenServer:
       runAsUser: 1000
       runAsGroup: 1000
     image:
-      repository: multiwoven/multiwoven-server-ee
+      repository: multiwoven/multiwoven-server
       tag: latest
     resources:
       limits:
@@ -304,7 +304,7 @@ multiwovenUI:
       runAsUser: 1000
       runAsGroup: 1000
     image:
-      repository: multiwoven/multiwoven-ui-ee
+      repository: multiwoven/multiwoven-ui
       tag: latest
     resources:
       limits:
@@ -333,7 +333,7 @@ multiwovenSolidWorker:
       - |
         ./app/solid_queue/cli/worker
     image:
-      repository: multiwoven/multiwoven-server-ee
+      repository: multiwoven/multiwoven-server
       tag: latest
     resources:
       limits:
@@ -362,7 +362,7 @@ multiwovenWorker:
       - |
         ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
     image:
-      repository: multiwoven/multiwoven-server-ee
+      repository: multiwoven/multiwoven-server
       tag: latest
     resources:
       limits:
