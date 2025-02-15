@@ -65,7 +65,7 @@ spec:
     http:
       paths:
       - path: /*
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-ui'
@@ -75,7 +75,7 @@ spec:
     http:
       paths:
       - path: /*
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-server'
@@ -85,7 +85,7 @@ spec:
     http:
       paths:
       - path: /*
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-worker'
@@ -95,7 +95,7 @@ spec:
     http:
       paths:
       - path: /*
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: '{{ include "chart.fullname" . }}-solid-worker'
@@ -111,5 +111,5 @@ spec:
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
         path: /*
-        pathType: ImplementationSpecific
+        pathType: Prefix
 {{ end }}
