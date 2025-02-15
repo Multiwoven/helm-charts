@@ -1,0 +1,48 @@
+name: Version Check
+
+on:
+  pull_request:
+    branches: [ main ]
+  
+jobs:
+  version-check:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: azure/setup-helm@v4.2.0
+        with:
+          version: 'latest'
+        id: install
+
+      - name: Get chart info
+        run: helm show chart multiwoven --repo https://multiwoven.github.io/helm-charts >> latest.yaml
+
+      - name: Get latest version
+        id: latestVersion
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: yq '.version' latest.yaml
+
+      - name: Get current version
+        id: currentVersion
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: yq '.version' ./charts/multiwoven/Chart.yaml
+
+      - name: Get app version
+        id: appVersion
+        uses: mikefarah/yq@v4.44.3
+        with:
+          cmd: yq '.version' ./charts/multiwoven/Chart.yaml
+
+      - name: Compare versions
+        env:
+          LATEST: ${{ steps.latestVersion.outputs.result }}
+          CURRENT: ${{ steps.currentVersion.outputs.result }}
+          APP_VERSION: ${{ steps.appVersion.outputs.result }}
+        run: |
+          if [ $LATEST = $CURRENT ] || [ $LATEST = $APP_VERSION ]; then
+              echo "Chart version has not been updated!"
+              exit 1
+          fi
