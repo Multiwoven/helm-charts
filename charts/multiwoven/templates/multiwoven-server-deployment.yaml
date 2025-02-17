@@ -84,6 +84,16 @@ spec:
             secretKeyRef:
               name: {{ .Values.secretsStore.secretAlias }}
               key: MW_DB_USERNAME
+        - name: TEMP_STORE_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.secretAlias }}
+              key: TEMP_STORE_DB_USERNAME
+        - name: TEMP_STORE_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.secretAlias }}
+              key: TEMP_STORE_DB_PASSWORD
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST

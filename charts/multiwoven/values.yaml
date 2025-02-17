@@ -104,6 +104,7 @@ secretsStore:
     MWCredsSecretName: ""
     TemporalCredsSecretName: ""
     TemporalVisibilityCredsSecretName: ""
+    TempStoreCredsSecretName: ""
 
 securityContext:
   readOnlyRootFilesystem: false
