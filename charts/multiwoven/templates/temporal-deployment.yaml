@@ -58,6 +58,16 @@ spec:
       {{ end }}
       containers:
       - env:
+        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
+          value: "true"
+        - name: POSTGRES_TLS_ENABLED
+          value: "true"
+        {{ if .Values.multiwovenConfig.skipDbMigration }}
+        - name: SKIP_DB_CREATE
+          value: "true"
+        - name: SKIP_SCHEMA_SETUP
+          value: "true"
+        {{ end }}
         {{ if not .Values.multipleDbHosts.enabled }}
         - name: DB
           value: {{ quote .Values.temporal.temporal.env.db }}
@@ -111,12 +121,6 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
-        - name: SKIP_DB_CREATE
-          value: "true"
-        - name: SKIP_SCHEMA_SETUP
-          value: "true"
-        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
-          value: "true"
         - name: TEMPORAL_DEFAULT_DB_NAME
           value: {{ .Values.multipleDbHosts.temporalDbName }}
         - name: TEMPORAL_DEFAULT_CONNECT_ADDR

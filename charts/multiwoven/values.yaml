@@ -380,6 +380,7 @@ multiwovenWorker:
 pvc:
   pvc:
     storageRequest: 100Mi
+    storageClassName: "default"
 temporal:
   podSecurityContext:
     fsGroup: 1000

@@ -13,4 +13,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.pvc.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.pvc.storageClassName | default "standard" | quote }}
 {{ end }}
