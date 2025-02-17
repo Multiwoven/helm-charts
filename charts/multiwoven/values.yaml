@@ -114,7 +114,7 @@ securityContext:
       permissions:
         - "ALL"
 
-globalImagePullPolicy: Always
+globalImagePullPolicy: IfNotPresent
 
 multipleDbHosts:
   enabled: false
