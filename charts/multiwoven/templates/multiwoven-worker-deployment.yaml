@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ include "chart.fullname" . }}-worker
     io.kompose.service: {{ include "chart.fullname" . }}-worker
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenWorker.replicas }}
   selector:
@@ -82,12 +82,12 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.mwSecretAlias }}
               key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.mwSecretAlias }}
               key: MW_DB_USERNAME
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
@@ -163,7 +163,7 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-mw
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config

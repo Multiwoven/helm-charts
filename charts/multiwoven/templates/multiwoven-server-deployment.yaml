@@ -77,13 +77,25 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.mwSecretAlias }}
               key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.mwSecretAlias }}
               key: MW_DB_USERNAME
+        {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+        - name: TEMP_STORE_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.tempStoreSecretAlias }}
+              key: TEMP_STORE_DB_USERNAME
+        - name: TEMP_STORE_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.tempStoreSecretAlias }}
+              key: TEMP_STORE_DB_PASSWORD
+        {{ end }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
@@ -131,7 +143,12 @@ spec:
         volumeMounts:
         {{ if .Values.secretsStore.enabled }}
         - name: multiwoven-secrets-store
-          mountPath: /run/secrets/store
+          mountPath: /run/secrets/mw-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+        - name: temp-store-secrets-store
+          mountPath: /run/secrets/temp-store-secrets
           readOnly: true
         {{ end }}
         {{ if not .Values.temporal.enabled }}
@@ -160,7 +177,15 @@ spec:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-mw
+      {{ end }}
+      {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+      - name: temp-store-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temp-store
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config
