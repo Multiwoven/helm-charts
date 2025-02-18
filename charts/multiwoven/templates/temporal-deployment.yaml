@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: temporal
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:
@@ -78,14 +78,14 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_PWD
           valueFrom:
-            {{ if not .Values.secretsStore.enabled }}
+            {{ if not .Values.secretsStore.temporalSecretEnabled }}
             configMapKeyRef:
               key: DB_PASSWORD
               name: {{ include "chart.fullname" . }}-config
             {{ end }}
-            {{ if .Values.secretsStore.enabled}}
+            {{ if .Values.secretsStore.temporalSecretEnabled}}
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.temporalSecretAlias }}
               key: TP_DB_PASSWORD
             {{ end }}
         - name: POSTGRES_SEEDS
@@ -95,14 +95,14 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_USER
           valueFrom:
-            {{ if not .Values.secretsStore.enabled }}
+            {{ if not .Values.secretsStore.temporalSecretEnabled }}
             configMapKeyRef:
               key: DB_USERNAME
               name: {{ include "chart.fullname" . }}-config
             {{ end }}
-            {{ if .Values.secretsStore.enabled}}
+            {{ if .Values.secretsStore.temporalSecretEnabled}}
             secretKeyRef:
-              name: {{ .Values.secretsStore.secretAlias }}
+              name: {{ .Values.secretsStore.temporalSecretAlias }}
               key: TP_DB_USERNAME
             {{ end }}
         {{ end }}
@@ -126,23 +126,23 @@ spec:
         - name: TEMPORAL_DEFAULT_CONNECT_ADDR
           value: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
         - name: TEMPORAL_DEFAULT_USER
-          {{ if not .Values.secretsStore.enabled }}
+          {{ if not .Values.secretsStore.temporalSecretEnabled }}
           value: {{ .Values.multipleDbHosts.temporalDbUsername }}
           {{ end }}
-          {{ if .Values.secretsStore.enabled }}
+          {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.secretAlias }}
+                name: {{ .Values.secretsStore.temporalSecretAlias }}
                 key: TP_DB_USERNAME
           {{end }}
         - name: TEMPORAL_DEFAULT_PASSWORD
-          {{ if not .Values.secretsStore.enabled }}
+          {{ if not .Values.secretsStore.temporalSecretEnabled }}
           value: {{ .Values.multipleDbHosts.temporalDbPassword }}
           {{ end }}
-          {{ if .Values.secretsStore.enabled }}
+          {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.secretAlias }}
+                name: {{ .Values.secretsStore.temporalSecretAlias }}
                 key: TP_DB_PASSWORD
           {{end }}
         - name: TEMPORAL_VISIBILITY_DB_NAME
@@ -150,24 +150,22 @@ spec:
         - name: TEMPORAL_VISIBILITY_CONNECT_ADDR
           value: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
         - name: TEMPORAL_VISIBILITY_USER
-          {{ if not .Values.secretsStore.enabled }}
-          value: {{ .Values.multipleDbHosts.temporalVisibilityDbUsername }}
-          {{ end }}
-          {{ if .Values.secretsStore.enabled }}
+          {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.secretAlias }}
+                name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
                 key: TPV_DB_USERNAME
+          {{ else }}
+          value: {{ .Values.multipleDbHosts.temporalVisibilityDbUsername }}
           {{end }}
         - name: TEMPORAL_VISIBILITY_PASSWORD
-          {{ if not .Values.secretsStore.enabled }}
-          value: {{ .Values.multipleDbHosts.temporalVisibilityDbPassword }}
-          {{ end }}
-          {{ if .Values.secretsStore.enabled }}
+          {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.secretAlias }}
+                name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
                 key: TPV_DB_PASSWORD
+          {{ else }}
+          value: {{ .Values.multipleDbHosts.temporalVisibilityDbPassword }}
           {{end }}
         {{ end }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
@@ -191,9 +189,12 @@ spec:
         - containerPort: 7233
         resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
         volumeMounts:
-        {{ if .Values.secretsStore.enabled }}
-        - name: multiwoven-secrets-store
-          mountPath: /run/secrets/store
+        {{ if .Values.secretsStore.temporalSecretEnabled }}
+        - name: temporal-secrets-store
+          mountPath: /run/secrets/temporal-secrets
+          readOnly: true
+        - name: temporal-visibility-secrets-store
+          mountPath: /run/secrets/temporal-visibility-secrets
           readOnly: true
         {{ end }}
         {{ if .Values.securityContext.readOnlyRootFilesystem }}
@@ -206,13 +207,19 @@ spec:
           subPath: config_template.yaml
         {{ end }}
       volumes:
-      {{ if .Values.secretsStore.enabled }}
-      - name: multiwoven-secrets-store
+      {{ if .Values.secretsStore.temporalSecretEnabled }}
+      - name: temporal-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
-            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temporal
+      - name: temporal-visibility-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temporal-visibility
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: temporal-config

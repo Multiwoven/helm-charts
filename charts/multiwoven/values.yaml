@@ -99,12 +99,18 @@ serviceAccount:
 
 secretsStore:
   enabled: false
-  secretAlias: dbsecret-f01dd256e712
-  aws:
-    MWCredsSecretName: ""
-    TemporalCredsSecretName: ""
-    TemporalVisibilityCredsSecretName: ""
-    TempStoreCredsSecretName: ""
+  mwSecretAlias: mw-f01dd256e712
+  temporalSecretAlias: temporal-f01dd256e712
+  temporalVisibilitySecretAlias: temporal-visibility-f01dd256e712
+  tempStoreSecretAlias: temp-store-f01dd256e712
+
+  tempStoreSecretEnabled: false
+  temporalSecretEnabled: false
+
+  MWCredsSecretName: ""
+  TemporalCredsSecretName: ""
+  TemporalVisibilityCredsSecretName: ""
+  TempStoreCredsSecretName: ""
 
 securityContext:
   readOnlyRootFilesystem: false
