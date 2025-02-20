@@ -56,6 +56,51 @@ spec:
             {{- end }}
             {{- end }}
       {{ end }}
+      {{ if and .Values.multiwovenConfig.dbCloudEnabled }}
+      - name: fetch-cloud-cert
+        image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default .Chart.AppVersion }}
+        command: ["/bin/sh", "-c"]
+        {{ if eq .Values.multiwovenConfig.dbCloudProvider "azure" }}
+        args:
+          - |
+            # Update package lists and install CA certificates
+            apt update && apt install -y ca-certificates
+
+            # Update CA certificates
+            update-ca-certificates
+
+            # Fetching Azure Flexible Server CA Certificate (DigiCert Global Root CA)
+            echo "Fetching Azure CA Certificate..."
+            wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem -O /etc/ssl/certs/azure-ca.pem
+
+            # Verify that the certificate was downloaded
+            ls -l /etc/ssl/certs/
+        {{ else if eq .Values.multiwovenConfig.dbCloudProvider "aws" }}
+        args:
+          - |
+            apt update && apt install -y ca-certificates
+            update-ca-certificates
+            echo "Fetching RDS CA Certificate..."
+            wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -O /etc/ssl/certs/rds-ca.pem
+            ls -l /etc/ssl/certs/  # Debugging step
+        {{ end }}
+        volumeMounts:
+          - name: cloud-cert-volume
+            mountPath: "/etc/ssl/certs"
+        securityContext:
+          runAsUser: {{ .Values.temporal.temporal.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.temporal.temporal.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        {{ end }}
       containers:
       - env:
         - name: TEMPORAL_TASK_QUEUE
@@ -191,9 +236,11 @@ spec:
         - containerPort: 7233
         resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
         volumeMounts:
-        - name: rds-ca-volume
+        {{ if and .Values.multiwovenConfig.dbCloudEnabled }}
+        - name: cloud-cert-volume
           mountPath: "/etc/ssl/certs"
           readOnly: true
+        {{ end }}
         {{ if .Values.secretsStore.temporalSecretEnabled }}
         - name: temporal-secrets-store
           mountPath: /run/secrets/temporal-secrets
@@ -239,9 +286,10 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
+      {{ if .Values.multiwovenConfig.dbCloudEnabled }}
       volumes:
-        - name: rds-ca-volume
-          secret:
-            secretName: rds-ca-cert
+        - name: cloud-cert-volume
+          emptyDir: {}
+      {{ end }}
 {{ end }}
 
