@@ -58,10 +58,16 @@ spec:
       {{ end }}
       containers:
       - env:
+        - name: TEMPORAL_TASK_QUEUE
+          value: production-queue
         - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
-          value: "true"
+          value: "false"
         - name: POSTGRES_TLS_ENABLED
           value: "true"
+        - name: SQL_TLS_ENABLED
+          value: 'true'
+        - name: SQL_TLS_DISABLE_HOST_VERIFICATION
+          value: 'true'
         {{ if .Values.multiwovenConfig.skipDbMigration }}
         - name: SKIP_DB_CREATE
           value: "true"
@@ -110,10 +116,6 @@ spec:
         - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
           value: 'true'
         - name: SQL_TLS
-          value: 'true'
-        - name: SQL_TLS_ENABLED
-          value: 'true'
-        - name: SQL_TLS_DISABLE_HOST_VERIFICATION
           value: 'true'
         - name: SQL_HOST_VERIFICATION
           value: 'false'
@@ -189,6 +191,9 @@ spec:
         - containerPort: 7233
         resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
         volumeMounts:
+        - name: rds-ca-volume
+          mountPath: "/etc/ssl/certs"
+          readOnly: true
         {{ if .Values.secretsStore.temporalSecretEnabled }}
         - name: temporal-secrets-store
           mountPath: /run/secrets/temporal-secrets
@@ -206,7 +211,6 @@ spec:
           mountPath: /etc/temporal/config/config_template.yaml
           subPath: config_template.yaml
         {{ end }}
-      volumes:
       {{ if .Values.secretsStore.temporalSecretEnabled }}
       - name: temporal-secrets-store
         csi:
@@ -235,5 +239,9 @@ spec:
       imagePullSecrets:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
+      volumes:
+        - name: rds-ca-volume
+          secret:
+            secretName: rds-ca-cert
 {{ end }}
 

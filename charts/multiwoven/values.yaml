@@ -367,7 +367,7 @@ multiwovenWorker:
       - sh
       - -c
       - |
-        ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
+        ./app/temporal/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
