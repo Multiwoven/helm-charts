@@ -15,7 +15,7 @@ multiwovenConfig:
   dbPassword: password
   dbPort: "5432"
   dbUsername: multiwoven
-  dbCloudEnabled: true
+  dbCloudEnabled: false
   dbCloudProvider: "aws"
   grpcEnableForkSupport: 1
   jwtSecret: ""
