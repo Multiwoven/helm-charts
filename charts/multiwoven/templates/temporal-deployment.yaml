@@ -82,7 +82,7 @@ spec:
             update-ca-certificates
             echo "Fetching RDS CA Certificate..."
             wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem -O /etc/ssl/certs/rds-ca.pem
-            ls -l /etc/ssl/certs/  # Debugging step
+            ls -l /etc/ssl/certs/
         {{ end }}
         volumeMounts:
           - name: cloud-cert-volume
