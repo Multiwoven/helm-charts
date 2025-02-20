@@ -106,7 +106,7 @@ spec:
         - name: TEMPORAL_TASK_QUEUE
           value: production-queue
         - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
-          value: "false"
+          value: "true"
         - name: POSTGRES_TLS_ENABLED
           value: "true"
         - name: SQL_TLS_ENABLED
