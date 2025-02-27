@@ -4,7 +4,7 @@ metadata:
   name: {{ include "chart.fullname" . }}-ingress
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
   annotations:
     {{ if .Values.externalDNS.enabled }}
       {{- if .Values.temporal.enabled }}

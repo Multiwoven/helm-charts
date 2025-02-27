@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: {{ include "chart.fullname" . }}-config
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 data:
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}

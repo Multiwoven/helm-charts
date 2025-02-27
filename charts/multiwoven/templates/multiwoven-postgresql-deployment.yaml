@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenPostgresql.replicas }}
   selector:

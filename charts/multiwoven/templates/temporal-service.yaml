@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: temporal
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)

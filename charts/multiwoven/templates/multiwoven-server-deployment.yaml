@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ include "chart.fullname" . }}-server
     io.kompose.service: {{ include "chart.fullname" . }}-server
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenServer.replicas }}
   selector:

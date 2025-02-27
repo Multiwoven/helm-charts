@@ -99,6 +99,7 @@ serviceAccount:
 
 secretsStore:
   enabled: false
+  secretRegion: "us-east-1"
   mwSecretAlias: mw-f01dd256e712
   temporalSecretAlias: temporal-f01dd256e712
   temporalVisibilitySecretAlias: temporal-visibility-f01dd256e712

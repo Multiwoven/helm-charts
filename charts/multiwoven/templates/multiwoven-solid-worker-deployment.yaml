@@ -13,7 +13,7 @@ spec:
     matchLabels:
       app: {{ include "chart.fullname" . }}-solid-worker
       io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
-    {{- include "chart.selectorLabels" . | nindent 6 }}
+      {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
