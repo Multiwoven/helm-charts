@@ -281,6 +281,7 @@ multiwovenPostgresql:
   replicas: 1
   type: ClusterIP
 multiwovenServer:
+  annotations: {}
   podSecurityContext:
     fsGroup: 1000
   multiwovenServer:
@@ -304,6 +305,7 @@ multiwovenServer:
   replicas: 1
   type: ClusterIP
 multiwovenUI:
+  annotations: {}
   podSecurityContext:
     fsGroup: 1000
   multiwovenUI:
@@ -356,6 +358,7 @@ multiwovenSolidWorker:
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
+  annotations: {}
   healthPort: 4567
   podSecurityContext:
     fsGroup: 1000
