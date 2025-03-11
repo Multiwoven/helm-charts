@@ -19,6 +19,10 @@ spec:
         io.kompose.network/multiwoven-server-default: "true"
         io.kompose.service: {{ include "chart.fullname" . }}-postgresql
       {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.multiwovenPostgresql.annotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       containers:
       - env:

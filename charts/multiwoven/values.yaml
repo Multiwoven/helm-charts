@@ -263,6 +263,7 @@ hpa:
 
 multiwovenPostgresql:
   enabled: true
+  annotations: {}
   multiwovenPostgresql:
     image:
       repository: postgres
@@ -281,6 +282,7 @@ multiwovenPostgresql:
   replicas: 1
   type: ClusterIP
 multiwovenServer:
+  annotations: {}
   podSecurityContext:
     fsGroup: 1000
   multiwovenServer:
@@ -304,6 +306,7 @@ multiwovenServer:
   replicas: 1
   type: ClusterIP
 multiwovenUI:
+  annotations: {}
   podSecurityContext:
     fsGroup: 1000
   multiwovenUI:
@@ -327,6 +330,7 @@ multiwovenUI:
   replicas: 1
   type: ClusterIP
 multiwovenSolidWorker:
+  annotations: {}
   healthPort: 9999
   podSecurityContext:
     fsGroup: 1000
@@ -356,6 +360,7 @@ multiwovenSolidWorker:
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
+  annotations: {}
   healthPort: 4567
   podSecurityContext:
     fsGroup: 1000
@@ -389,9 +394,10 @@ pvc:
     storageRequest: 100Mi
     storageClassName: "default"
 temporal:
+  enabled: true
+  annotations: {}
   podSecurityContext:
     fsGroup: 1000
-  enabled: true
   ports:
     - name: "7233"
       port: 7233
@@ -415,6 +421,7 @@ temporal:
         memory: 1Gi
   type: ClusterIP
 temporalUi:
+  annotations: {}
   podSecurityContext:
     fsGroup: 5000
   ports:
