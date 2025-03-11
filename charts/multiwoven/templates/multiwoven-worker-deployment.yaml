@@ -20,6 +20,10 @@ spec:
         app: {{ include "chart.fullname" . }}-worker
         io.kompose.service: {{ include "chart.fullname" . }}-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.multiwovenWorker.annotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}

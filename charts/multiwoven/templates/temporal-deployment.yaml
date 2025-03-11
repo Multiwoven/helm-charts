@@ -19,6 +19,10 @@ spec:
         io.kompose.network/multiwoven-server-default: "true"
         io.kompose.service: temporal
       {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.temporal.annotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
