@@ -45,4 +45,6 @@ jobs:
           if [ $LATEST = $CURRENT ] || [ $LATEST = $APP_VERSION ]; then
               echo "Chart version has not been updated!"
               exit 1
+          else
+            echo "Chart version has been updated to $LATEST."
           fi
