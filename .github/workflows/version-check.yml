@@ -3,12 +3,12 @@ name: Version Check
 on:
   pull_request:
     branches: [ main ]
-  
+
 jobs:
   version-check:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: azure/setup-helm@v4.2.0
         with:
@@ -45,4 +45,6 @@ jobs:
           if [ $LATEST = $CURRENT ] || [ $LATEST = $APP_VERSION ]; then
               echo "Chart version has not been updated!"
               exit 1
+          else
+            echo "Chart version has been updated to $LATEST."
           fi
