@@ -412,6 +412,10 @@ temporal:
     image:
       repository: temporalio/auto-setup
       tag: 1.22.4
+    initContainer:
+      image:
+        repository: temporalio/auto-setup
+        tag: 1.22.4
     resources:
       limits:
         cpu: "1"
@@ -440,6 +444,10 @@ temporalUi:
     image:
       repository: temporalio/ui
       tag: 2.22.3
+    initContainer:
+      image:
+        repository: temporalio/ui
+        tag: 2.22.3
     resources:
       requests:
         cpu: "250m"
