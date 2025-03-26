@@ -27,7 +27,6 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
