@@ -33,7 +33,7 @@ spec:
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
-        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.temporalUi.temporalUi.initContainer.image.repository }}:{{ .Values.temporalUi.temporalUi.initContainer.image.tag | default "latest" }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
@@ -69,7 +69,7 @@ spec:
           value: {{ quote .Values.temporalUi.temporalUi.env.temporalUiPort }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.temporalUi.temporalUi.image.repository }}:{{ .Values.temporalUi.temporalUi.image.tag | default "latest" }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
           runAsUser: {{ .Values.temporalUi.temporalUi.containerSecurityContext.runAsUser }}
