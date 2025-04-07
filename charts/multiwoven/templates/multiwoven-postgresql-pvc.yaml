@@ -5,7 +5,7 @@ metadata:
   name: {{ include "chart.fullname" . }}-postgresql-pvc
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql-pvc
+    service: {{ include "chart.fullname" . }}-postgresql-pvc
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   accessModes:

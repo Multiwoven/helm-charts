@@ -5,19 +5,19 @@ metadata:
   name: {{ include "chart.fullname" . }}-temporal
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: temporal
+    service: temporal
     {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: temporal
+      service: temporal
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: temporal
+        network/multiwoven-server-default: "true"
+        service: temporal
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.temporal.annotations }}
@@ -239,4 +239,3 @@ spec:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
 {{ end }}
-

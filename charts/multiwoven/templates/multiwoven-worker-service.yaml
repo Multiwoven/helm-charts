@@ -3,17 +3,13 @@ kind: Service
 metadata:
   name: {{ include "chart.fullname" . }}-worker
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
-    io.kompose.service:  {{ include "chart.fullname" . }}-worker
+    service:  {{ include "chart.fullname" . }}-worker
   {{- include "chart.labels" . | nindent 4 }}
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.32.0 (HEAD)
 spec:
   type: {{ .Values.multiwovenWorker.type }}
   selector:
-    io.kompose.service:  {{ include "chart.fullname" . }}-worker
+    service:  {{ include "chart.fullname" . }}-worker
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.multiwovenWorker.ports | toYaml | nindent 2 -}}
