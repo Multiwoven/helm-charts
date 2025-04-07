@@ -5,19 +5,19 @@ metadata:
   name: {{ include "chart.fullname" . }}-postgresql
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenPostgresql.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+      service: {{ include "chart.fullname" . }}-postgresql
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+        network/multiwoven-server-default: "true"
+        service: {{ include "chart.fullname" . }}-postgresql
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.multiwovenPostgresql.annotations }}

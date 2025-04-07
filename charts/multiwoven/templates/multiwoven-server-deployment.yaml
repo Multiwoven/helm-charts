@@ -5,20 +5,20 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     app: {{ include "chart.fullname" . }}-server
-    io.kompose.service: {{ include "chart.fullname" . }}-server
+    service: {{ include "chart.fullname" . }}-server
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenServer.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-server
-      io.kompose.service: {{ include "chart.fullname" . }}-server
+      service: {{ include "chart.fullname" . }}-server
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: {{ include "chart.fullname" . }}-server
-        io.kompose.service: {{ include "chart.fullname" . }}-server
+        service: {{ include "chart.fullname" . }}-server
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.multiwovenServer.annotations }}
@@ -49,7 +49,7 @@ spec:
             runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
             privileged: false
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
             capabilities:
               drop:
               {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -119,7 +119,7 @@ spec:
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
