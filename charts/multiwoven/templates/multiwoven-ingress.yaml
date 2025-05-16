@@ -29,7 +29,7 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.multiwovenConfig.nginxProxyBodySize }}
-    {{ if .Values.nginxIngress.enableMetrics }}
+    {{ if not .Values.nginxIngress.enableMetrics }}
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /metrics {
         return 403;
