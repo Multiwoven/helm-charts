@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: multiwoven-server-metrics
+  namespace: monitoring
+  labels:
+    team: backend
+spec:
+  jobLabel: multiwoven-server
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: multiwoven
+      app.kubernetes.io/name: multiwoven
+      io.kompose.service: multiwoven-server
+  namespaceSelector:
+    matchNames:
+      - multiwoven
+  endpoints:
+    - port: server
+      path: /metrics
+      interval: 15s
+      honorLabels: true
