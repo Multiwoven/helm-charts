@@ -78,6 +78,7 @@ externalDNS:
 
 nginxIngress:
   enabled: true
+  enableMetrics: false
 
 kongIngress:
   enabled: false
