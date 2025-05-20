@@ -1,0 +1,47 @@
+{{ if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "chart.fullname" . }}-ui-hpa
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ui-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "chart.fullname" . }}-ui
+  minReplicas: {{ .Values.hpa.aisquaredUI.minReplicas }}
+  maxReplicas: {{ .Values.hpa.aisquaredUI.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.aisquaredUI.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.aisquaredUI.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.aisquaredUI.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredUI.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.aisquaredUI.behavior.scaleUp.policies.selectPolicy }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.aisquaredUI.cpuAverageUtilizationPercentageThreshold }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.aisquaredUI.memoryAverageUtilizationPercentageThreshold }}
+{{ end }}

@@ -11,9 +11,9 @@ metadata:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
 spec:
-  type: {{ .Values.multiwovenSolidWorker.type }}
+  type: {{ .Values.aisquaredSolidWorker.type }}
   selector:
     io.kompose.service:  {{ include "chart.fullname" . }}-solid-worker
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-  {{- .Values.multiwovenSolidWorker.ports | toYaml | nindent 2 -}}
+  {{- .Values.aisquaredSolidWorker.ports | toYaml | nindent 2 -}}

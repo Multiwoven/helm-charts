@@ -1,7 +1,7 @@
 apiVersion: v2
-name: multiwoven
+name: aisquared
 description: |
-  Multiwoven is an open-source reverse ETL tool, offering an alternative to qHightouch, Census, and similar platforms. 🔥
+  AI Squared is an open-source reverse ETL tool, offering an alternative to qHightouch, Census, and similar platforms. 🔥
 # kubeVersion: ">=1.16.0"
 type: application
 version: 0.56.0

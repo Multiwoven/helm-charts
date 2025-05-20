@@ -11,9 +11,9 @@ metadata:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
 spec:
-  type: {{ .Values.multiwovenUI.type }}
+  type: {{ .Values.aisquaredUI.type }}
   selector:
     io.kompose.service:  {{ include "chart.fullname" . }}-ui
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.multiwovenUI.ports | toYaml | nindent 2 -}}
+	{{- .Values.aisquaredUI.ports | toYaml | nindent 2 -}}

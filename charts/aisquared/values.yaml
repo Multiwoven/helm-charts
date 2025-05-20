@@ -1,9 +1,9 @@
 kubernetesClusterDomain: cluster.local
-kubernetesNamespace: multiwoven
-multiwovenConfig:
+kubernetesNamespace: aisquared
+aisquaredConfig:
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
-  apiHost: api.multiwoven.com
+  apiHost: api.squared.ai
   appRevision: unknown
   appEnv: community
   appsignalPushApiKey: yourkey
@@ -11,10 +11,10 @@ multiwovenConfig:
   awsSecretAccessKey: ""
   azureSpot: false
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
-  dbHost: multiwoven-postgresql
+  dbHost: aisquared-postgresql
   dbPassword: password
   dbPort: "5432"
-  dbUsername: multiwoven
+  dbUsername: aisquared
   grpcEnableForkSupport: 1
   jwtSecret: ""
   newRelicKey: yourkey
@@ -26,15 +26,15 @@ multiwovenConfig:
   secretKeyBase: ""
   skipDbMigration: "false"
   smtpAddress: smtp.yourdomain.com
-  smtpBrandName: Multiwoven
+  smtpBrandName: "AI Squared"
   smtpHost: yourdomain.com
   smtpPassword: yourpassword
   smtpPort: "587"
   smtpUsername: yourusername
   smtpSenderEmail: admin@yourdomain.com
-  solidWorkerHost: solid.multiwoven.com
+  solidWorkerHost: solid.squared.ai
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
-  storageAccessKey: ""
+  storageAccessKey: "myaccesskey"
   storageAccountName: ""
   syncExtractorBatchSize: "1000"
   syncExtractorThreadPoolSize: "10"
@@ -43,32 +43,32 @@ multiwovenConfig:
   temporalActivityThreadPoolSize: "20"
   temporalClientChain: /certs/temporal.chain.pem
   temporalClientKey: /certs/temporal.pem
-  temporalHost: multiwoven-temporal
-  temporalNamespace: multiwoven-dev
+  temporalHost: aisquared-temporal
+  temporalNamespace: aisquared-dev
   temporalPort: "7233"
   temporalPostgresDefaultPort: "5432"
   temporalPostgresPassword: password
   temporalPostgresSsl: false
-  temporalPostgresUser: multiwoven
+  temporalPostgresUser: aisquared
   temporalPostgresqlVersion: "13"
   temporalRootCert: /certs/temporal.key
   temporalTaskQueue: sync-dev
-  temporalUiHost: temporal.multiwoven.com
+  temporalUiHost: temporal.squared.ai
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
-  tlsAdminEmail: admin@multiwoven.com
+  tlsAdminEmail: admin@squared.ai
   tlsCertIssuer: letsencrypt-staging
-  uiHost: app.multiwoven.com
+  uiHost: app.squared.ai
   userEmailVerification: "false"
-  viteApiHost: api.multiwoven.com
+  viteApiHost: api.squared.ai
   viteAppsignalPushApiKey: yourkey
-  viteBrandName: "Multiwoven"
+  viteBrandName: "AI Squared"
   viteLogoUrl: ""
   viteBrandColor: ""
   viteBrandHoverColor: ""
   viteFavIconUrl: ""
-  workerHost: worker.multiwoven.com
+  workerHost: worker.squared.ai
 
 automountServiceAccountToken:
   enabled: true
@@ -94,7 +94,7 @@ awsIngress:
 
 serviceAccount:
   create: false
-  name: multiwoven-service-account
+  name: aisquared-service-account
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
 
@@ -126,8 +126,8 @@ globalImagePullPolicy: IfNotPresent
 multipleDbHosts:
   enabled: false
 
-  multiwovenDBHost: ""
-  multiwovenDBName: ""
+  aisquaredDBHost: ""
+  aisquaredDBName: ""
 
   temporalDbName: ""
   temporalDbHost: ""
@@ -141,7 +141,7 @@ multipleDbHosts:
 
 hpa:
   enabled: true
-  multiwovenUI:
+  aisquaredUI:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -171,7 +171,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenServer:
+  aisquaredServer:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -201,7 +201,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenSolidWorker:
+  aisquaredSolidWorker:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -231,7 +231,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenWorker:
+  aisquaredWorker:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -262,10 +262,10 @@ hpa:
             periodSeconds: 15
           selectPolicy: Max
 
-multiwovenPostgresql:
+aisquaredPostgresql:
   enabled: true
   annotations: {}
-  multiwovenPostgresql:
+  aisquaredPostgresql:
     image:
       repository: postgres
       tag: "13"
@@ -282,16 +282,16 @@ multiwovenPostgresql:
       targetPort: 5432
   replicas: 1
   type: ClusterIP
-multiwovenServer:
+aisquaredServer:
   annotations: {}
   podSecurityContext:
     fsGroup: 1000
-  multiwovenServer:
+  aisquaredServer:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
     image:
-      repository: multiwoven/multiwoven-server
+      repository: aisquared/aisquared-server
       tag: latest
     resources:
       limits:
@@ -306,16 +306,16 @@ multiwovenServer:
       targetPort: 3000
   replicas: 1
   type: ClusterIP
-multiwovenUI:
+aisquaredUI:
   annotations: {}
   podSecurityContext:
     fsGroup: 1000
-  multiwovenUI:
+  aisquaredUI:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
     image:
-      repository: multiwoven/multiwoven-ui
+      repository: aisquared/aisquared-ui
       tag: latest
     resources:
       limits:
@@ -330,12 +330,12 @@ multiwovenUI:
       targetPort: 8000
   replicas: 1
   type: ClusterIP
-multiwovenSolidWorker:
+aisquaredSolidWorker:
   annotations: {}
   healthPort: 9999
   podSecurityContext:
     fsGroup: 1000
-  multiwovenSolidWorker:
+  aisquaredSolidWorker:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -345,7 +345,7 @@ multiwovenSolidWorker:
       - |
         ./app/solid_queue/cli/worker
     image:
-      repository: multiwoven/multiwoven-server
+      repository: aisquared/aisquared-server
       tag: latest
     resources:
       limits:
@@ -360,12 +360,12 @@ multiwovenSolidWorker:
       targetPort: 9999
   replicas: 1
   type: ClusterIP
-multiwovenWorker:
+aisquaredWorker:
   annotations: {}
   healthPort: 4567
   podSecurityContext:
     fsGroup: 1000
-  multiwovenWorker:
+  aisquaredWorker:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -375,7 +375,7 @@ multiwovenWorker:
       - |
         ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
     image:
-      repository: multiwoven/multiwoven-server
+      repository: aisquared/aisquared-server
       tag: latest
     resources:
       limits:
@@ -439,7 +439,7 @@ temporalUi:
       runAsUser: 5000
       runAsGroup: 5000
     env:
-      temporalAddress: multiwoven-temporal:7233
+      temporalAddress: aisquared-temporal:7233
       temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
     image:
