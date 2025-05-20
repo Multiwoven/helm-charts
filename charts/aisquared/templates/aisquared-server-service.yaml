@@ -11,9 +11,9 @@ metadata:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
 spec:
-  type: {{ .Values.multiwovenServer.type }}
+  type: {{ .Values.aisquaredServer.type }}
   selector:
     io.kompose.service:  {{ include "chart.fullname" . }}-server
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.multiwovenServer.ports | toYaml | nindent 2 -}}
+	{{- .Values.aisquaredServer.ports | toYaml | nindent 2 -}}

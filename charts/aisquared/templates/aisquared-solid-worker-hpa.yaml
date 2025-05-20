@@ -1,0 +1,47 @@
+{{ if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "chart.fullname" . }}-solid-worker-hpa
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "chart.fullname" . }}-solid-worker
+  minReplicas: {{ .Values.hpa.aisquaredSolidWorker.minReplicas }}
+  maxReplicas: {{ .Values.hpa.aisquaredSolidWorker.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.aisquaredSolidWorker.behavior.scaleUp.policies.selectPolicy }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.aisquaredSolidWorker.cpuAverageUtilizationPercentageThreshold }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.aisquaredSolidWorker.memoryAverageUtilizationPercentageThreshold }}
+{{ end }}

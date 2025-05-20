@@ -1,4 +1,4 @@
-{{ if .Values.multiwovenPostgresql.enabled }}
+{{ if .Values.aisquaredPostgresql.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.multiwovenPostgresql.replicas }}
+  replicas: {{ .Values.aisquaredPostgresql.replicas }}
   selector:
     matchLabels:
       io.kompose.service: {{ include "chart.fullname" . }}-postgresql
@@ -16,11 +16,11 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.network/aisquared-server-default: "true"
         io.kompose.service: {{ include "chart.fullname" . }}-postgresql
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenPostgresql.annotations }}
+        {{- with .Values.aisquaredPostgresql.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -38,7 +38,7 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredPostgresql.aisquaredPostgresql.image.repository }}:{{ .Values.aisquaredPostgresql.aisquaredPostgresql.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -52,7 +52,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 5432
-        resources: {{- toYaml .Values.multiwovenPostgresql.multiwovenPostgresql.resources | nindent 10 }}
+        resources: {{- toYaml .Values.aisquaredPostgresql.aisquaredPostgresql.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           subPath: postgres

@@ -1,4 +1,4 @@
-{{ if .Values.multiwovenPostgresql.enabled }}
+{{ if .Values.aisquaredPostgresql.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,10 +8,10 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.multiwovenPostgresql.type }}
+  type: {{ .Values.aisquaredPostgresql.type }}
   selector:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.multiwovenPostgresql.ports | toYaml | nindent 2 -}}
+	{{- .Values.aisquaredPostgresql.ports | toYaml | nindent 2 -}}
 {{ end }}

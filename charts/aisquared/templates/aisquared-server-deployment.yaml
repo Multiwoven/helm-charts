@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-server
   {{- include "chart.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.multiwovenServer.replicas }}
+  replicas: {{ .Values.aisquaredServer.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-server
@@ -21,18 +21,18 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-server
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenServer.annotations }}
+        {{- with .Values.aisquaredServer.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.aisquaredServer.podSecurityContext.fsGroup }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredServer.aisquaredServer.image.repository }}:{{ .Values.aisquaredServer.aisquaredServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
@@ -45,8 +45,8 @@ spec:
           - name: rails-config
             mountPath: /mnt/rails
         securityContext:
-            runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
-            runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
+            runAsUser: {{ .Values.aisquaredServer.aisquaredServer.containerSecurityContext.runAsUser }}
+            runAsGroup: {{ .Values.aisquaredServer.aisquaredServer.containerSecurityContext.runAsGroup }}
             privileged: false
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
             readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
@@ -58,7 +58,7 @@ spec:
               {{- end }}
               {{- end }}
       {{ end }}
-      {{ if .Values.multiwovenConfig.azureSpot }}
+      {{ if .Values.aisquaredConfig.azureSpot }}
       tolerations:
       - key: "kubernetes.azure.com/scalesetpriority"
         operator: "Equal"
@@ -103,20 +103,20 @@ spec:
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
-          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+          value: {{ .Values.multipleDbHosts.aisquaredDBHost }}
         - name: DB_NAME
-          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+          value: {{ .Values.multipleDbHosts.aisquaredDBName }}
         {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredServer.aisquaredServer.image.repository }}:{{ .Values.aisquaredServer.aisquaredServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.aisquaredServer.aisquaredServer.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.aisquaredServer.aisquaredServer.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
@@ -130,23 +130,23 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: {{ (index .Values.multiwovenServer.ports 0).port }}
+            port: {{ (index .Values.aisquaredServer.ports 0).port }}
           initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-server
         ports:
-        - containerPort: {{ (index .Values.multiwovenServer.ports 0).port }}
+        - containerPort: {{ (index .Values.aisquaredServer.ports 0).port }}
         readinessProbe:
           httpGet:
             path: /
-            port: {{ (index .Values.multiwovenServer.ports 0).port }}
+            port: {{ (index .Values.aisquaredServer.ports 0).port }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
+        resources: {{- toYaml .Values.aisquaredServer.aisquaredServer.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
         {{ if .Values.secretsStore.enabled }}
-        - name: multiwoven-secrets-store
+        - name: aisquared-secrets-store
           mountPath: /run/secrets/mw-secrets
           readOnly: true
         {{ end }}
@@ -176,7 +176,7 @@ spec:
             path: ./temporal.pem
       {{ end }}
       {{ if .Values.secretsStore.enabled }}
-      - name: multiwoven-secrets-store
+      - name: aisquared-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -196,7 +196,7 @@ spec:
         emptyDir: {}
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
