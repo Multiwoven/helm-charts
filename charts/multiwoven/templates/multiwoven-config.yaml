@@ -58,6 +58,7 @@ data:
   TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
+  TRACK: {{ .Values.multiwovenConfig.track | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
