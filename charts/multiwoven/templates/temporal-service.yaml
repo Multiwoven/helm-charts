@@ -5,16 +5,12 @@ metadata:
   name: {{ include "chart.fullname" . }}-temporal
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: temporal
+    service: temporal
   {{- include "chart.labels" . | nindent 4 }}
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.32.0 (HEAD)
-    kompose.volume.type: configMap
 spec:
   type: {{ .Values.temporal.type }}
   selector:
-    io.kompose.service: temporal
+    service: temporal
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
 	{{- .Values.temporal.ports | toYaml | nindent 2 -}}

@@ -5,12 +5,12 @@ metadata:
   name: {{ include "chart.fullname" . }}-postgresql
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.multiwovenPostgresql.type }}
   selector:
-    io.kompose.service: {{ include "chart.fullname" . }}-postgresql
+    service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
 	{{- .Values.multiwovenPostgresql.ports | toYaml | nindent 2 -}}

@@ -3,17 +3,13 @@ kind: Service
 metadata:
   name: {{ include "chart.fullname" . }}-solid-worker
   namespace: {{ .Values.kubernetesNamespace }}
-
   labels:
-    io.kompose.service:  {{ include "chart.fullname" . }}-solid-worker
+    service:  {{ include "chart.fullname" . }}-solid-worker
   {{- include "chart.labels" . | nindent 4 }}
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.32.0 (HEAD)
 spec:
   type: {{ .Values.multiwovenSolidWorker.type }}
   selector:
-    io.kompose.service:  {{ include "chart.fullname" . }}-solid-worker
+    service:  {{ include "chart.fullname" . }}-solid-worker
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.multiwovenSolidWorker.ports | toYaml | nindent 2 -}}

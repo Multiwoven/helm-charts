@@ -5,20 +5,20 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     app: {{ include "chart.fullname" . }}-worker
-    io.kompose.service: {{ include "chart.fullname" . }}-worker
+    service: {{ include "chart.fullname" . }}-worker
     {{- include "chart.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.multiwovenWorker.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-worker
-      io.kompose.service: {{ include "chart.fullname" . }}-worker
+      service: {{ include "chart.fullname" . }}-worker
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: {{ include "chart.fullname" . }}-worker
-        io.kompose.service: {{ include "chart.fullname" . }}-worker
+        service: {{ include "chart.fullname" . }}-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.multiwovenWorker.annotations }}
