@@ -17,6 +17,7 @@ data:
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
+  DB_NAME: {{ .Values.multiwovenConfig.dbName | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
   {{ if not .Values.secretsStore.enabled }}
