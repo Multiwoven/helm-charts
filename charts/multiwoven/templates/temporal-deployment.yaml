@@ -7,6 +7,10 @@ metadata:
   labels:
     io.kompose.service: temporal
     {{- include "chart.labels" . | nindent 4 }}
+  {{- with .Values.multiwovenConfig.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:
