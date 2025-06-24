@@ -9,7 +9,7 @@ multiwovenConfig:
   appEnv: community
   appsignalPushApiKey: yourkey
   awsAccessKeyId: ""
-  awsBucket: ""
+  awsS3Bucket: ""
   awsRegion: ""
   awsSecretAccessKey: ""
   azureSpot: false
