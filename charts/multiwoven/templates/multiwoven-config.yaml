@@ -7,6 +7,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-config
   {{- include "chart.labels" . | nindent 4 }}
 data:
+  ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
@@ -14,6 +15,8 @@ data:
   APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
   AWS_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.awsAccessKeyId | quote }}
+  AWS_REGION: {{ .Values.multiwovenConfig.awsRegion | quote }}
+  AWS_S3_BUCKET: {{ .Values.multiwovenConfig.awsS3Bucket | quote }}
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
