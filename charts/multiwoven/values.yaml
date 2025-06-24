@@ -1,6 +1,7 @@
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 multiwovenConfig:
+  activeStorageService: "microsoft"
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
   apiHost: api.multiwoven.com
@@ -8,6 +9,8 @@ multiwovenConfig:
   appEnv: community
   appsignalPushApiKey: yourkey
   awsAccessKeyId: ""
+  awsBucket: ""
+  awsRegion: ""
   awsSecretAccessKey: ""
   azureSpot: false
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
