@@ -34,12 +34,14 @@ data:
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
   SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
+  {{ if not .Values.multiwovenConfig.userEmailVerification}}
   SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
   SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
   SMTP_PORT: {{ .Values.multiwovenConfig.smtpPort | quote }}
   SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
   SMTP_SENDER_EMAIL: {{ .Values.multiwovenConfig.smtpSenderEmail | quote }}
+  {{ end }}
   SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
   STORAGE_ACCESS_KEY: {{ .Values.multiwovenConfig.storageAccessKey }}
   STORAGE_ACCOUNT_NAME: {{ .Values.multiwovenConfig.storageAccountName }}
