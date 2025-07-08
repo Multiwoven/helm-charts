@@ -54,7 +54,9 @@ data:
   TEMPORAL_NAMESPACE: {{ .Values.multiwovenConfig.temporalNamespace | quote }}
   TEMPORAL_PORT: {{ .Values.multiwovenConfig.temporalPort | quote }}
   TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.multiwovenConfig.temporalPostgresDefaultPort | quote }}
+  {{ if not .Values.secretsStore.enabled }}
   TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
+  {{ end }}
   TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
   TEMPORAL_POSTGRESQL_VERSION: {{ .Values.multiwovenConfig.temporalPostgresqlVersion | quote }}
   TEMPORAL_ROOT_CERT: {{ .Values.multiwovenConfig.temporalRootCert | quote }}
