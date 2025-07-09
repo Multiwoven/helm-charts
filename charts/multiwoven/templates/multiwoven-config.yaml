@@ -34,12 +34,14 @@ data:
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
   SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
+  {{ if not .Values.multiwovenConfig.userEmailVerification}}
   SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
   SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
   SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
   SMTP_PORT: {{ .Values.multiwovenConfig.smtpPort | quote }}
   SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
   SMTP_SENDER_EMAIL: {{ .Values.multiwovenConfig.smtpSenderEmail | quote }}
+  {{ end }}
   SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
   STORAGE_ACCESS_KEY: {{ .Values.multiwovenConfig.storageAccessKey }}
   STORAGE_ACCOUNT_NAME: {{ .Values.multiwovenConfig.storageAccountName }}
@@ -54,7 +56,9 @@ data:
   TEMPORAL_NAMESPACE: {{ .Values.multiwovenConfig.temporalNamespace | quote }}
   TEMPORAL_PORT: {{ .Values.multiwovenConfig.temporalPort | quote }}
   TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.multiwovenConfig.temporalPostgresDefaultPort | quote }}
+  {{ if not .Values.secretsStore.enabled }}
   TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
+  {{ end }}
   TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
   TEMPORAL_POSTGRESQL_VERSION: {{ .Values.multiwovenConfig.temporalPostgresqlVersion | quote }}
   TEMPORAL_ROOT_CERT: {{ .Values.multiwovenConfig.temporalRootCert | quote }}
