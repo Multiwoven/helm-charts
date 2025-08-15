@@ -28,12 +28,15 @@ data:
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
   {{ end }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
+  HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
+  LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
   SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
+  SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.multiwovenConfig.slackSignupChannelEmail | quote }}
   {{ if not .Values.multiwovenConfig.userEmailVerification}}
   SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
   SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
