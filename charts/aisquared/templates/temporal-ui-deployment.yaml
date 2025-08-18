@@ -8,8 +8,9 @@ metadata:
     io.kompose.service: temporal-ui
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.32.0 (HEAD)
+    {{- with .Values.temporalUi.annotations }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.temporalUi.replicas }}
   selector:

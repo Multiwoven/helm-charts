@@ -19,7 +19,7 @@ data:
       datastores:
         default:
           sql:
-            pluginName: "postgres"
+            pluginName: {{ `{{ .Env.TEMPORAL_DB_PLUGIN }}` }}
             databaseName: {{ `{{ .Env.TEMPORAL_DEFAULT_DB_NAME }}` }}
             connectAddr: {{ `{{ .Env.TEMPORAL_DEFAULT_CONNECT_ADDR }}` }}
             connectProtocol: "tcp"
@@ -37,7 +37,7 @@ data:
               serverName: ""
         visibility:
           sql:
-            pluginName: "postgres"
+            pluginName: {{ `{{ .Env.TEMPORAL_DB_PLUGIN }}` }}
             databaseName: {{ `{{ .Env.TEMPORAL_VISIBILITY_DB_NAME }}` }}
             connectAddr: {{ `{{ .Env.TEMPORAL_VISIBILITY_CONNECT_ADDR }}` }}
             connectProtocol: "tcp"

@@ -7,6 +7,10 @@ metadata:
   labels:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.multiwovenPostgresql.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.aisquaredPostgresql.replicas }}
   selector:

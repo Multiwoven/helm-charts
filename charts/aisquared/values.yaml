@@ -1,6 +1,7 @@
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: aisquared
 aisquaredConfig:
+  activeStorageService: "microsoft"
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
   apiHost: api.squared.ai
@@ -8,15 +9,20 @@ aisquaredConfig:
   appEnv: community
   appsignalPushApiKey: yourkey
   awsAccessKeyId: ""
+  awsS3Bucket: ""
+  awsRegion: ""
   awsSecretAccessKey: ""
   azureSpot: false
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: aisquared-postgresql
   dbPassword: password
   dbPort: "5432"
-  dbUsername: aisquared
+  dbUsername: multiwoven
+  dbName: multiwoven_server_production
   grpcEnableForkSupport: 1
+  hubspotApiKey: ""
   jwtSecret: ""
+  leadCaptureEnabled: "false"
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   privateRepo: false
@@ -25,6 +31,7 @@ aisquaredConfig:
   registrySecretName: mwregistrysecret
   secretKeyBase: ""
   skipDbMigration: "false"
+  slackSignupChannelEmail: ""
   smtpAddress: smtp.yourdomain.com
   smtpBrandName: "AI Squared"
   smtpHost: yourdomain.com

@@ -7,6 +7,10 @@ metadata:
   labels:
     io.kompose.service: temporal
     {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.temporal.annotations }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:
@@ -72,8 +76,6 @@ spec:
           value: "true"
         {{ end }}
         {{ if not .Values.multipleDbHosts.enabled }}
-        - name: DB
-          value: {{ quote .Values.temporal.temporal.env.db }}
         - name: DB_PORT
           valueFrom:
             configMapKeyRef:
@@ -124,6 +126,8 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
+        - name: TEMPORAL_DB_PLUGIN
+          value: {{ .Values.temporal.temporal.env.db | quote }}
         - name: TEMPORAL_DEFAULT_DB_NAME
           value: {{ .Values.multipleDbHosts.temporalDbName }}
         - name: TEMPORAL_DEFAULT_CONNECT_ADDR

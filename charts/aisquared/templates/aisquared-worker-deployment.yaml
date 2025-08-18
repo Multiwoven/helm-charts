@@ -7,6 +7,10 @@ metadata:
     app: {{ include "chart.fullname" . }}-worker
     io.kompose.service: {{ include "chart.fullname" . }}-worker
     {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.multiwovenWorker.annotations }}
+      {{ toYaml . | nindent 4 }}
+      {{- end }}
 spec:
   replicas: {{ .Values.aisquaredWorker.replicas }}
   selector:
