@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-server
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenServer.annotations }}
+    {{- with .Values.aisquaredServer.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
