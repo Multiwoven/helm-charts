@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenSolidWorker.annotations }}
+    {{- with .Values.aisquaredSolidWorker.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
