@@ -20,7 +20,9 @@ multiwovenConfig:
   dbUsername: multiwoven
   dbName: multiwoven_server_production
   grpcEnableForkSupport: 1
+  hubspotApiKey: ""
   jwtSecret: ""
+  leadCaptureEnabled: "false"
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   privateRepo: false
@@ -29,6 +31,7 @@ multiwovenConfig:
   registrySecretName: mwregistrysecret
   secretKeyBase: ""
   skipDbMigration: "false"
+  slackSignupChannelEmail: ""
   smtpAddress: smtp.yourdomain.com
   smtpBrandName: Multiwoven
   smtpHost: yourdomain.com
