@@ -1,4 +1,4 @@
-name: Deploy chart to staging env
+name: Deploy chart to qa env
 
 on:
   pull_request:
@@ -17,13 +17,13 @@ env:
   CHART_PATH: charts/multiwoven
   CHART_NAME: multiwoven
   INFRA_REPO: Multiwoven/aisquared-infra
-  INFRA_PATH: kubernetes/staging/aisquared
-  ARGOCD_APP: aisquared-staging
+  INFRA_PATH: kubernetes/qa/aisquared
+  ARGOCD_APP: aisquared-qa
   ARGOCD_SERVER_HOST: argocd-staging.squared.ai
 
 jobs:
   publish_pr_chart:
-    if: ${{ github.event.label.name == 'deploy-to-staging' || contains( github.event.pull_request.labels.*.name, 'deploy-to-staging') }}
+    if: ${{ github.event.label.name == 'deploy-to-qa' || contains( github.event.pull_request.labels.*.name, 'deploy-to-qa') }}
     runs-on: ubuntu-latest
     outputs:
       ver: ${{ steps.setver.outputs.ver }}
@@ -92,18 +92,18 @@ jobs:
       - name: Commit to a temporary branch
         working-directory: infra
         env:
-          BRANCH_NAME: staging-test/pr-${{ github.event.number }}
+          BRANCH_NAME: qa-test/pr-${{ github.event.number }}
         run: |
           git checkout -b "$BRANCH_NAME"
           git add -A
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -m "test(staging): bump ${{ env.CHART_NAME }} to ${{ needs.publish_pr_chart.outputs.ver }}"
+              commit -m "test(qa): bump ${{ env.CHART_NAME }} to ${{ needs.publish_pr_chart.outputs.ver }}"
           git push -u origin "$BRANCH_NAME"
 
       - name: Flip Argo CD app to temp branch and sync
         env:
-          BRANCH_NAME: staging-test/pr-${{ github.event.number }}
+          BRANCH_NAME: qa-test/pr-${{ github.event.number }}
         run: |
           curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/download/v2.12.3/argocd-linux-amd64
           chmod +x argocd && sudo mv argocd /usr/local/bin/argocd
@@ -130,7 +130,8 @@ jobs:
 
 
   restore:
-    if: (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-to-staging') || github.event.action == 'closed'
+    needs: publish_pr_chart
+    if: needs.publish_pr_chart.result == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Install Argo CD CLI
@@ -142,11 +143,11 @@ jobs:
         run: |
           argocd app set "${{ env.ARGOCD_APP }}" \
             --server "${{ env.ARGOCD_SERVER_HOST }}" \
-            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
             --grpc-web \
+            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
             --revision "main"
           argocd app sync "${{ env.ARGOCD_APP }}" \
             --server "${{ env.ARGOCD_SERVER_HOST }}" \
-            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
             --grpc-web \
+            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
             --prune --timeout 600
