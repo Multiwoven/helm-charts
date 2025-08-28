@@ -21,6 +21,10 @@ env:
   ARGOCD_APP: aisquared-staging
   ARGOCD_SERVER_HOST: argocd-staging.squared.ai
 
+concurrency:
+  group: staging-deploy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   publish_pr_chart:
     if: ${{ github.event.label.name == 'deploy-to-staging' || contains( github.event.pull_request.labels.*.name, 'deploy-to-staging') }}
@@ -94,12 +98,12 @@ jobs:
         env:
           BRANCH_NAME: staging-test/pr-${{ github.event.number }}
         run: |
-          git checkout -b "$BRANCH_NAME"
+          git switch -c "$BRANCH_NAME" 2>/dev/null || git switch "$BRANCH_NAME"
           git add -A
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
               commit -m "test(staging): bump ${{ env.CHART_NAME }} to ${{ needs.publish_pr_chart.outputs.ver }}"
-          git push -u origin "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME" --force
 
       - name: Flip Argo CD app to temp branch and sync
         env:
