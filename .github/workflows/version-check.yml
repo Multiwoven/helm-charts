@@ -3,6 +3,8 @@ name: Version Check
 on:
   pull_request:
     branches: [ main ]
+    paths:
+      - 'charts/**'
 
 jobs:
   version-check:
