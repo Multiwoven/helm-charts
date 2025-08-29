@@ -101,8 +101,8 @@ spec:
           emptyDir: {}
         {{ end }}
       restartPolicy: Always
-       {{ if .Values.multiwovenConfig.privateRepo }}
+       {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
 {{ end }}

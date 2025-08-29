@@ -69,9 +69,7 @@ spec:
           value: "true"
         - name: POSTGRES_TLS_ENABLED
           value: "true"
-        - name: DB
-          value: {{ quote .Values.temporal.temporal.env.db }}
-        {{ if .Values.multiwovenConfig.skipDbMigration }}
+        {{ if .Values.aisquaredConfig.skipDbMigration }}
         - name: SKIP_DB_CREATE
           value: "true"
         - name: SKIP_SCHEMA_SETUP
@@ -113,7 +111,7 @@ spec:
               key: TP_DB_USERNAME
             {{ end }}
         {{ end }}
-        {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
+        {{ if .Values.aisquaredConfig.temporalPostgresSsl }}
         - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
           value: 'true'
         - name: SQL_TLS
@@ -240,9 +238,9 @@ spec:
           name: "{{ include "chart.fullname" . }}-temporal-config"
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
 {{ end }}
 

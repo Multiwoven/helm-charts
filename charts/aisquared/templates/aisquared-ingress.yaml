@@ -8,10 +8,10 @@ metadata:
   annotations:
     {{ if .Values.externalDNS.enabled }}
       {{- if .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }},{{ .Values.multiwovenConfig.temporalUiHost }}"
+        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.aisquaredConfig.uiHost }},{{ .Values.aisquaredConfig.apiHost }},{{ .Values.aisquaredConfig.workerHost }},{{ .Values.aisquaredConfig.solidWorkerHost }},{{ .Values.aisquaredConfig.temporalUiHost }}"
       {{- end }}
       {{- if not .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }}"
+        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.aisquaredConfig.uiHost }},{{ .Values.aisquaredConfig.apiHost }},{{ .Values.aisquaredConfig.workerHost }},{{ .Values.aisquaredConfig.solidWorkerHost }}"
       {{- end }}
     {{ end }}
     
@@ -24,12 +24,12 @@ metadata:
     {{ if .Values.nginxIngress.enabled }}
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    cert-manager.io/issuer: {{ .Values.multiwovenConfig.tlsCertIssuer }}
+    cert-manager.io/issuer: {{ .Values.aisquaredConfig.tlsCertIssuer }}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.multiwovenConfig.allowedSourceIP }}
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.multiwovenConfig.nginxProxyBodySize }}
-    {{ if not .Values.nginxIngress.enableMetrics }}
+    nginx.ingress.kubernetes.io/whitelist-source-range: {{ .Values.aisquaredConfig.allowedSourceIP }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.aisquaredConfig.nginxProxyBodySize }}
+    {{ if .Values.nginxIngress.enableMetrics }}
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /metrics {
         return 403;
@@ -50,12 +50,12 @@ spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - {{ .Values.multiwovenConfig.uiHost }}
-    - {{ .Values.multiwovenConfig.apiHost }}
-    - {{ .Values.multiwovenConfig.workerHost }}
-    - {{ .Values.multiwovenConfig.solidWorkerHost }}
+    - {{ .Values.aisquaredConfig.uiHost }}
+    - {{ .Values.aisquaredConfig.apiHost }}
+    - {{ .Values.aisquaredConfig.workerHost }}
+    - {{ .Values.aisquaredConfig.solidWorkerHost }}
   {{ if .Values.temporal.enabled }}
-    - {{ .Values.multiwovenConfig.temporalUiHost }}
+    - {{ .Values.aisquaredConfig.temporalUiHost }}
   {{ end }}
     secretName: mw-tls-cert
   {{ end }}
@@ -67,7 +67,7 @@ spec:
   ingressClassName: alb
   {{ end }}
   rules:
-  - host:  {{ .Values.multiwovenConfig.uiHost }}
+  - host:  {{ .Values.aisquaredConfig.uiHost }}
     http:
       paths:
       - path: /
@@ -76,8 +76,8 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-ui'
             port:
-              number: {{ (index .Values.multiwovenUI.ports 0).port }}
-  - host: {{ .Values.multiwovenConfig.apiHost }}
+              number: {{ (index .Values.aisquaredUI.ports 0).port }}
+  - host: {{ .Values.aisquaredConfig.apiHost }}
     http:
       paths:
       - path: /
@@ -86,8 +86,8 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-server'
             port:
-              number: {{ (index .Values.multiwovenServer.ports 0).port }}
-  - host: {{ .Values.multiwovenConfig.workerHost }}
+              number: {{ (index .Values.aisquaredServer.ports 0).port }}
+  - host: {{ .Values.aisquaredConfig.workerHost }}
     http:
       paths:
       - path: /
@@ -96,8 +96,8 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-worker'
             port:
-              number: {{ .Values.multiwovenWorker.healthPort }}
-  - host: {{ .Values.multiwovenConfig.solidWorkerHost }}
+              number: {{ .Values.aisquaredWorker.healthPort }}
+  - host: {{ .Values.aisquaredConfig.solidWorkerHost }}
     http:
       paths:
       - path: /
@@ -106,9 +106,9 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-solid-worker'
             port:
-              number: {{ .Values.multiwovenSolidWorker.healthPort }}
+              number: {{ .Values.aisquaredSolidWorker.healthPort }}
 {{ if .Values.temporal.enabled }}
-  - host: {{ .Values.multiwovenConfig.temporalUiHost }}
+  - host: {{ .Values.aisquaredConfig.temporalUiHost }}
     http:
       paths:
       - backend:

@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-config
+  {{- include "chart.labels" . | nindent 4 }}
+data:
+  ALLOWED_HOST: {{ .Values.aisquaredConfig.allowedHost | quote }}
+  API_HOST: {{ .Values.aisquaredConfig.apiHost | quote }}
+  APP_ENV: {{ .Values.aisquaredConfig.appEnv | quote }}
+  APP_REVISION: {{ .Values.aisquaredConfig.appRevision | quote }}
+  APPSIGNAL_APP_ENV: {{ .Values.aisquaredConfig.appEnv | quote }}
+  APPSIGNAL_PUSH_API_KEY: {{ .Values.aisquaredConfig.appsignalPushApiKey | quote }}
+  AWS_ACCESS_KEY_ID: {{ .Values.aisquaredConfig.awsAccessKeyId | quote }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.aisquaredConfig.awsSecretAccessKey | quote }}
+  BRAND_NAME: {{ .Values.aisquaredConfig.smtpBrandName | quote }}
+  DATABRICKS_DRIVER_PATH: {{ .Values.aisquaredConfig.databricksDriverPath | quote }}
+  DB_PORT: {{ .Values.aisquaredConfig.dbPort | quote }}
+  DB_HOST: {{ .Values.aisquaredConfig.dbHost | quote }}
+  {{ if not .Values.secretsStore.enabled }}
+  DB_PASSWORD: {{ .Values.aisquaredConfig.dbPassword | quote }}
+  DB_USERNAME: {{ .Values.aisquaredConfig.dbUsername | quote }}
+  {{ end }}
+  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.aisquaredConfig.grpcEnableForkSupport | quote }}
+  JWT_SECRET: {{ .Values.aisquaredConfig.jwtSecret | quote }}
+  NEW_RELIC_KEY: {{ .Values.aisquaredConfig.newRelicKey | quote }}
+  RAILS_ENV: {{ .Values.aisquaredConfig.railsEnv | quote }}
+  RAILS_LOG_LEVEL: {{ .Values.aisquaredConfig.railsLogLevel | quote }}
+  SECRET_KEY_BASE: {{ .Values.aisquaredConfig.secretKeyBase | quote }}
+  SKIP_DB_MIGRATION: {{ .Values.aisquaredConfig.skipDbMigration | quote }}
+  SMTP_ADDRESS: {{ .Values.aisquaredConfig.smtpAddress | quote }}
+  SMTP_HOST: {{ .Values.aisquaredConfig.smtpHost | quote }}
+  SMTP_PASSWORD: {{ .Values.aisquaredConfig.smtpPassword | quote }}
+  SMTP_PORT: {{ .Values.aisquaredConfig.smtpPort | quote }}
+  SMTP_USERNAME: {{ .Values.aisquaredConfig.smtpUsername | quote }}
+  SMTP_SENDER_EMAIL: {{ .Values.aisquaredConfig.smtpSenderEmail | quote }}
+  SNOWFLAKE_DRIVER_PATH: {{ .Values.aisquaredConfig.snowflakeDriverPath | quote }}
+  STORAGE_ACCESS_KEY: {{ .Values.aisquaredConfig.storageAccessKey }}
+  STORAGE_ACCOUNT_NAME: {{ .Values.aisquaredConfig.storageAccountName }}
+  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.aisquaredConfig.syncExtractorBatchSize | quote }}
+  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.syncExtractorThreadPoolSize | quote }}
+  SYNC_LOADER_BATCH_SIZE: {{ .Values.aisquaredConfig.syncLoaderBatchSize | quote }}
+  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.syncLoaderThreadPoolSize | quote }}
+  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.temporalActivityThreadPoolSize | quote }}
+  TEMPORAL_CLIENT_CHAIN: {{ .Values.aisquaredConfig.temporalClientChain | quote }}
+  TEMPORAL_CLIENT_KEY: {{ .Values.aisquaredConfig.temporalClientKey | quote }}
+  TEMPORAL_HOST: {{ .Values.aisquaredConfig.temporalHost | quote }}
+  TEMPORAL_NAMESPACE: {{ .Values.aisquaredConfig.temporalNamespace | quote }}
+  TEMPORAL_PORT: {{ .Values.aisquaredConfig.temporalPort | quote }}
+  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.aisquaredConfig.temporalPostgresDefaultPort | quote }}
+  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.aisquaredConfig.temporalPostgresPassword | quote }}
+  TEMPORAL_POSTGRES_USER: {{ .Values.aisquaredConfig.temporalPostgresUser | quote }}
+  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.aisquaredConfig.temporalPostgresqlVersion | quote }}
+  TEMPORAL_ROOT_CERT: {{ .Values.aisquaredConfig.temporalRootCert | quote }}
+  TEMPORAL_TASK_QUEUE: {{ .Values.aisquaredConfig.temporalTaskQueue | quote }}
+  TEMPORAL_UI_VERSION: {{ .Values.aisquaredConfig.temporalUiVersion | quote }}
+  TEMPORAL_VERSION: {{ .Values.aisquaredConfig.temporalVersion | quote }}
+  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.temporalWorkflowThreadPoolSize | quote }}
+  UI_HOST: {{ .Values.aisquaredConfig.uiHost | quote }}
+  USER_EMAIL_VERIFICATION: {{ .Values.aisquaredConfig.userEmailVerification | quote }}
+  VITE_API_HOST: {{ .Values.aisquaredConfig.viteApiHost | quote }}
+  VITE_APPSIGNAL_PUSH_API_KEY: {{ .Values.aisquaredConfig.viteAppsignalPushApiKey | quote }}
+  VITE_BRAND_NAME: {{ .Values.aisquaredConfig.viteBrandName | quote }}
+  VITE_LOGO_URL: {{ .Values.aisquaredConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.aisquaredConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.aisquaredConfig.viteBrandHoverColor | quote }}
+  VITE_FAV_ICON_URL: {{ .Values.aisquaredConfig.viteFavIconUrl | quote }}

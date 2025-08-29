@@ -1,42 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-worker
+  name: {{ include "chart.fullname" . }}-solid-worker
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    app: {{ include "chart.fullname" . }}-worker
-    io.kompose.service: {{ include "chart.fullname" . }}-worker
+    app: {{ include "chart.fullname" . }}-solid-worker
+    io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenWorker.annotations }}
-      {{ toYaml . | nindent 4 }}
-      {{- end }}
+    {{- with .Values.aisquaredSolidWorker.annotations }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenWorker.replicas }}
+  replicas: {{ .Values.aisquaredSolidWorker.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-worker
-      io.kompose.service: {{ include "chart.fullname" . }}-worker
+      app: {{ include "chart.fullname" . }}-solid-worker
+      io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-worker
-        io.kompose.service: {{ include "chart.fullname" . }}-worker
+        app: {{ include "chart.fullname" . }}-solid-worker
+        io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenWorker.annotations }}
+        {{- with .Values.aisquaredSolidWorker.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenWorker.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.aisquaredSolidWorker.podSecurityContext.fsGroup }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredServer.aisquaredServer.image.repository }}:{{ .Values.aisquaredServer.aisquaredServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
@@ -49,8 +49,8 @@ spec:
           - name: rails-config
             mountPath: /mnt/rails
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -62,7 +62,7 @@ spec:
             {{- end }}
             {{- end }}
       {{ end }}
-      {{ if .Values.multiwovenConfig.azureSpot }}
+      {{ if .Values.aisquaredConfig.azureSpot }}
       tolerations:
       - key: "kubernetes.azure.com/scalesetpriority"
         operator: "Equal"
@@ -80,12 +80,12 @@ spec:
                 - spot
       {{ end }}
       containers:
-      - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
+      - args: {{- toYaml .Values.aisquaredSolidWorker.aisquaredSolidWorker.args | nindent 8 }}
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
-          value: {{ quote .Values.multiwovenWorker.healthPort }}
+          value: {{ quote .Values.aisquaredSolidWorker.healthPort }}
         {{ if .Values.secretsStore.enabled }}
         - name: DB_PASSWORD
           valueFrom:
@@ -100,18 +100,18 @@ spec:
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
-          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+          value: {{ .Values.multipleDbHosts.aisquaredDBHost }}
         - name: DB_NAME
-          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+          value: {{ .Values.multipleDbHosts.aisquaredDBName }}
         {{ end }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.image.repository }}:{{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.aisquaredSolidWorker.aisquaredSolidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -125,19 +125,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.aisquaredSolidWorker.healthPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: {{ include "chart.fullname" . }}-worker
+        name: {{ include "chart.fullname" . }}-solid-worker
         ports:
-        - containerPort: {{ .Values.multiwovenWorker.healthPort }}
+        - containerPort: {{ .Values.aisquaredSolidWorker.healthPort }}
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.aisquaredSolidWorker.healthPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
+        resources: {{- toYaml .Values.aisquaredSolidWorker.aisquaredSolidWorker.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
         {{ if not .Values.temporal.enabled }}
@@ -146,7 +146,7 @@ spec:
           readOnly: false
         {{ end }}
         {{ if .Values.secretsStore.enabled }}
-        - name: multiwoven-secrets-store
+        - name: aisquared-secrets-store
           mountPath: /run/secrets/store
           readOnly: true
         {{ end }}
@@ -166,7 +166,7 @@ spec:
             path: ./temporal.pem
       {{ end }}
       {{ if .Values.secretsStore.enabled }}
-      - name: multiwoven-secrets-store
+      - name: aisquared-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -178,7 +178,7 @@ spec:
         emptyDir: {}
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
