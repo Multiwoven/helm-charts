@@ -9,10 +9,12 @@ multiwovenConfig:
   appEnv: community
   appsignalPushApiKey: yourkey
   awsAccessKeyId: ""
+  awsLambdaApiUrl: ""
   awsS3Bucket: ""
   awsRegion: ""
   awsSecretAccessKey: ""
   azureSpot: false
+  codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
   dbPassword: password
@@ -29,6 +31,7 @@ multiwovenConfig:
   railsEnv: development
   railsLogLevel: info
   registrySecretName: mwregistrysecret
+  remoteCodeExecutionProvider: ""
   secretKeyBase: ""
   skipDbMigration: "false"
   slackSignupChannelEmail: ""
