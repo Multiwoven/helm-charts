@@ -22,7 +22,7 @@ env:
   ARGOCD_SERVER_HOST: argocd-staging.squared.ai
 
 concurrency:
-  group: staging-deploy-${{ github.event.pull_request.number }}
+  group: qa-deploy-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
@@ -134,7 +134,7 @@ jobs:
 
 
   restore:
-    if: (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-to-staging') || github.event.action == 'closed'
+    if: (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-to-qa') || github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Install Argo CD CLI
