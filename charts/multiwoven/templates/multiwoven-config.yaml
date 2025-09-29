@@ -72,7 +72,10 @@ data:
   TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
   TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
+  TEXTRACT_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.textractAccessKeyId | quote }}
   TEXTRACT_BUCKET_NAME: {{ .Values.multiwovenConfig.textractBucketName | quote }}
+  TEXTRACT_REGION: {{ .Values.multiwovenConfig.textractRegion | quote }}
+  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.textractSecretAccessKey | quote }}
   TRACK: {{ .Values.multiwovenConfig.track | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
