@@ -37,6 +37,8 @@ data:
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.multiwovenConfig.remoteCodeExecutionProvider | quote }}
+  S3_SSE_TYPE: {{ .Values.multiwovenConfig.s3SseType | quote }}
+  S3_KMS_KEY_ID: {{ .Values.multiwovenConfig.s3KmsKeyId | quote }}
   SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
   SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
   SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.multiwovenConfig.slackSignupChannelEmail | quote }}
