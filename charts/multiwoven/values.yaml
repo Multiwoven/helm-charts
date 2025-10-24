@@ -85,6 +85,9 @@ multiwovenConfig:
   viteBrandColor: ""
   viteBrandHoverColor: ""
   viteFavIconUrl: ""
+  vitePublicPosthogKey: ""
+  vitePublicPosthogHost: ""
+
   workerHost: worker.multiwoven.com
 
 automountServiceAccountToken:

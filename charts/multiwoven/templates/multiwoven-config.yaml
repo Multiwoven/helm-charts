@@ -88,3 +88,5 @@ data:
   VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
   VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}
   VITE_FAV_ICON_URL: {{ .Values.multiwovenConfig.viteFavIconUrl | quote }}
+  VITE_PUBLIC_POSTHOG_KEY: {{ .Values.multiwovenConfig.vitePublicPosthogKey | quote }}
+  VITE_PUBLIC_POSTHOG_HOST: {{ .Values.multiwovenConfig.vitePublicPosthogHost | quote }}
