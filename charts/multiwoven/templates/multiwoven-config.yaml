@@ -30,11 +30,11 @@ data:
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
   {{ end }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
-  HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.vectorDb.host | quote }}
-  HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.vectorDb.database | quote }}
-  HOSTED_VECTOR_DB_USERNAME: {{ .Values.multiwovenConfig.vectorDb.username | quote }}
-  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.multiwovenConfig.vectorDb.password | quote }}
-  HOSTED_VECTOR_DB_PORT: {{ .Values.multiwovenConfig.vectorDb.port | quote }}
+  HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.hostedVectorDbHost | quote }}
+  HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.hostedVectorDbDatabase | quote }}
+  HOSTED_VECTOR_DB_USERNAME: {{ .Values.multiwovenConfig.hostedVectorDbUsername | quote }}
+  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.multiwovenConfig.hostedVectorDbPassword | quote }}
+  HOSTED_VECTOR_DB_PORT: {{ .Values.multiwovenConfig.hostedVectorDbPort | quote }}
   HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
