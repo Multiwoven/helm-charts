@@ -22,6 +22,11 @@ multiwovenConfig:
   dbUsername: multiwoven
   dbName: multiwoven_server_production
   grpcEnableForkSupport: 1
+  hostedVectorDbHost: ""
+  hostedVectorDbDatabase: ""
+  hostedVectorDbUsername: ""
+  hostedVectorDbPassword: ""
+  hostedVectorDbPort: "5432"
   hubspotApiKey: ""
   jwtSecret: ""
   leadCaptureEnabled: "false"
