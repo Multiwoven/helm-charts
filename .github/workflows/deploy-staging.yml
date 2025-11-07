@@ -44,9 +44,14 @@ jobs:
         run: |
           base=$(yq '.version' "$CHART_PATH/Chart.yaml")
           short=${GITHUB_SHA::7}
-          ver="${base}-pr${{ github.event.number }}+${short}"
+          ver="${base}-pr${{ github.event.number }}-${short}"
           yq -i ".version = \"${ver}\"" "$CHART_PATH/Chart.yaml"
           echo "ver=$ver" >> $GITHUB_OUTPUT
+
+      - name: Configure git identity for chart-releaser
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Release with chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
