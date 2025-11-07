@@ -37,8 +37,8 @@ multiwovenConfig:
   railsLogLevel: info
   registrySecretName: mwregistrysecret
   remoteCodeExecutionProvider: ""
-  s3SseType: "AES256"  # optional: "none", "AES256", or "aws:kms - case-sensitive"
-  s3KmsKeyId: ""  # optional: full ARN if using aws:kms
+  s3SseType: "AES256" # optional: "none", "AES256", or "aws:kms - case-sensitive"
+  s3KmsKeyId: "" # optional: full ARN if using aws:kms
   secretKeyBase: ""
   skipDbMigration: "false"
   slackSignupChannelEmail: ""
@@ -104,6 +104,8 @@ externalDNS:
 nginxIngress:
   enabled: true
   enableMetrics: false
+  proxyReadTimeout: 300
+  proxySendTimeout: 300
 
 kongIngress:
   enabled: false
