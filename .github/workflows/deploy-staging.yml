@@ -48,6 +48,11 @@ jobs:
           yq -i ".version = \"${ver}\"" "$CHART_PATH/Chart.yaml"
           echo "ver=$ver" >> $GITHUB_OUTPUT
 
+      - name: Configure git identity for AISQUARED_CI_BOT
+        run: |
+          git config --global user.name "AISQUARED-CI-BOT[bot]"
+          git config --global user.email "168923211+AISQUARED-CI-BOT[bot]@users.noreply.github.com"
+
       - name: Release with chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
         env:
