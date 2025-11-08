@@ -94,7 +94,7 @@ jobs:
       - name: Bump dependency version and update lock
         working-directory: infra/${{ env.INFRA_PATH }}
         run: |
-          ver="${{ needs.publish_pr_chart.outputs.ver }}"
+          export ver="${{ needs.publish_pr_chart.outputs.ver }}"
           yq -i '(.dependencies[] | select(.name == "multiwoven")).version = strenv(ver)' Chart.yaml
           cat Chart.yaml
 
