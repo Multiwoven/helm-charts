@@ -116,7 +116,8 @@ jobs:
         run: |
           curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/download/v2.12.3/argocd-linux-amd64
           chmod +x argocd && sudo mv argocd /usr/local/bin/argocd
-
+          echo "sleeping till chart is ready"
+          sleep 100
           # Point app at the temp branch
           argocd app set "${{ env.ARGOCD_APP }}" \
             --server "${{ env.ARGOCD_SERVER_HOST }}" \
