@@ -48,10 +48,13 @@ jobs:
           yq -i ".version = \"${ver}\"" "$CHART_PATH/Chart.yaml"
           echo "ver=$ver" >> $GITHUB_OUTPUT
 
-      - name: Configure git identity for chart-releaser
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.AISQUARED_CI_BOT_APP_ID }}
+          private_key: ${{ secrets.AISQUARED_CI_BOT_PRIVATE_KEY }}
+          repository: Multiwoven/helm-charts
 
       - name: Release with chart-releaser
         uses: helm/chart-releaser-action@v1.6.0
