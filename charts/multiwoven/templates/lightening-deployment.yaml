@@ -1,0 +1,56 @@
+{{ if .Values.lightening.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-lightening
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-lightening
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.lightening.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.lightening.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: {{ include "chart.fullname" . }}-lightening
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: {{ include "chart.fullname" . }}-lightening
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.lightening.annotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      - env:
+        - name: VERSION
+          value: {{ .Values.lighteningConfig.version | quote}}
+        - name: OPENAI_API_KEY
+          value: {{ .Values.lighteningConfig.openaiApiKey | quote }}
+        - name: CEREBRAS_API_KEY
+          value: {{ .Values.lighteningConfig.cerebrasApiKey | quote }}
+        - name: HUGGINGFACE_TOKEN
+          value: {{ .Values.lighteningConfig.hfToken | quote }}
+        image: {{ .Values.lightening.lightening.image.repository }}:{{ .Values.lightening.lightening.image.tag | default .Chart.AppVersion }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        name: {{ include "chart.fullname" . }}-lightening
+        ports:
+        - containerPort: 5432
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: 5432
+        resources: {{- toYaml .Values.lightening.lightening.resources | nindent 10 }}
+{{ end }}

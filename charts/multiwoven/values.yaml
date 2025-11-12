@@ -95,6 +95,12 @@ multiwovenConfig:
 
   workerHost: worker.multiwoven.com
 
+lighteningConfig:
+  version: ""
+  openaiApiKey: ""
+  cerebrasApiKey: ""
+  hfToken: ""
+
 automountServiceAccountToken:
   enabled: true
 
@@ -263,6 +269,36 @@ hpa:
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
     memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  lightening:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
     behavior:
       scaleDown:
         stabilizationWindowSeconds: 300
@@ -483,4 +519,38 @@ temporalUi:
       limits:
         cpu: "500m"
         memory: "512Mi"
+  type: ClusterIP
+lightening:
+  enabled: true
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 0
+  ports:
+    - name: "6000"
+      port: 6000
+      targetPort: 6000
+  replicas: 1
+  lightening:
+    containerSecurityContext:
+      runAsUser: 0
+      runAsGroup: 0
+    image:
+      repository: multiwoven/lightening
+      tag: "2025-11-12"
+    args:
+      - uvicorn
+      - --app-dir
+      - lightning
+      - main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "6000"
+    resources:
+      limits:
+        cpu: "2"
+        memory: "3Gi"
+      requests:
+        cpu: "1"
+        memory: "1Gi"
   type: ClusterIP
