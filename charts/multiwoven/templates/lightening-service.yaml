@@ -13,5 +13,5 @@ spec:
     io.kompose.service: {{ include "chart.fullname" . }}-lightening
   {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.lightening.ports | toYaml | nindent 2 -}}
+	  {{- .Values.lightening.ports | toYaml | nindent 2 -}}
 {{ end }}
