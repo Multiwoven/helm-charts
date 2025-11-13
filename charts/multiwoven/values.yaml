@@ -106,6 +106,8 @@ externalDNS:
 nginxIngress:
   enabled: true
   enableMetrics: false
+  proxyReadTimeout: 300
+  proxySendTimeout: 300
 
 kongIngress:
   enabled: false
