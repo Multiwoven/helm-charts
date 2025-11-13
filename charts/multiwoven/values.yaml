@@ -524,7 +524,7 @@ lightening:
   enabled: true
   annotations: {}
   podSecurityContext:
-    fsGroup: 0
+    fsGroup: 1000
   ports:
     - name: "6000"
       port: 6000
@@ -532,8 +532,8 @@ lightening:
   replicas: 1
   lightening:
     containerSecurityContext:
-      runAsUser: 0
-      runAsGroup: 0
+      runAsUser: 1000
+      runAsGroup: 1000
     image:
       repository: multiwoven/lightening
       tag: "2025-11-13"
