@@ -37,7 +37,7 @@ data:
   HOSTED_VECTOR_DB_PORT: {{ .Values.multiwovenConfig.hostedVectorDbPort | quote }}
   HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
   {{ if .Values.securityContext.readOnlyRootFilesystem }}
-  INSTALL_HTTPFS_QUERY : {{ .Values.multiwovenConfig.installHttpfsQuery | quote }}
+  INSTALL_HTTPFS_QUERY: {{ .Values.multiwovenConfig.installHttpfsQuery | quote }}
   {{ end }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
