@@ -36,6 +36,9 @@ data:
   HOSTED_VECTOR_DB_PASSWORD: {{ .Values.multiwovenConfig.hostedVectorDbPassword | quote }}
   HOSTED_VECTOR_DB_PORT: {{ .Values.multiwovenConfig.hostedVectorDbPort | quote }}
   HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
+  {{ if .Values.securityContext.readOnlyRootFilesystem }}
+  INSTALL_HTTPFS_QUERY: {{ .Values.multiwovenConfig.installHttpfsQuery | quote }}
+  {{ end }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
@@ -83,6 +86,9 @@ data:
   TEXTRACT_BUCKET_NAME: {{ .Values.multiwovenConfig.textractBucketName | quote }}
   TEXTRACT_REGION: {{ .Values.multiwovenConfig.textractRegion | quote }}
   TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.textractSecretAccessKey | quote }}
+  {{ if .Values.securityContext.readOnlyRootFilesystem }}
+  TMPDIR : {{ .Values.multiwovenConfig.tmpdir | quote }}
+  {{ end }}
   TRACK: {{ .Values.multiwovenConfig.track | quote }}
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}

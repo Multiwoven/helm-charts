@@ -28,6 +28,7 @@ multiwovenConfig:
   hostedVectorDbPassword: ""
   hostedVectorDbPort: "5432"
   hubspotApiKey: ""
+  installHttpfsQuery: "LOAD HTTPFS;"
   jwtSecret: ""
   leadCaptureEnabled: "false"
   newRelicKey: yourkey
@@ -80,6 +81,7 @@ multiwovenConfig:
   textractSecretAccessKey: ""
   tlsAdminEmail: admin@multiwoven.com
   tlsCertIssuer: letsencrypt-staging
+  tmpdir: "/rails/storage"
   track: "no"
   uiHost: app.multiwoven.com
   userEmailVerification: "false"
