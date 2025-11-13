@@ -1,4 +1,4 @@
-{{-- if .Values.lightening.enabled }}
+{{- if .Values.lightening.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
