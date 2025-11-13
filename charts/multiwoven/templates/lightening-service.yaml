@@ -1,4 +1,4 @@
-{{ if .Values.lightening.enabled }}
+{{- if .Values.lightening.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,12 +6,12 @@ metadata:
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
     io.kompose.service: {{ include "chart.fullname" . }}-lightening
-  {{- include "chart.labels" . | nindent 4 }}
+    {{- include "chart.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.lightening.type }}
   selector:
     io.kompose.service: {{ include "chart.fullname" . }}-lightening
-  {{- include "chart.selectorLabels" . | nindent 4 }}
+    {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
-	  {{- .Values.lightening.ports | toYaml | nindent 2 -}}
-{{ end }}
+    {{- toYaml .Values.lightening.ports | nindent 4 }}
+{{- end }}
