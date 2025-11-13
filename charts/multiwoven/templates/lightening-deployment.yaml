@@ -32,25 +32,31 @@ spec:
       - env:
         - name: VERSION
           value: {{ .Values.lighteningConfig.version | quote}}
-        - name: OPENAI_API_KEY
-          value: {{ .Values.lighteningConfig.openaiApiKey | quote }}
-        - name: CEREBRAS_API_KEY
-          value: {{ .Values.lighteningConfig.cerebrasApiKey | quote }}
-        - name: HUGGINGFACE_TOKEN
+        - name: HF_TOKEN
           value: {{ .Values.lighteningConfig.hfToken | quote }}
+        - name: HUGGINGFACE_BILLING_ACCOUNT
+          value: {{ .Values.lighteningConfig.hfBillingAccount | quote }}
+        - name: NANONETS_API_KEY
+          value: {{ .Values.lighteningConfig.nanonetsApiKey | quote }}
         image: {{ .Values.lightening.lightening.image.repository }}:{{ .Values.lightening.lightening.image.tag | default .Chart.AppVersion }}
+        args: {{- toYaml .Values.lightening.lightening.args | nindent 10 }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
           tcpSocket:
-            port: 5432
+            port: 6000
         name: {{ include "chart.fullname" . }}-lightening
         ports:
-        - containerPort: 5432
+        - containerPort: 6000
         readinessProbe:
           initialDelaySeconds: 5
           periodSeconds: 10
           tcpSocket:
-            port: 5432
+            port: 6000
         resources: {{- toYaml .Values.lightening.lightening.resources | nindent 10 }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
 {{ end }}

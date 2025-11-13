@@ -97,9 +97,9 @@ multiwovenConfig:
 
 lighteningConfig:
   version: ""
-  openaiApiKey: ""
-  cerebrasApiKey: ""
   hfToken: ""
+  hfBillingAccount: ""
+  nanonetsApiKey: ""
 
 automountServiceAccountToken:
   enabled: true
@@ -536,7 +536,7 @@ lightening:
       runAsGroup: 0
     image:
       repository: multiwoven/lightening
-      tag: "2025-11-12"
+      tag: "2025-11-13"
     args:
       - uvicorn
       - --app-dir
