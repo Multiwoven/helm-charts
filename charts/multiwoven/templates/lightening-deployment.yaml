@@ -1,4 +1,4 @@
-{{ if .Values.lightening.enabled }}
+{{-- if .Values.lightening.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,6 +40,19 @@ spec:
           value: {{ .Values.lighteningConfig.nanonetsApiKey | quote }}
         image: {{ .Values.lightening.lightening.image.repository }}:{{ .Values.lightening.lightening.image.tag | default .Chart.AppVersion }}
         args: {{- toYaml .Values.lightening.lightening.args | nindent 10 }}
+        securityContext:
+          runAsUser: {{ .Values.lightening.lightening.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.lightening.lightening.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
