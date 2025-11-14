@@ -95,7 +95,7 @@ multiwovenConfig:
 
   workerHost: worker.multiwoven.com
 
-lighteningConfig:
+lightningConfig:
   version: ""
   hfToken: ""
   hfBillingAccount: ""
@@ -294,7 +294,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  lightening:
+  lightning:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -520,7 +520,7 @@ temporalUi:
         cpu: "500m"
         memory: "512Mi"
   type: ClusterIP
-lightening:
+lightning:
   enabled: true
   annotations: {}
   podSecurityContext:
@@ -530,22 +530,13 @@ lightening:
       port: 6000
       targetPort: 6000
   replicas: 1
-  lightening:
+  lightning:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
     image:
-      repository: multiwoven/lightening
-      tag: "2025-11-13"
-    args:
-      - uvicorn
-      - --app-dir
-      - lightning
-      - main:app
-      - --host
-      - 0.0.0.0
-      - --port
-      - "6000"
+      repository: multiwoven/lightning
+      tag: "latest"
     resources:
       limits:
         cpu: "2"

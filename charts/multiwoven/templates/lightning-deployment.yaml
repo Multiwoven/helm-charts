@@ -1,48 +1,50 @@
-{{- if .Values.lightening.enabled }}
+{{- if .Values.lightning.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-lightening
+  name: {{ include "chart.fullname" . }}-lightning
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    io.kompose.service: {{ include "chart.fullname" . }}-lightening
+    io.kompose.service: {{ include "chart.fullname" . }}-lightning
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.lightening.annotations }}
+    {{- with .Values.lightning.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .Values.lightening.replicas }}
+  replicas: {{ .Values.lightning.replicas }}
   selector:
     matchLabels:
-      io.kompose.service: {{ include "chart.fullname" . }}-lightening
+      io.kompose.service: {{ include "chart.fullname" . }}-lightning
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         io.kompose.network/multiwoven-server-default: "true"
-        io.kompose.service: {{ include "chart.fullname" . }}-lightening
+        io.kompose.service: {{ include "chart.fullname" . }}-lightning
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.lightening.annotations }}
+        {{- with .Values.lightning.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       containers:
       - env:
         - name: VERSION
-          value: {{ .Values.lighteningConfig.version | quote}}
+          value: {{ .Values.lightningConfig.version | quote}}
         - name: HF_TOKEN
-          value: {{ .Values.lighteningConfig.hfToken | quote }}
+          value: {{ .Values.lightningConfig.hfToken | quote }}
         - name: HUGGINGFACE_BILLING_ACCOUNT
-          value: {{ .Values.lighteningConfig.hfBillingAccount | quote }}
+          value: {{ .Values.lightningConfig.hfBillingAccount | quote }}
         - name: NANONETS_API_KEY
-          value: {{ .Values.lighteningConfig.nanonetsApiKey | quote }}
-        image: {{ .Values.lightening.lightening.image.repository }}:{{ .Values.lightening.lightening.image.tag | default .Chart.AppVersion }}
-        args: {{- toYaml .Values.lightening.lightening.args | nindent 10 }}
+          value: {{ .Values.lightningConfig.nanonetsApiKey | quote }}
+        - name: PORT
+          value: {{ (index .Values.lightning.ports 0).port | quote }}
+        image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
+        args: {{- toYaml .Values.lightning.lightning.args | nindent 10 }}
         securityContext:
-          runAsUser: {{ .Values.lightening.lightening.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.lightening.lightening.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.lightning.lightning.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.lightning.lightning.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -58,7 +60,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 6000
-        name: {{ include "chart.fullname" . }}-lightening
+        name: {{ include "chart.fullname" . }}-lightning
         ports:
         - containerPort: 6000
         readinessProbe:
@@ -66,7 +68,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 6000
-        resources: {{- toYaml .Values.lightening.lightening.resources | nindent 10 }}
+        resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:
