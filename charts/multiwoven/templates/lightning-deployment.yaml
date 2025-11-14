@@ -58,15 +58,15 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           tcpSocket:
-            port: 6000
+            port: {{ (index .Values.lightning.ports 0).port | quote }}
         name: {{ include "chart.fullname" . }}-lightning
         ports:
-        - containerPort: 6000
+        - containerPort: {{ (index .Values.lightning.ports 0).port | quote }}
         readinessProbe:
           initialDelaySeconds: 5
           periodSeconds: 10
           tcpSocket:
-            port: 6000
+            port: {{ (index .Values.lightning.ports 0).port | quote }}
         resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
