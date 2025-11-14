@@ -1,0 +1,76 @@
+{{- if .Values.lightning.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-lightning
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-lightning
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.lightning.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.lightning.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: {{ include "chart.fullname" . }}-lightning
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: {{ include "chart.fullname" . }}-lightning
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.lightning.annotations }}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      - env:
+        - name: VERSION
+          value: {{ .Values.lightningConfig.version | quote}}
+        - name: HF_TOKEN
+          value: {{ .Values.lightningConfig.hfToken | quote }}
+        - name: HUGGINGFACE_BILLING_ACCOUNT
+          value: {{ .Values.lightningConfig.hfBillingAccount | quote }}
+        - name: NANONETS_API_KEY
+          value: {{ .Values.lightningConfig.nanonetsApiKey | quote }}
+        - name: PORT
+          value: {{ (index .Values.lightning.ports 0).port | quote }}
+        image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
+        securityContext:
+          runAsUser: {{ .Values.lightning.lightning.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.lightning.lightning.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.lightning.ports 0).port | quote }}
+        name: {{ include "chart.fullname" . }}-lightning
+        ports:
+        - containerPort: {{ (index .Values.lightning.ports 0).port | quote }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.lightning.ports 0).port | quote }}
+        resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
+{{ end }}
