@@ -41,7 +41,6 @@ spec:
         - name: PORT
           value: {{ (index .Values.lightning.ports 0).port | quote }}
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
-        args: {{- toYaml .Values.lightning.lightning.args | nindent 10 }}
         securityContext:
           runAsUser: {{ .Values.lightning.lightning.containerSecurityContext.runAsUser }}
           runAsGroup: {{ .Values.lightning.lightning.containerSecurityContext.runAsGroup }}
