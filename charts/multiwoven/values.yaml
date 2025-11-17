@@ -99,6 +99,7 @@ lightningConfig:
   version: ""
   hfToken: ""
   hfBillingAccount: ""
+  lightningUrl: http://multiwoven-lightning:6000
   nanonetsApiKey: ""
 
 automountServiceAccountToken:

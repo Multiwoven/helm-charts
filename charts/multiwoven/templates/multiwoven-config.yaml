@@ -38,6 +38,7 @@ data:
   HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
+  LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
