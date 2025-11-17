@@ -25,7 +25,7 @@ spec:
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.lightning.annotations }}
-        {{ toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
       containers:
@@ -58,15 +58,15 @@ spec:
           initialDelaySeconds: 30
           periodSeconds: 10
           tcpSocket:
-            port: {{ (index .Values.lightning.ports 0).port | quote }}
+            port: {{ (index .Values.lightning.ports 0).port }}
         name: {{ include "chart.fullname" . }}-lightning
         ports:
-        - containerPort: {{ (index .Values.lightning.ports 0).port | quote }}
+        - containerPort: {{ (index .Values.lightning.ports 0).port }}
         readinessProbe:
           initialDelaySeconds: 5
           periodSeconds: 10
           tcpSocket:
-            port: {{ (index .Values.lightning.ports 0).port | quote }}
+            port: {{ (index .Values.lightning.ports 0).port }}
         resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
