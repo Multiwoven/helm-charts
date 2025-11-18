@@ -95,6 +95,13 @@ multiwovenConfig:
 
   workerHost: worker.multiwoven.com
 
+lightningConfig:
+  version: ""
+  hfToken: ""
+  hfBillingAccount: ""
+  lightningUrl: http://multiwoven-lightning:6000
+  nanonetsApiKey: ""
+
 automountServiceAccountToken:
   enabled: true
 
@@ -263,6 +270,36 @@ hpa:
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
     memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  lightning:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
     behavior:
       scaleDown:
         stabilizationWindowSeconds: 300
@@ -483,4 +520,29 @@ temporalUi:
       limits:
         cpu: "500m"
         memory: "512Mi"
+  type: ClusterIP
+lightning:
+  enabled: true
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "6000"
+      port: 6000
+      targetPort: 6000
+  replicas: 1
+  lightning:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/lightning
+      tag: "latest"
+    resources:
+      limits:
+        cpu: "2"
+        memory: "3Gi"
+      requests:
+        cpu: "1"
+        memory: "1Gi"
   type: ClusterIP
