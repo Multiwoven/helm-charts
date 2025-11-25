@@ -37,8 +37,8 @@ multiwovenConfig:
   railsLogLevel: info
   registrySecretName: mwregistrysecret
   remoteCodeExecutionProvider: ""
-  s3SseType: "AES256"  # optional: "none", "AES256", or "aws:kms - case-sensitive"
-  s3KmsKeyId: ""  # optional: full ARN if using aws:kms
+  s3SseType: "AES256" # optional: "none", "AES256", or "aws:kms - case-sensitive"
+  s3KmsKeyId: "" # optional: full ARN if using aws:kms
   secretKeyBase: ""
   skipDbMigration: "false"
   slackSignupChannelEmail: ""
@@ -96,11 +96,27 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 lightningConfig:
-  version: ""
-  hfToken: ""
-  hfBillingAccount: ""
   lightningUrl: http://multiwoven-lightning:6000
-  nanonetsApiKey: ""
+  huggingfaceBillingAccount: ""
+
+  xpertApiKey: ""
+  xpertEndpoint: ""
+  xpertModel: ""
+
+  sentinelApiKey: ""
+  sentinelEndpoint: ""
+  sentinelModel: ""
+
+  pathfinderApiKey: ""
+  pathfinderEndpoint: ""
+  pathfinderModel: ""
+
+  seemoreApiKey: ""
+  structuredExtractionApiKey: ""
+  structuredExtractionModel: ""
+  structuredExtractionEndpoint: ""
+  seemoreVlm: ""
+  seemoreEndpoint: ""
 
 automountServiceAccountToken:
   enabled: true
@@ -153,7 +169,7 @@ securityContext:
   capabilities:
     drop:
       permissions:
-        - "ALL"
+      - "ALL"
 
 globalImagePullPolicy: IfNotPresent
 
@@ -341,9 +357,9 @@ multiwovenPostgresql:
         cpu: 500m
         memory: 1Gi
   ports:
-    - name: postgres
-      port: 5432
-      targetPort: 5432
+  - name: postgres
+    port: 5432
+    targetPort: 5432
   replicas: 1
   type: ClusterIP
 multiwovenServer:
@@ -365,9 +381,9 @@ multiwovenServer:
         cpu: "1"
         memory: "1Gi"
   ports:
-    - name: "3000"
-      port: 3000
-      targetPort: 3000
+  - name: "3000"
+    port: 3000
+    targetPort: 3000
   replicas: 1
   type: ClusterIP
 multiwovenUI:
@@ -389,9 +405,9 @@ multiwovenUI:
         cpu: "100m"
         memory: "256Mi"
   ports:
-    - name: "8000"
-      port: 8000
-      targetPort: 8000
+  - name: "8000"
+    port: 8000
+    targetPort: 8000
   replicas: 1
   type: ClusterIP
 multiwovenSolidWorker:
@@ -404,10 +420,10 @@ multiwovenSolidWorker:
       runAsUser: 1000
       runAsGroup: 1000
     args:
-      - sh
-      - -c
-      - |
-        ./app/solid_queue/cli/worker
+    - sh
+    - -c
+    - |
+      ./app/solid_queue/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -419,9 +435,9 @@ multiwovenSolidWorker:
         cpu: "500m"
         memory: 1Gi
   ports:
-    - name: "9999"
-      port: 9999
-      targetPort: 9999
+  - name: "9999"
+    port: 9999
+    targetPort: 9999
   replicas: 1
   type: ClusterIP
 multiwovenWorker:
@@ -434,10 +450,10 @@ multiwovenWorker:
       runAsUser: 1000
       runAsGroup: 1000
     args:
-      - sh
-      - -c
-      - |
-        ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
+    - sh
+    - -c
+    - |
+      ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -449,9 +465,9 @@ multiwovenWorker:
         cpu: "500m"
         memory: 1Gi
   ports:
-    - name: "4567"
-      port: 4567
-      targetPort: 4567
+  - name: "4567"
+    port: 4567
+    targetPort: 4567
   replicas: 1
   type: ClusterIP
 pvc:
@@ -464,9 +480,9 @@ temporal:
   podSecurityContext:
     fsGroup: 1000
   ports:
-    - name: "7233"
-      port: 7233
-      targetPort: 7233
+  - name: "7233"
+    port: 7233
+    targetPort: 7233
   replicas: 1
   temporal:
     containerSecurityContext:
@@ -494,9 +510,9 @@ temporalUi:
   podSecurityContext:
     fsGroup: 5000
   ports:
-    - name: "8080"
-      port: 8080
-      targetPort: 8080
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
   replicas: 1
   temporalUi:
     containerSecurityContext:
@@ -527,9 +543,9 @@ lightning:
   podSecurityContext:
     fsGroup: 1000
   ports:
-    - name: "6000"
-      port: 6000
-      targetPort: 6000
+  - name: "6000"
+    port: 6000
+    targetPort: 6000
   replicas: 1
   lightning:
     containerSecurityContext:
@@ -537,7 +553,7 @@ lightning:
       runAsGroup: 1000
     image:
       repository: multiwoven/lightning
-      tag: "latest"
+      tag: "2025-11-25"
     resources:
       limits:
         cpu: "2"
