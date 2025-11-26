@@ -97,7 +97,6 @@ multiwovenConfig:
 
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
-  huggingfaceBillingAccount: ""
 
   xpertApiKey: ""
   xpertEndpoint: ""
