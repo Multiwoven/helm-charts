@@ -420,10 +420,10 @@ multiwovenSolidWorker:
       runAsUser: 1000
       runAsGroup: 1000
     args:
-    - sh
-    - -c
-    - |
-      ./app/solid_queue/cli/worker
+      - sh
+      - -c
+      - |
+        ./app/solid_queue/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -450,10 +450,10 @@ multiwovenWorker:
       runAsUser: 1000
       runAsGroup: 1000
     args:
-    - sh
-    - -c
-    - |
-      ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
+      - sh
+      - -c
+      - |
+        ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
     image:
       repository: multiwoven/multiwoven-server
       tag: latest
@@ -553,7 +553,7 @@ lightning:
       runAsGroup: 1000
     image:
       repository: multiwoven/lightning
-      tag: "2025-11-25"
+      tag: "latest"
     resources:
       limits:
         cpu: "2"
