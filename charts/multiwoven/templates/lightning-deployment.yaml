@@ -30,16 +30,42 @@ spec:
     spec:
       containers:
       - env:
-        - name: VERSION
-          value: {{ .Values.lightningConfig.version | quote}}
-        - name: HF_TOKEN
-          value: {{ .Values.lightningConfig.hfToken | quote }}
-        - name: HUGGINGFACE_BILLING_ACCOUNT
-          value: {{ .Values.lightningConfig.hfBillingAccount | quote }}
-        - name: NANONETS_API_KEY
-          value: {{ .Values.lightningConfig.nanonetsApiKey | quote }}
         - name: PORT
           value: {{ (index .Values.lightning.ports 0).port | quote }}
+
+        - name: XPERT_API_KEY
+          value: {{ .Values.lightningConfig.xpertApiKey | quote }}
+        - name: XPERT_ENDPOINT
+          value: {{ .Values.lightningConfig.xpertEndpoint | quote }}
+        - name: XPERT_MODEL
+          value: {{ .Values.lightningConfig.xpertModel | quote }}
+
+        - name: SENTINEL_API_KEY
+          value: {{ .Values.lightningConfig.sentinelApiKey | quote }}
+        - name: SENTINEL_ENDPOINT
+          value: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
+        - name: SENTINEL_MODEL
+          value: {{ .Values.lightningConfig.sentinelModel | quote }}
+
+        - name: PATHFINDER_API_KEY
+          value: {{ .Values.lightningConfig.pathfinderApiKey | quote }}
+        - name: PATHFINDER_ENDPOINT
+          value: {{ .Values.lightningConfig.pathfinderEndpoint | quote }}
+        - name: PATHFINDER_MODEL
+          value: {{ .Values.lightningConfig.pathfinderModel | quote }}
+
+        - name: SEEMORE_API_KEY
+          value: {{ .Values.lightningConfig.seemoreApiKey | quote }}
+        - name: STRUCTURED_EXTRACTION_API_KEY
+          value: {{ .Values.lightningConfig.structuredExtractionApiKey | quote }}
+        - name: STRUCTURED_EXTRACTION_MODEL
+          value: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
+        - name: STRUCTURED_EXTRACTION_ENDPOINT
+          value: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
+        - name: SEEMORE_VLM
+          value: {{ .Values.lightningConfig.seemoreVlm | quote }}
+        - name: SEEMORE_ENDPOINT
+          value: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
         securityContext:
           runAsUser: {{ .Values.lightning.lightning.containerSecurityContext.runAsUser }}
