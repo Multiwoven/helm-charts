@@ -96,11 +96,26 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 lightningConfig:
-  version: ""
-  hfToken: ""
-  hfBillingAccount: ""
   lightningUrl: http://multiwoven-lightning:6000
-  nanonetsApiKey: ""
+
+  xpertApiKey: ""
+  xpertEndpoint: ""
+  xpertModel: ""
+
+  sentinelApiKey: ""
+  sentinelEndpoint: ""
+  sentinelModel: ""
+
+  pathfinderApiKey: ""
+  pathfinderEndpoint: ""
+  pathfinderModel: ""
+
+  seemoreApiKey: ""
+  structuredExtractionApiKey: ""
+  structuredExtractionModel: ""
+  structuredExtractionEndpoint: ""
+  seemoreVlm: ""
+  seemoreEndpoint: ""
 
 automountServiceAccountToken:
   enabled: true
