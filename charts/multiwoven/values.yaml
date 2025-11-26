@@ -169,7 +169,7 @@ securityContext:
   capabilities:
     drop:
       permissions:
-      - "ALL"
+        - "ALL"
 
 globalImagePullPolicy: IfNotPresent
 
