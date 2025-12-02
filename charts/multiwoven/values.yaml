@@ -97,6 +97,7 @@ multiwovenConfig:
 
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
+  lightningHealthHost: multiwoven-lightning:6000/health
 
   xpertApiKey: ""
   xpertEndpoint: ""
@@ -539,6 +540,7 @@ temporalUi:
 lightning:
   enabled: true
   annotations: {}
+  healthPort: 6000
   podSecurityContext:
     fsGroup: 1000
   ports:
