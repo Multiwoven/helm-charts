@@ -118,6 +118,11 @@ lightningConfig:
   seemoreVlm: ""
   seemoreEndpoint: ""
 
+  judyApiKey: ""
+  judyModel: ""
+  judyEndpoint: ""
+
+
 automountServiceAccountToken:
   enabled: true
 

@@ -66,6 +66,13 @@ spec:
           value: {{ .Values.lightningConfig.seemoreVlm | quote }}
         - name: SEEMORE_ENDPOINT
           value: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
+
+        - name: JUDY_API_KEY
+          value: {{ .Values.lightningConfig.judyApiKey | quote }}
+        - name: JUDY_MODEL
+          value: {{ .Values.lightningConfig.judyModel | quote }}
+        - name: JUDY_ENDPOINT
+          value: {{ .Values.lightningConfig.judyEndpoint | quote }}
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
         # command: ["sleep", "3600"] # Uncomment for debugging
         securityContext:
