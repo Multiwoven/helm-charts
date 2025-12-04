@@ -6,14 +6,24 @@ metadata:
   labels:
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{ if .Values.externalDNS.enabled }}
+    {{- if .Values.externalDNS.enabled }}
+      {{- $hosts := list 
+          .Values.multiwovenConfig.uiHost
+          .Values.multiwovenConfig.apiHost
+          .Values.multiwovenConfig.workerHost
+          .Values.multiwovenConfig.solidWorkerHost
+      }}
+
       {{- if .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }},{{ .Values.multiwovenConfig.temporalUiHost }}"
+        {{- $hosts = append $hosts .Values.multiwovenConfig.temporalUiHost }}
       {{- end }}
-      {{- if not .Values.temporal.enabled }}
-        external-dns.alpha.kubernetes.io/hostname: "{{ .Values.multiwovenConfig.uiHost }},{{ .Values.multiwovenConfig.apiHost }},{{ .Values.multiwovenConfig.workerHost }},{{ .Values.multiwovenConfig.solidWorkerHost }}"
+
+      {{- if .Values.lightning.enabled }}
+        {{- $hosts = append $hosts .Values.lightningConfig.lightningHealthHost }}
       {{- end }}
-    {{ end }}
+
+      external-dns.alpha.kubernetes.io/hostname: "{{ join "," $hosts }}"
+    {{- end }}
     
     {{ if .Values.kongIngress.enabled }}
       {{- if .Values.kongIngress.plugins.prometheus.enabled }}
@@ -58,6 +68,9 @@ spec:
     - {{ .Values.multiwovenConfig.solidWorkerHost }}
   {{ if .Values.temporal.enabled }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
+  {{ end }}
+  {{ if .Values.lightning.enabled }}
+    - {{ .Values.lightningConfig.lightningHealthHost }}
   {{ end }}
     secretName: mw-tls-cert
   {{ end }}
@@ -119,5 +132,17 @@ spec:
             port:
               number: {{ (index .Values.temporalUi.ports 0).port }}
         path: /
+        pathType: Prefix
+{{ end }}
+{{ if .Values.lightning.enabled }}
+  - host: {{ .Values.lightningConfig.lightningHealthHost }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-lightning'
+            port:
+              number: {{ (index .Values.lightning.ports 0).port }}
+        path: /health
         pathType: Prefix
 {{ end }}
