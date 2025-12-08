@@ -1,0 +1,47 @@
+{{ if and .Values.hpa.enabled .Values.lightning.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "chart.fullname" . }}-lightning-hpa
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: lightning-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "chart.fullname" . }}-lightning
+  minReplicas: {{ .Values.hpa.lightning.minReplicas }}
+  maxReplicas: {{ .Values.hpa.lightning.maxReplicas }}
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: {{ .Values.hpa.lightning.behavior.scaleDown.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.lightning.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.lightning.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.lightning.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+    scaleUp:
+      stabilizationWindowSeconds: {{ .Values.hpa.lightning.behavior.scaleUp.stabilizationWindowSeconds }}
+      policies:
+      - type: {{ .Values.hpa.lightning.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.lightning.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.lightning.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.lightning.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.lightning.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.lightning.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.lightning.behavior.scaleUp.policies.selectPolicy }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.lightning.cpuAverageUtilizationPercentageThreshold }}
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.hpa.lightning.memoryAverageUtilizationPercentageThreshold }}
+{{ end }}

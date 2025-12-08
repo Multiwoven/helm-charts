@@ -1,0 +1,110 @@
+{{- if .Values.lightning.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-lightning
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-lightning
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.lightning.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.lightning.replicas }}
+  selector:
+    matchLabels:
+      io.kompose.service: {{ include "chart.fullname" . }}-lightning
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.service: {{ include "chart.fullname" . }}-lightning
+      {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.lightning.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: {{ (index .Values.lightning.ports 0).port | quote }}
+
+        - name: XPERT_API_KEY
+          value: {{ .Values.lightningConfig.xpertApiKey | quote }}
+        - name: XPERT_ENDPOINT
+          value: {{ .Values.lightningConfig.xpertEndpoint | quote }}
+        - name: XPERT_MODEL
+          value: {{ .Values.lightningConfig.xpertModel | quote }}
+
+        - name: SENTINEL_API_KEY
+          value: {{ .Values.lightningConfig.sentinelApiKey | quote }}
+        - name: SENTINEL_ENDPOINT
+          value: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
+        - name: SENTINEL_MODEL
+          value: {{ .Values.lightningConfig.sentinelModel | quote }}
+
+        - name: PATHFINDER_API_KEY
+          value: {{ .Values.lightningConfig.pathfinderApiKey | quote }}
+        - name: PATHFINDER_ENDPOINT
+          value: {{ .Values.lightningConfig.pathfinderEndpoint | quote }}
+        - name: PATHFINDER_MODEL
+          value: {{ .Values.lightningConfig.pathfinderModel | quote }}
+
+        - name: SEEMORE_API_KEY
+          value: {{ .Values.lightningConfig.seemoreApiKey | quote }}
+        - name: STRUCTURED_EXTRACTION_API_KEY
+          value: {{ .Values.lightningConfig.structuredExtractionApiKey | quote }}
+        - name: STRUCTURED_EXTRACTION_MODEL
+          value: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
+        - name: STRUCTURED_EXTRACTION_ENDPOINT
+          value: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
+        - name: SEEMORE_VLM
+          value: {{ .Values.lightningConfig.seemoreVlm | quote }}
+        - name: SEEMORE_ENDPOINT
+          value: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
+
+        - name: JUDY_API_KEY
+          value: {{ .Values.lightningConfig.judyApiKey | quote }}
+        - name: JUDY_MODEL
+          value: {{ .Values.lightningConfig.judyModel | quote }}
+        - name: JUDY_ENDPOINT
+          value: {{ .Values.lightningConfig.judyEndpoint | quote }}
+        image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
+        # command: ["sleep", "3600"] # Uncomment for debugging
+        securityContext:
+          runAsUser: {{ .Values.lightning.lightning.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.lightning.lightning.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.lightning.ports 0).port }}
+        name: {{ include "chart.fullname" . }}-lightning
+        ports:
+        - containerPort: {{ (index .Values.lightning.ports 0).port }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.lightning.ports 0).port }}
+        resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
+{{ end }}
