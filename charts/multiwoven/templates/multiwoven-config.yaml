@@ -40,6 +40,10 @@ data:
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
+  PROMPT_TO_WORKFLOW_MODEL: {{ .Values.multiwovenConfig.promptToWorkflowModel | quote }}
+  PROMPT_TO_WORKFLOW_API_URL: {{ .Values.multiwovenConfig.promptToWorkflowApiUrl | quote }}
+  PROMPT_TO_WORKFLOW_API_KEY: {{ .Values.multiwovenConfig.promptToWorkflowApiKey | quote }}
   RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
   RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
   REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.multiwovenConfig.remoteCodeExecutionProvider | quote }}

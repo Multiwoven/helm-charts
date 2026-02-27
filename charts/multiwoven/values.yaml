@@ -33,6 +33,10 @@ multiwovenConfig:
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   privateRepo: false
+  promptToWorkflowProvider: ""
+  promptToWorkflowModel: ""
+  promptToWorkflowApiUrl: ""
+  promptToWorkflowApiKey: ""
   railsEnv: development
   railsLogLevel: info
   registrySecretName: mwregistrysecret
