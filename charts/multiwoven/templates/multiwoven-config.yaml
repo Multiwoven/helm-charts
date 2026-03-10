@@ -40,6 +40,7 @@ data:
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
   PROMPT_TO_WORKFLOW_MODEL: {{ .Values.multiwovenConfig.promptToWorkflowModel | quote }}
   PROMPT_TO_WORKFLOW_API_URL: {{ .Values.multiwovenConfig.promptToWorkflowApiUrl | quote }}
