@@ -98,24 +98,41 @@ multiwovenConfig:
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
 
-  xpertApiKey: ""
-  xpertEndpoint: ""
-  xpertModel: ""
+  babelApiKey: ""
+  babelEndpoint: ""
+  babelModel: ""
 
-  sentinelApiKey: ""
-  sentinelEndpoint: ""
-  sentinelModel: ""
+  chatApiKey: ""
+  chatEndpoint: ""
+  chatModel: ""
+
+  embeddingApiKey: ""
+  embeddingEndpoint: ""
+  embeddingModel: ""
+
+  judyApiKey: ""
+  judyEndpoint: ""
+  judyModel: ""
 
   pathfinderApiKey: ""
   pathfinderEndpoint: ""
   pathfinderModel: ""
 
   seemoreApiKey: ""
+  seemoreEndpoint: ""
+  seemoreVlm: ""
+
+  sentinelApiKey: ""
+  sentinelEndpoint: ""
+  sentinelModel: ""
+
   structuredExtractionApiKey: ""
   structuredExtractionModel: ""
   structuredExtractionEndpoint: ""
-  seemoreVlm: ""
-  seemoreEndpoint: ""
+
+  xpertApiKey: ""
+  xpertEndpoint: ""
+  xpertModel: ""
 
 automountServiceAccountToken:
   enabled: true
