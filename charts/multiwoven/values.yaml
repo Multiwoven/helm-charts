@@ -32,12 +32,7 @@ multiwovenConfig:
   leadCaptureEnabled: "false"
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
-  openrouterApiKey: ""
   privateRepo: false
-  promptToWorkflowProvider: ""
-  promptToWorkflowModel: ""
-  promptToWorkflowApiUrl: ""
-  promptToWorkflowApiKey: ""
   railsEnv: development
   railsLogLevel: info
   registrySecretName: mwregistrysecret
@@ -102,31 +97,42 @@ multiwovenConfig:
 
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
-  lightningHealthHost: lightning.multiwoven.com
 
-  xpertApiKey: ""
-  xpertEndpoint: ""
-  xpertModel: ""
+  babelApiKey: ""
+  babelEndpoint: ""
+  babelModel: ""
 
-  sentinelApiKey: ""
-  sentinelEndpoint: ""
-  sentinelModel: ""
+  chatApiKey: ""
+  chatEndpoint: ""
+  chatModel: ""
+
+  embeddingApiKey: ""
+  embeddingEndpoint: ""
+  embeddingModel: ""
+
+  judyApiKey: ""
+  judyEndpoint: ""
+  judyModel: ""
 
   pathfinderApiKey: ""
   pathfinderEndpoint: ""
   pathfinderModel: ""
 
   seemoreApiKey: ""
+  seemoreEndpoint: ""
+  seemoreVlm: ""
+
+  sentinelApiKey: ""
+  sentinelEndpoint: ""
+  sentinelModel: ""
+
   structuredExtractionApiKey: ""
   structuredExtractionModel: ""
   structuredExtractionEndpoint: ""
-  seemoreVlm: ""
-  seemoreEndpoint: ""
 
-  judyApiKey: ""
-  judyModel: ""
-  judyEndpoint: ""
-
+  xpertApiKey: ""
+  xpertEndpoint: ""
+  xpertModel: ""
 
 automountServiceAccountToken:
   enabled: true
