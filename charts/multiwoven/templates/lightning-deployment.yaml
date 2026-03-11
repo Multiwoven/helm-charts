@@ -33,19 +33,33 @@ spec:
         - name: PORT
           value: {{ (index .Values.lightning.ports 0).port | quote }}
 
-        - name: XPERT_API_KEY
-          value: {{ .Values.lightningConfig.xpertApiKey | quote }}
-        - name: XPERT_ENDPOINT
-          value: {{ .Values.lightningConfig.xpertEndpoint | quote }}
-        - name: XPERT_MODEL
-          value: {{ .Values.lightningConfig.xpertModel | quote }}
+        - name: BABEL_API_KEY
+          value: {{ .Values.lightningConfig.babelApiKey | quote }}
+        - name: BABEL_ENDPOINT
+          value: {{ .Values.lightningConfig.babelEndpoint | quote }}
+        - name: BABLE_MODEL
+          value: {{ .Values.lightningConfig.babelModel | quote }}
 
-        - name: SENTINEL_API_KEY
-          value: {{ .Values.lightningConfig.sentinelApiKey | quote }}
-        - name: SENTINEL_ENDPOINT
-          value: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
-        - name: SENTINEL_MODEL
-          value: {{ .Values.lightningConfig.sentinelModel | quote }}
+        - name: CHAT_API_KEY
+          value: {{ .Values.lightningConfig.chatApiKey | quote }}
+        - name: CHAT_ENDPOINT
+          value: {{ .Values.lightningConfig.chatEndpoint | quote }}
+        - name: CHAT_MODEL
+          value: {{ .Values.lightningConfig.chatModel | quote }}
+
+        - name: EMBEDDING_API_KEY
+          value: {{ .Values.lightningConfig.embeddingApiKey | quote }}
+        - name: EMBEDDING_ENDPOINT
+          value: {{ .Values.lightningConfig.embeddingEndpoint | quote }}
+        - name: EMBEDDING_MODEL
+          value: {{ .Values.lightningConfig.embeddingModel | quote }}
+
+        - name: JUDY_API_KEY
+          value: {{ .Values.lightningConfig.judyApiKey | quote }}
+        - name: JUDY_ENDPOINT
+          value: {{ .Values.lightningConfig.judyEndpoint | quote }}
+        - name: JUDY_MODEL
+          value: {{ .Values.lightningConfig.judyModel | quote }}
 
         - name: PATHFINDER_API_KEY
           value: {{ .Values.lightningConfig.pathfinderApiKey | quote }}
@@ -56,23 +70,32 @@ spec:
 
         - name: SEEMORE_API_KEY
           value: {{ .Values.lightningConfig.seemoreApiKey | quote }}
+        - name: SEEMORE_VLM
+          value: {{ .Values.lightningConfig.seemoreVlm | quote }}
+        - name: SEEMORE_ENDPOINT
+          value: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
+
+        - name: SENTINEL_API_KEY
+          value: {{ .Values.lightningConfig.sentinelApiKey | quote }}
+        - name: SENTINEL_ENDPOINT
+          value: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
+        - name: SENTINEL_MODEL
+          value: {{ .Values.lightningConfig.sentinelModel | quote }}
+
         - name: STRUCTURED_EXTRACTION_API_KEY
           value: {{ .Values.lightningConfig.structuredExtractionApiKey | quote }}
         - name: STRUCTURED_EXTRACTION_MODEL
           value: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
         - name: STRUCTURED_EXTRACTION_ENDPOINT
           value: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
-        - name: SEEMORE_VLM
-          value: {{ .Values.lightningConfig.seemoreVlm | quote }}
-        - name: SEEMORE_ENDPOINT
-          value: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
 
-        - name: JUDY_API_KEY
-          value: {{ .Values.lightningConfig.judyApiKey | quote }}
-        - name: JUDY_MODEL
-          value: {{ .Values.lightningConfig.judyModel | quote }}
-        - name: JUDY_ENDPOINT
-          value: {{ .Values.lightningConfig.judyEndpoint | quote }}
+        - name: XPERT_API_KEY
+          value: {{ .Values.lightningConfig.xpertApiKey | quote }}
+        - name: XPERT_ENDPOINT
+          value: {{ .Values.lightningConfig.xpertEndpoint | quote }}
+        - name: XPERT_MODEL
+          value: {{ .Values.lightningConfig.xpertModel | quote }}
+          
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
         # command: ["sleep", "3600"] # Uncomment for debugging
         securityContext:
