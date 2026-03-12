@@ -102,14 +102,14 @@ multiwovenConfig:
 
 modalConfig:
   agenticCodingSandboxProvider: "modal"
-  agenticCodingSandboxTimeout: "3600" # seconds
-  agenticCodingSandboxIdleTimeout: "1200" # seconds
+  agenticCodingSandboxTimeout: "3600"
+  agenticCodingSandboxIdleTimeout: "1200"
   agenticCodingSandboxCpu: "2000"
   agenticCodingSandboxMemory: "4096"
   agenticCodingDeployCpu: "1000"
   agenticCodingDeployMemory: "2048"
   agenticCodingSnapshotInterval: "*/10 * * * *"
-  agenticCodingIdleThreshold: "10" # seconds
+  agenticCodingIdleThreshold: "10"
   agenticCodingSandboxDomain: "agentic-coding-sandbox.multiwoven.com"
   codingAgentProvider: "opencode"
   codingAgentModel: "anthropic/claude-sonnet-4-20250514"
