@@ -100,6 +100,25 @@ multiwovenConfig:
 
   workerHost: worker.multiwoven.com
 
+modalConfig:
+  agenticCodingSandboxProvider: "modal"
+  agenticCodingSandboxTimeout: "3600" # seconds
+  agenticCodingSandboxIdleTimeout: "1200" # seconds
+  agenticCodingSandboxCpu: "2000"
+  agenticCodingSandboxMemory: "4096"
+  agenticCodingDeployCpu: "1000"
+  agenticCodingDeployMemory: "2048"
+  agenticCodingSnapshotInterval: "*/10 * * * *"
+  agenticCodingIdleThreshold: "10" # seconds
+  agenticCodingSandboxDomain: "agentic-coding-sandbox.multiwoven.com"
+  codingAgentProvider: "opencode"
+  codingAgentModel: "anthropic/claude-sonnet-4-20250514"
+  codingAgentModelApiKey: ""
+  modalTokenId: ""
+  modalTokenSecret: ""
+  dockerHubRegistryUsername: ""
+  dockerHubRegistryPassword: ""
+
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
   lightningHealthHost: lightning.multiwoven.com
