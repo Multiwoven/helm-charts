@@ -8,16 +8,16 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
-  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.multiwovenConfig.agenticCodingSandboxProvider | quote }}
-  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.multiwovenConfig.agenticCodingSandboxTimeout | quote }}
-  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.multiwovenConfig.agenticCodingSandboxIdleTimeout | quote }}
-  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.multiwovenConfig.agenticCodingSandboxCpu | quote }}
-  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.multiwovenConfig.agenticCodingSandboxMemory | quote}}
-  AGENTIC_CODING_DEPLOY_CPU: {{ .Values.multiwovenConfig.agenticCodingDeployCpu | quote }}
-  AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.multiwovenConfig.agenticCodingDeployMemory | quote }}
-  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.multiwovenConfig.agenticCodingSnapshotInterval | quote }}
-  AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.multiwovenConfig.agenticCodingIdleThreshold | quote }}
-  AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.multiwovenConfig.agenticCodingSandboxDomain | quote }}
+  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.modalConfig.agenticCodingSandboxProvider | quote }}
+  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.modalConfig.agenticCodingSandboxTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.modalConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.modalConfig.agenticCodingSandboxCpu | quote }}
+  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.modalConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_DEPLOY_CPU: {{ .Values.modalConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.modalConfig.agenticCodingDeployMemory | quote }}
+  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.modalConfig.agenticCodingSnapshotInterval | quote }}
+  AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.modalConfig.agenticCodingIdleThreshold | quote }}
+  AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.modalConfig.agenticCodingSandboxDomain | quote }}
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
@@ -31,9 +31,9 @@ data:
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   CODE_EXEC_SIGNING_SECRET: {{ .Values.multiwovenConfig.codeExecSigningSecret | quote }}
-  CODING_AGENT_PROVIDER: {{ .Values.multiwovenConfig.codingAgentProvider | quote }}
-  CODING_AGENT_MODEL: {{ .Values.multiwovenConfig.codingAgentModel | quote }}
-  CODING_AGENT_MODEL_API_KEY: {{ .Values.multiwovenConfig.codingAgentModelApiKey | quote }}
+  CODING_AGENT_PROVIDER: {{ .Values.modalConfig.codingAgentProvider | quote }}
+  CODING_AGENT_MODEL: {{ .Values.modalConfig.codingAgentModel | quote }}
+  CODING_AGENT_MODEL_API_KEY: {{ .Values.modalConfig.codingAgentModelApiKey | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
   DB_NAME: {{ .Values.multiwovenConfig.dbName | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
@@ -42,8 +42,8 @@ data:
   DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
   {{ end }}
-  DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.multiwovenConfig.dockerHubRegistryUsername | quote }}
-  DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.multiwovenConfig.dockerHubRegistryPassword | quote }}
+  DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.modalConfig.dockerHubRegistryUsername | quote }}
+  DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.modalConfig.dockerHubRegistryPassword | quote }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.hostedVectorDbHost | quote }}
   HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.hostedVectorDbDatabase | quote }}
@@ -54,8 +54,8 @@ data:
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
-  MODAL_TOKEN_ID: {{ .Values.multiwovenConfig.modalTokenId | quote }}
-  MODAL_TOKEN_SECRET: {{ .Values.multiwovenConfig.modalTokenSecret | quote }}
+  MODAL_TOKEN_ID: {{ .Values.modalConfig.modalTokenId | quote }}
+  MODAL_TOKEN_SECRET: {{ .Values.modalConfig.modalTokenSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
