@@ -100,7 +100,7 @@ multiwovenConfig:
 
   workerHost: worker.multiwoven.com
 
-modalConfig:
+sandboxConfig:
   agenticCodingSandboxProvider: "modal"
   agenticCodingSandboxTimeout: "3600"
   agenticCodingSandboxIdleTimeout: "1200"
