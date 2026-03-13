@@ -171,6 +171,7 @@ nginxIngress:
   enableMetrics: false
   proxyReadTimeout: 300
   proxySendTimeout: 300
+  proxyBuffering: "on"
 
 kongIngress:
   enabled: false
