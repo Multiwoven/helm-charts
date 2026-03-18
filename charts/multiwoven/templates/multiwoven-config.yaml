@@ -8,6 +8,16 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
+  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
+  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
+  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
+  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
+  AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
+  AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.sandboxConfig.agenticCodingSandboxDomain | quote }}
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
@@ -21,6 +31,9 @@ data:
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   CODE_EXEC_SIGNING_SECRET: {{ .Values.multiwovenConfig.codeExecSigningSecret | quote }}
+  CODING_AGENT_PROVIDER: {{ .Values.sandboxConfig.codingAgentProvider | quote }}
+  CODING_AGENT_MODEL: {{ .Values.sandboxConfig.codingAgentModel | quote }}
+  CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
   DB_NAME: {{ .Values.multiwovenConfig.dbName | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
@@ -29,6 +42,8 @@ data:
   DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
   DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
   {{ end }}
+  DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.sandboxConfig.dockerHubRegistryUsername | quote }}
+  DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.sandboxConfig.dockerHubRegistryPassword | quote }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
   HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.hostedVectorDbHost | quote }}
   HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.hostedVectorDbDatabase | quote }}
@@ -39,6 +54,8 @@ data:
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
+  MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
+  MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}

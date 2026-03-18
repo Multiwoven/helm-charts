@@ -41,6 +41,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.multiwovenConfig.nginxProxyBodySize }}
     nginx.ingress.kubernetes.io/proxy-read-timeout: "{{ .Values.nginxIngress.proxyReadTimeout }}"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "{{ .Values.nginxIngress.proxySendTimeout }}"
+    nginx.ingress.kubernetes.io/proxy-buffering: "{{ .Values.nginxIngress.proxyBuffering }}"
     {{ if not .Values.nginxIngress.enableMetrics }}
     nginx.ingress.kubernetes.io/server-snippet: |
       location = /metrics {
