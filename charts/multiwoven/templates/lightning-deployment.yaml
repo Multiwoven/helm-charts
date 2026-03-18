@@ -37,7 +37,7 @@ spec:
           value: {{ .Values.lightningConfig.babelApiKey | quote }}
         - name: BABEL_ENDPOINT
           value: {{ .Values.lightningConfig.babelEndpoint | quote }}
-        - name: BABLE_MODEL
+        - name: BABEL_MODEL
           value: {{ .Values.lightningConfig.babelModel | quote }}
 
         - name: CHAT_API_KEY
