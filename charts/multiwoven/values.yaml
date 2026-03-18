@@ -154,7 +154,7 @@ lightningConfig:
   structuredExtractionApiKey: ""
   structuredExtractionModel: ""
   structuredExtractionEndpoint: ""
-
+  
   xpertApiKey: ""
   xpertEndpoint: ""
   xpertModel: ""

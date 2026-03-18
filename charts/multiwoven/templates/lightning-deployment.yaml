@@ -88,6 +88,13 @@ spec:
           value: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
         - name: STRUCTURED_EXTRACTION_ENDPOINT
           value: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
+
+        - name: XPERT_API_KEY
+          value: {{ .Values.lightningConfig.xpertApiKey | quote }}
+        - name: XPERT_ENDPOINT
+          value: {{ .Values.lightningConfig.xpertEndpoint | quote }}
+        - name: XPERT_MODEL
+          value: {{ .Values.lightningConfig.xpertModel | quote }}
           
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
         # command: ["sleep", "3600"] # Uncomment for debugging
