@@ -155,10 +155,6 @@ lightningConfig:
   structuredExtractionModel: ""
   structuredExtractionEndpoint: ""
 
-  xpertApiKey: ""
-  xpertEndpoint: ""
-  xpertModel: ""
-
 
 automountServiceAccountToken:
   enabled: true
