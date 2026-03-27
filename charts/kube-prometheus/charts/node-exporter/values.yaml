@@ -126,7 +126,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.9.1-debian-12-r4
+  tag: 1.9.1-debian-12-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
@@ -458,13 +458,7 @@ nodeSelector: {}
 ## @param tolerations Tolerations for pod assignment. Evaluated as a template.
 ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 ##
-## Comment out the below lines and add empty line in case of our VPC customers
-## tolerations: []
-tolerations:
-  - key: "kubernetes.azure.com/scalesetpriority"
-    operator: "Equal"
-    value: "spot"
-    effect: "NoSchedule"
+tolerations: []
 ## Configure extra options for liveness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -591,7 +585,7 @@ serviceMonitor:
   sampleLimit: ""
 ## Pod Security Policy for Node Exporter to use.
 ## WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
-## @param podSecurityPolicy.annotations Annotations for Pod Security Policy. Evaluated as a template.
+## @param podSecurityPolicy.annotations Annotations for Pod Security Policy. Evaluated as a template. 
 ## e.g:
 ## annotations:
 ##   seccomp.security.alpha.kubernetes.io/defaultProfileName: runtime/default
