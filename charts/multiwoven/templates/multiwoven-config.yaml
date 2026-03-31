@@ -58,6 +58,10 @@ data:
   MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
+  P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
+  P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}
+  P2W_LLM_MODEL: {{ .Values.multiwovenConfig.p2wLlmModel | quote }}
+  P2W_LLM_TEMPERATURE: {{ .Values.multiwovenConfig.p2wLlmTemperature | quote }}
   PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
   PROMPT_TO_WORKFLOW_MODEL: {{ .Values.multiwovenConfig.promptToWorkflowModel | quote }}
   PROMPT_TO_WORKFLOW_API_URL: {{ .Values.multiwovenConfig.promptToWorkflowApiUrl | quote }}

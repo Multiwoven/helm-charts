@@ -34,6 +34,10 @@ multiwovenConfig:
   nginxProxyBodySize: 2m
   openrouterApiKey: ""
   privateRepo: false
+  p2wLlmProvider: ""
+  p2wLlmApiKey: ""
+  p2wLlmModel: ""
+  p2wLlmTemperature: ""
   promptToWorkflowProvider: ""
   promptToWorkflowModel: ""
   promptToWorkflowApiUrl: ""
