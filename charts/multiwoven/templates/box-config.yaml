@@ -10,9 +10,18 @@ data:
   BOX_PORT: {{ .Values.boxConfig.boxPort | quote }}
   BOX_K8S_IN_CLUSTER: {{ .Values.boxConfig.boxK8sInCluster | quote }}
   BOX_K8S_NAMESPACE: {{ .Values.boxConfig.boxK8sNamespace | quote }}
+  BOX_RELEASES_NAMESPACE: {{ .Values.boxConfig.boxReleasesNamespace | quote }}
   BOX_INGRESS_DOMAIN: {{ .Values.boxConfig.boxIngressDomain | quote }}
   BOX_INGRESS_CLASS: {{ .Values.boxConfig.boxIngressClass | quote }}
+  BOX_INGRESS_NAMESPACE: {{ .Values.boxConfig.boxIngressNamespace | quote }}
   BOX_IMAGE_REGISTRY: {{ .Values.boxConfig.boxImageRegistry | quote }}
+  BOX_STORAGE_CLASS: {{ .Values.boxConfig.boxStorageClass | quote }}
+  BOX_SNAPSHOT_CLASS: {{ .Values.boxConfig.boxSnapshotClass | quote }}
+  BOX_PVC_SIZE: {{ .Values.boxConfig.boxPvcSize | quote }}
+  BOX_DEFAULT_CPU: {{ .Values.boxConfig.boxDefaultCpu | quote }}
+  BOX_DEFAULT_MEMORY_MB: {{ .Values.boxConfig.boxDefaultMemoryMb | quote }}
+  BOX_DEFAULT_TIMEOUT: {{ .Values.boxConfig.boxDefaultTimeout | quote }}
+  BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
   BOX_LOG_LEVEL: {{ .Values.boxConfig.boxLogLevel | quote }}
   DB_PORT: {{ .Values.boxConfig.dbPort | quote }}
