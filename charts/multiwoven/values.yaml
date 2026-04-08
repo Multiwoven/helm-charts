@@ -388,6 +388,36 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
+  box:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
 
 multiwovenPostgresql:
   enabled: true
@@ -609,3 +639,47 @@ lightning:
         cpu: "1"
         memory: "1Gi"
   type: ClusterIP
+
+box:
+  enabled: false
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  replicas: 1
+  box:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/box
+      tag: "latest"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+  type: ClusterIP
+
+boxConfig:
+  boxPort: "8080"
+  boxK8sInCluster: "true"
+  boxK8sNamespace: "box-sandboxes"
+  boxIngressDomain: ""
+  boxIngressClass: "nginx"
+  boxImageRegistry: ""
+  boxReaperInterval: "60s"
+  boxLogLevel: "info"
+  boxApiKey: ""
+  boxEncryptionKey: ""
+  dbHost: ""
+  dbPort: "5432"
+  dbUsername: ""
+  dbPassword: ""
+  dbSslMode: "disable"
+  boxDbName: "box_production"

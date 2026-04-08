@@ -1,0 +1,67 @@
+{{- if .Values.box.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-box
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.box.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.box.replicas }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.box.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: {{ include "chart.fullname" . }}-box-config
+        image: {{ .Values.box.box.image.repository }}:{{ .Values.box.box.image.tag | default .Chart.AppVersion }}
+        # command: ["sleep", "3600"] # Uncomment for debugging
+        securityContext:
+          runAsUser: {{ .Values.box.box.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.box.box.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          httpGet:
+            path: /healthz
+            port: {{ (index .Values.box.ports 0).port }}
+        name: {{ include "chart.fullname" . }}-box
+        ports:
+        - containerPort: {{ (index .Values.box.ports 0).port }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          httpGet:
+            path: /readyz
+            port: {{ (index .Values.box.ports 0).port }}
+        resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
+{{ end }}

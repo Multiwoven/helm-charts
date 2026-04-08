@@ -1,0 +1,21 @@
+{{- if .Values.box.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-box-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  BOX_PORT: {{ .Values.boxConfig.boxPort | quote }}
+  BOX_K8S_IN_CLUSTER: {{ .Values.boxConfig.boxK8sInCluster | quote }}
+  BOX_K8S_NAMESPACE: {{ .Values.boxConfig.boxK8sNamespace | quote }}
+  BOX_INGRESS_DOMAIN: {{ .Values.boxConfig.boxIngressDomain | quote }}
+  BOX_INGRESS_CLASS: {{ .Values.boxConfig.boxIngressClass | quote }}
+  BOX_IMAGE_REGISTRY: {{ .Values.boxConfig.boxImageRegistry | quote }}
+  BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
+  BOX_LOG_LEVEL: {{ .Values.boxConfig.boxLogLevel | quote }}
+  DB_PORT: {{ .Values.boxConfig.dbPort | quote }}
+  DB_SSLMODE: {{ .Values.boxConfig.dbSslMode | quote }}
+  BOX_DB_NAME: {{ .Values.boxConfig.boxDbName | quote }}
+{{- end }}
