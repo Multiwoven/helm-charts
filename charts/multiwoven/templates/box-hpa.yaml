@@ -1,3 +1,8 @@
+# Box HorizontalPodAutoscaler
+# Autoscales the box deployment based on CPU and memory utilization.
+# Only rendered when both hpa.enabled and box.enabled are true.
+# Scale-up uses both percent-based and pod-based policies (whichever is larger).
+# Scale-down has a 300s stabilization window to avoid thrashing.
 {{ if and .Values.hpa.enabled .Values.box.enabled }}
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

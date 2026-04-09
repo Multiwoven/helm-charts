@@ -1,4 +1,20 @@
-{{- if .Values.box.enabled }}
+# Box RBAC
+# Contains the ClusterRole and two RoleBindings for the box orchestrator.
+#
+# ClusterRole: defines permissions box needs to manage sandbox resources:
+#   - pods, services, secrets, PVCs in the sandbox namespace
+#   - ingresses and network policies for sandbox isolation
+#   - volumesnapshots in the releases namespace for sandbox snapshotting
+#
+# RoleBinding (sandbox namespace): grants the ClusterRole to the box service account
+#   in boxConfig.boxK8sNamespace (default: box-sandboxes), where sandbox pods run.
+#
+# RoleBinding (releases namespace): grants the ClusterRole to the box service account
+#   in boxConfig.boxReleasesNamespace (default: box-releases), where snapshots are stored.
+#
+# For restricted environments (e.g. GovCloud), set box.rbac.create: false and
+# have the cluster admin apply these resources out-of-band before deploying the chart.
+{{- if and .Values.box.enabled .Values.box.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -64,3 +80,4 @@ subjects:
     name: {{ include "chart.fullname" . }}-box-controller
     namespace: {{ .Values.kubernetesNamespace }}
 {{- end }}
+

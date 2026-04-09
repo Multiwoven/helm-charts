@@ -1,3 +1,9 @@
+# Box Deployment
+# Box is an infra service (written in Go) that acts as a sandbox orchestrator.
+# It manages the lifecycle of sandbox pods used to run LLM-generated code in
+# isolated environments, including creating/deleting pods, PVCs, secrets,
+# network policies, and ingresses in the sandbox namespace.
+# Enabled via box.enabled. Disabled by default.
 {{- if .Values.box.enabled }}
 apiVersion: apps/v1
 kind: Deployment

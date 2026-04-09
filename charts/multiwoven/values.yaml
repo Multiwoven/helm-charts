@@ -642,6 +642,10 @@ lightning:
 
 box:
   enabled: false
+  rbac:
+    create: true
+  namespaces:
+    create: true
   annotations: {}
   podSecurityContext:
     fsGroup: 1000

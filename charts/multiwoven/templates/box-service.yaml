@@ -1,3 +1,8 @@
+# Box Service
+# ClusterIP service exposing the box orchestrator on port 8080 within the cluster.
+# Other services (e.g. multiwoven-server) can reach box at:
+#   http://{{ include "chart.fullname" . }}-box:8080
+# Enabled via box.enabled. Disabled by default.
 {{- if .Values.box.enabled }}
 apiVersion: v1
 kind: Service

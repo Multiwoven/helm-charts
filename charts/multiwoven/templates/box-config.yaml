@@ -1,3 +1,13 @@
+# Box ConfigMap
+# Holds all environment variables for the box orchestrator, including:
+# - Kubernetes sandbox/releases namespace names
+# - Ingress configuration (domain, class, namespace)
+# - Storage class and snapshot class for PVC/snapshot operations
+# - Default resource limits (CPU, memory, timeout) for sandbox pods
+# - Database connection details
+# NOTE: Sensitive values (API keys, DB credentials) are stored here temporarily.
+#       A secret management solution (e.g. secrets-store CSI) should be wired in later.
+# Enabled via box.enabled. Disabled by default.
 {{- if .Values.box.enabled }}
 apiVersion: v1
 kind: ConfigMap
