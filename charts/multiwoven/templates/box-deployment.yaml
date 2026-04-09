@@ -57,21 +57,25 @@ spec:
               - {{ . }}
             {{- end }}
             {{- end }}
+        {{- if lt (len .Values.box.ports) 1 }}
+        {{- fail "box.ports must contain at least one entry" }}
+        {{- end }}
+        {{- $boxPort := (index .Values.box.ports 0).port }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
           httpGet:
             path: /healthz
-            port: {{ (index .Values.box.ports 0).port }}
+            port: {{ $boxPort }}
         name: {{ include "chart.fullname" . }}-box
         ports:
-        - containerPort: {{ (index .Values.box.ports 0).port }}
+        - containerPort: {{ $boxPort }}
         readinessProbe:
           initialDelaySeconds: 5
           periodSeconds: 10
           httpGet:
             path: /readyz
-            port: {{ (index .Values.box.ports 0).port }}
+            port: {{ $boxPort }}
         resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
