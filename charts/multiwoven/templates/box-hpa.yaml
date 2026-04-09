@@ -21,6 +21,10 @@ spec:
       - type: {{ .Values.hpa.box.behavior.scaleDown.policies.percentPolicy.type }}
         value: {{ .Values.hpa.box.behavior.scaleDown.policies.percentPolicy.value }}
         periodSeconds: {{ .Values.hpa.box.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.box.behavior.scaleDown.policies.podPolicy.type }}
+        value: {{ .Values.hpa.box.behavior.scaleDown.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.box.behavior.scaleDown.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.box.behavior.scaleDown.policies.selectPolicy }}
     scaleUp:
       stabilizationWindowSeconds: {{ .Values.hpa.box.behavior.scaleUp.stabilizationWindowSeconds }}
       policies:

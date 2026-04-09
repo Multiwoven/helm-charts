@@ -9,6 +9,7 @@ metadata:
 spec:
   type: {{ .Values.box.type }}
   selector:
+    app: {{ include "chart.fullname" . }}-box
     {{- include "chart.selectorLabels" . | nindent 4 }}
   ports:
     {{- toYaml .Values.box.ports | nindent 4 }}

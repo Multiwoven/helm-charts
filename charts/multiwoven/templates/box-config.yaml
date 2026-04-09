@@ -24,7 +24,12 @@ data:
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
   BOX_LOG_LEVEL: {{ .Values.boxConfig.boxLogLevel | quote }}
+  BOX_API_KEY: {{ .Values.boxConfig.boxApiKey | quote }}
+  BOX_ENCRYPTION_KEY: {{ .Values.boxConfig.boxEncryptionKey | quote }}
+  DB_HOST: {{ .Values.boxConfig.dbHost | quote }}
   DB_PORT: {{ .Values.boxConfig.dbPort | quote }}
+  DB_USERNAME: {{ .Values.boxConfig.dbUsername | quote }}
+  DB_PASSWORD: {{ .Values.boxConfig.dbPassword | quote }}
   DB_SSLMODE: {{ .Values.boxConfig.dbSslMode | quote }}
   BOX_DB_NAME: {{ .Values.boxConfig.boxDbName | quote }}
 {{- end }}

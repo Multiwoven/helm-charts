@@ -14,22 +14,29 @@ spec:
   replicas: {{ .Values.box.replicas }}
   selector:
     matchLabels:
+      app: {{ include "chart.fullname" . }}-box
       {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
+        app: {{ include "chart.fullname" . }}-box
         {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
         {{- with .Values.box.annotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      {{- with .Values.box.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ include "chart.fullname" . }}-box-controller
       containers:
       - envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-box-config
         image: {{ .Values.box.box.image.repository }}:{{ .Values.box.box.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         # command: ["sleep", "3600"] # Uncomment for debugging
         securityContext:
           runAsUser: {{ .Values.box.box.containerSecurityContext.runAsUser }}
