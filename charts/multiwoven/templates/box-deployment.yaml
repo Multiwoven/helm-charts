@@ -1,0 +1,85 @@
+# Box Deployment
+# Box is an infra service (written in Go) that acts as a sandbox orchestrator.
+# It manages the lifecycle of sandbox pods used to run LLM-generated code in
+# isolated environments, including creating/deleting pods, PVCs, secrets,
+# network policies, and ingresses in the sandbox namespace.
+# Enabled via box.enabled. Disabled by default.
+{{- if .Values.box.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-box
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.box.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.box.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-box
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-box
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.box.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.box.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "chart.fullname" . }}-box-controller
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: {{ include "chart.fullname" . }}-box-config
+        image: {{ .Values.box.box.image.repository }}:{{ .Values.box.box.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
+        # command: ["sleep", "3600"] # Uncomment for debugging
+        securityContext:
+          runAsUser: {{ .Values.box.box.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.box.box.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        {{- if lt (len .Values.box.ports) 1 }}
+        {{- fail "box.ports must contain at least one entry" }}
+        {{- end }}
+        {{- $boxPort := (index .Values.box.ports 0).port }}
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          httpGet:
+            path: /healthz
+            port: {{ $boxPort }}
+        name: {{ include "chart.fullname" . }}-box
+        ports:
+        - containerPort: {{ $boxPort }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          httpGet:
+            path: /readyz
+            port: {{ $boxPort }}
+        resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
+      restartPolicy: Always
+      {{ if .Values.multiwovenConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+      {{ end }}
+{{ end }}
