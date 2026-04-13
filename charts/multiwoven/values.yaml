@@ -30,6 +30,8 @@ multiwovenConfig:
   hubspotApiKey: ""
   jwtSecret: ""
   leadCaptureEnabled: "false"
+  maxmindAccountId: ""
+  maxmindLicenseKey: ""
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   openrouterApiKey: ""
