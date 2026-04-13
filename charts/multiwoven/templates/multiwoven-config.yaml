@@ -54,6 +54,8 @@ data:
   JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
   LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
+  MAXMIND_ACCOUNT_ID: {{ .Values.multiwovenConfig.maxmindAccountId | quote }}
+  MAXMIND_LICENSE_KEY: {{ .Values.multiwovenConfig.maxmindLicenseKey | quote }}
   MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
   MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
