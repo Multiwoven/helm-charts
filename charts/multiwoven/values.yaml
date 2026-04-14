@@ -680,6 +680,7 @@ boxConfig:
   boxIngressDomain: ""
   boxIngressClass: "nginx"
   boxIngressNamespace: "ingress-nginx"
+  boxImagePullSecret: ""
   boxImageRegistry: ""
   boxStorageClass: "standard"
   boxSnapshotClass: "csi-hostpath-snapclass"
