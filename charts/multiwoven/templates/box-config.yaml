@@ -24,6 +24,9 @@ data:
   BOX_INGRESS_DOMAIN: {{ .Values.boxConfig.boxIngressDomain | quote }}
   BOX_INGRESS_CLASS: {{ .Values.boxConfig.boxIngressClass | quote }}
   BOX_INGRESS_NAMESPACE: {{ .Values.boxConfig.boxIngressNamespace | quote }}
+  {{- if .Values.boxConfig.boxImagePullSecret }}
+  BOX_IMAGE_PULL_SECRET: {{ .Values.boxConfig.boxImagePullSecret | quote }}
+  {{- end }}
   BOX_IMAGE_REGISTRY: {{ .Values.boxConfig.boxImageRegistry | quote }}
   BOX_STORAGE_CLASS: {{ .Values.boxConfig.boxStorageClass | quote }}
   BOX_SNAPSHOT_CLASS: {{ .Values.boxConfig.boxSnapshotClass | quote }}
