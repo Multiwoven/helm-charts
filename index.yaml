@@ -2,6 +2,25 @@ apiVersion: v1
 entries:
   multiwoven:
   - apiVersion: v2
+    appVersion: 0.84.0
+    created: "2026-04-14T13:18:08.331016703Z"
+    description: "Multiwoven is an open-source reverse ETL tool, offering an alternative
+      to qHightouch, Census, and similar platforms. \U0001F525 "
+    digest: e68c43a970772ea845c76a1010877d8286d3c01b0ca1041eea5e5e2c6d39d94c
+    home: https://github.com/Multiwoven/multiwoven
+    maintainers:
+    - name: subintp
+    - name: RafaelOAiSquared
+    - name: AngeloB-AIS
+    - name: hassimnaseef
+    name: multiwoven
+    sources:
+    - https://docs.squared.ai/open-source/guides/setup/helm
+    type: application
+    urls:
+    - https://github.com/Multiwoven/helm-charts/releases/download/multiwoven-0.84.0/multiwoven-0.84.0.tgz
+    version: 0.84.0
+  - apiVersion: v2
     appVersion: 0.83.0
     created: "2026-04-10T11:24:07.952575036Z"
     description: "Multiwoven is an open-source reverse ETL tool, offering an alternative
@@ -1623,4 +1642,4 @@ entries:
     urls:
     - https://github.com/Multiwoven/helm-charts/releases/download/multiwoven-0.1.0/multiwoven-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-10T11:24:07.952917944Z"
+generated: "2026-04-14T13:18:08.331392243Z"
