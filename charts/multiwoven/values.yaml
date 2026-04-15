@@ -14,6 +14,8 @@ multiwovenConfig:
   awsRegion: ""
   awsSecretAccessKey: ""
   azureSpot: false
+  boxApiKey: ""
+  boxBaseUrl: ""
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
