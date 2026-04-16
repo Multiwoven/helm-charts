@@ -684,6 +684,7 @@ boxConfig:
   boxIngressNamespace: "ingress-nginx"
   boxImagePullSecret: ""
   boxImageRegistry: ""
+  boxSandboxBaseImage: ""
   boxStorageClass: "standard"
   boxSnapshotClass: "csi-hostpath-snapclass"
   boxPvcSize: "10Gi"

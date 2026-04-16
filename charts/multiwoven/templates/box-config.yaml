@@ -28,6 +28,7 @@ data:
   BOX_IMAGE_PULL_SECRET: {{ .Values.boxConfig.boxImagePullSecret | quote }}
   {{- end }}
   BOX_IMAGE_REGISTRY: {{ .Values.boxConfig.boxImageRegistry | quote }}
+  BOX_SANDBOX_BASE_IMAGE: {{ .Values.boxConfig.boxSandboxBaseImage | quote }}
   BOX_STORAGE_CLASS: {{ .Values.boxConfig.boxStorageClass | quote }}
   BOX_SNAPSHOT_CLASS: {{ .Values.boxConfig.boxSnapshotClass | quote }}
   BOX_PVC_SIZE: {{ .Values.boxConfig.boxPvcSize | quote }}
