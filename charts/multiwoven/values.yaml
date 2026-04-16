@@ -16,6 +16,7 @@ multiwovenConfig:
   azureSpot: false
   boxApiKey: ""
   boxBaseUrl: ""
+  boxSandboxBaseImage: ""
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
