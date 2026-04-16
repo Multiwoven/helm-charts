@@ -31,7 +31,6 @@ data:
   AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
   BOX_API_KEY: {{ .Values.multiwovenConfig.boxApiKey | quote }}
   BOX_BASE_URL: {{ .Values.multiwovenConfig.boxBaseUrl | quote }}
-  BOX_SANDBOX_BASE_IMAGE: {{ .Values.multiwovenConfig.boxSandboxBaseImage | quote }}
   BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
   CODE_EXEC_SIGNING_SECRET: {{ .Values.multiwovenConfig.codeExecSigningSecret | quote }}
   CODING_AGENT_PROVIDER: {{ .Values.sandboxConfig.codingAgentProvider | quote }}

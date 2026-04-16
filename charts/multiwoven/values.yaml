@@ -16,7 +16,6 @@ multiwovenConfig:
   azureSpot: false
   boxApiKey: ""
   boxBaseUrl: ""
-  boxSandboxBaseImage: ""
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   dbHost: multiwoven-postgresql
@@ -685,6 +684,7 @@ boxConfig:
   boxIngressNamespace: "ingress-nginx"
   boxImagePullSecret: ""
   boxImageRegistry: ""
+  boxSandboxBaseImage: ""
   boxStorageClass: "standard"
   boxSnapshotClass: "csi-hostpath-snapclass"
   boxPvcSize: "10Gi"
