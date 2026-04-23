@@ -14,12 +14,16 @@ metadata:
           .Values.multiwovenConfig.solidWorkerHost
       }}
 
-      {{- if .Values.temporal.enabled }}
+      {{- if and .Values.temporal.enabled .Values.multiwovenConfig.temporalUiHost }}
         {{- $hosts = append $hosts .Values.multiwovenConfig.temporalUiHost }}
       {{- end }}
 
       {{- if .Values.lightning.enabled }}
         {{- $hosts = append $hosts .Values.lightningConfig.lightningHealthHost }}
+      {{- end }}
+
+      {{- if and .Values.box.enabled .Values.boxConfig.boxAdminHost }}
+        {{- $hosts = append $hosts .Values.boxConfig.boxAdminHost }}
       {{- end }}
 
       external-dns.alpha.kubernetes.io/hostname: "{{ join "," $hosts }}"
@@ -67,11 +71,14 @@ spec:
     - {{ .Values.multiwovenConfig.apiHost }}
     - {{ .Values.multiwovenConfig.workerHost }}
     - {{ .Values.multiwovenConfig.solidWorkerHost }}
-  {{ if .Values.temporal.enabled }}
+  {{ if and .Values.temporal.enabled .Values.multiwovenConfig.temporalUiHost }}
     - {{ .Values.multiwovenConfig.temporalUiHost }}
   {{ end }}
   {{ if .Values.lightning.enabled }}
     - {{ .Values.lightningConfig.lightningHealthHost }}
+  {{ end }}
+  {{ if and .Values.box.enabled .Values.boxConfig.boxAdminHost }}
+    - {{ .Values.boxConfig.boxAdminHost }}
   {{ end }}
     secretName: mw-tls-cert
   {{ end }}
@@ -123,7 +130,7 @@ spec:
             name: '{{ include "chart.fullname" . }}-solid-worker'
             port:
               number: {{ .Values.multiwovenSolidWorker.healthPort }}
-{{ if .Values.temporal.enabled }}
+{{ if and .Values.temporal.enabled .Values.multiwovenConfig.temporalUiHost }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:
       paths:
@@ -145,5 +152,17 @@ spec:
             port:
               number: {{ (index .Values.lightning.ports 0).port }}
         path: /health
+        pathType: Prefix
+{{ end }}
+{{ if and .Values.box.enabled .Values.boxConfig.boxAdminHost }}
+  - host: {{ .Values.boxConfig.boxAdminHost }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-box'
+            port:
+              number: {{ (index .Values.box.ports 0).port }}
+        path: /admin
         pathType: Prefix
 {{ end }}
