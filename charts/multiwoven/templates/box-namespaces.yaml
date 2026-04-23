@@ -1,25 +1,15 @@
 # Box Namespaces
-# Creates the two namespaces required by the box orchestrator:
+# Creates the namespace required by the box orchestrator:
 #   - boxConfig.boxK8sNamespace (default: box-sandboxes): where sandbox pods run.
-#   - boxConfig.boxReleasesNamespace (default: box-releases): where volume snapshots are stored.
 #
 # For restricted environments (e.g. GovCloud) where namespace creation requires
 # elevated permissions, set box.namespaces.create: false and have the cluster admin
-# pre-create these namespaces with the custom names configured in boxConfig.
+# pre-create this namespace with the custom name configured in boxConfig.
 {{- if and .Values.box.enabled .Values.box.namespaces.create }}
 apiVersion: v1
 kind: Namespace
 metadata:
   name: {{ .Values.boxConfig.boxK8sNamespace }}
-  labels:
-    {{- include "chart.labels" . | nindent 4 }}
-
----
-
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.boxConfig.boxReleasesNamespace }}
   labels:
     {{- include "chart.labels" . | nindent 4 }}
 {{- end }}

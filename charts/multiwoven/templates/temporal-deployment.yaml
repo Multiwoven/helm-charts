@@ -31,8 +31,6 @@ spec:
       serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
       securityContext:
         fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
-      securityContext:
-        fsGroup: {{ .Values.temporal.podSecurityContext.fsGroup }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
@@ -65,10 +63,12 @@ spec:
       {{ end }}
       containers:
       - env:
+        {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
         - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
           value: "true"
         - name: POSTGRES_TLS_ENABLED
           value: "true"
+        {{ end }}
         - name: DB
           value: {{ quote .Values.temporal.temporal.env.db }}
         {{ if .Values.multiwovenConfig.skipDbMigration }}
