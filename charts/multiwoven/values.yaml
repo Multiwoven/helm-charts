@@ -79,6 +79,7 @@ multiwovenConfig:
   temporalPostgresDefaultPort: "5432"
   temporalPostgresPassword: password
   temporalPostgresSsl: false
+  temporalPostgresTlsDisableHostVerification: false
   temporalPostgresUser: multiwoven
   temporalPostgresqlVersion: "13"
   temporalRootCert: /certs/temporal.key

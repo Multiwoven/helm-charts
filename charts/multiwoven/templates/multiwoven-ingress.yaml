@@ -14,7 +14,7 @@ metadata:
           .Values.multiwovenConfig.solidWorkerHost
       }}
 
-      {{- if .Values.temporal.enabled }}
+      {{- if and .Values.temporal.enabled .Values.multiwovenConfig.temporalUiHost }}
         {{- $hosts = append $hosts .Values.multiwovenConfig.temporalUiHost }}
       {{- end }}
 
@@ -130,7 +130,7 @@ spec:
             name: '{{ include "chart.fullname" . }}-solid-worker'
             port:
               number: {{ .Values.multiwovenSolidWorker.healthPort }}
-{{ if .Values.temporal.enabled }}
+{{ if and .Values.temporal.enabled .Values.multiwovenConfig.temporalUiHost }}
   - host: {{ .Values.multiwovenConfig.temporalUiHost }}
     http:
       paths:

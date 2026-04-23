@@ -64,10 +64,12 @@ spec:
       containers:
       - env:
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
-        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
-          value: "true"
         - name: POSTGRES_TLS_ENABLED
           value: "true"
+        {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
+        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
+          value: "true"
+        {{ end }}
         {{ end }}
         - name: DB
           value: {{ quote .Values.temporal.temporal.env.db }}
@@ -120,10 +122,12 @@ spec:
           value: 'true'
         - name: SQL_TLS_ENABLED
           value: 'true'
+        {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
         - name: SQL_TLS_DISABLE_HOST_VERIFICATION
           value: 'true'
         - name: SQL_HOST_VERIFICATION
           value: 'false'
+        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         {{ end }}
