@@ -149,6 +149,10 @@ lightningConfig:
   judyEndpoint: ""
   judyModel: ""
 
+  multimodalChatApiKey: ""
+  multimodalChatEndpoint: ""
+  multimodalChatModel: ""
+
   pathfinderApiKey: ""
   pathfinderEndpoint: ""
   pathfinderModel: ""

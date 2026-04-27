@@ -1,0 +1,51 @@
+{{- if .Values.lightning.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-lightning-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  PORT: {{ (index .Values.lightning.ports 0).port | quote }}
+ 
+  BABEL_API_KEY: {{ .Values.lightningConfig.babelApiKey | quote }}
+  BABEL_ENDPOINT: {{ .Values.lightningConfig.babelEndpoint | quote }}
+  BABEL_MODEL: {{ .Values.lightningConfig.babelModel | quote }}
+ 
+  CHAT_API_KEY: {{ .Values.lightningConfig.chatApiKey | quote }}
+  CHAT_ENDPOINT: {{ .Values.lightningConfig.chatEndpoint | quote }}
+  CHAT_MODEL: {{ .Values.lightningConfig.chatModel | quote }}
+ 
+  EMBEDDING_API_KEY: {{ .Values.lightningConfig.embeddingApiKey | quote }}
+  EMBEDDING_ENDPOINT: {{ .Values.lightningConfig.embeddingEndpoint | quote }}
+  EMBEDDING_MODEL: {{ .Values.lightningConfig.embeddingModel | quote }}
+ 
+  JUDY_API_KEY: {{ .Values.lightningConfig.judyApiKey | quote }}
+  JUDY_ENDPOINT: {{ .Values.lightningConfig.judyEndpoint | quote }}
+  JUDY_MODEL: {{ .Values.lightningConfig.judyModel | quote }}
+
+  MULTIMODAL_CHAT_API_KEY: {{ .Values.lightningConfig.multimodalChatApiKey | quote }}
+  MULTIMODAL_CHAT_ENDPOINT: {{ .Values.lightningConfig.multimodalChatEndpoint | quote }}
+  MULTIMODAL_CHAT_MODEL: {{ .Values.lightningConfig.multimodalChatModel | quote }}
+ 
+  PATHFINDER_API_KEY: {{ .Values.lightningConfig.pathfinderApiKey | quote }}
+  PATHFINDER_ENDPOINT: {{ .Values.lightningConfig.pathfinderEndpoint | quote }}
+  PATHFINDER_MODEL: {{ .Values.lightningConfig.pathfinderModel | quote }}
+ 
+  SEEMORE_API_KEY: {{ .Values.lightningConfig.seemoreApiKey | quote }}
+  SEEMORE_VLM: {{ .Values.lightningConfig.seemoreVlm | quote }}
+  SEEMORE_ENDPOINT: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
+ 
+  SENTINEL_API_KEY: {{ .Values.lightningConfig.sentinelApiKey | quote }}
+  SENTINEL_ENDPOINT: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
+  SENTINEL_MODEL: {{ .Values.lightningConfig.sentinelModel | quote }}
+ 
+  STRUCTURED_EXTRACTION_API_KEY: {{ .Values.lightningConfig.structuredExtractionApiKey | quote }}
+  STRUCTURED_EXTRACTION_MODEL: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
+  STRUCTURED_EXTRACTION_ENDPOINT: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
+ 
+  XPERT_API_KEY: {{ .Values.lightningConfig.xpertApiKey | quote }}
+  XPERT_ENDPOINT: {{ .Values.lightningConfig.xpertEndpoint | quote }}
+  XPERT_MODEL: {{ .Values.lightningConfig.xpertModel | quote }}
+{{- end }}
