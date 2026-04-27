@@ -18,6 +18,7 @@ multiwovenConfig:
   boxBaseUrl: ""
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
+  enableGeoSubscriber: "false"
   dbHost: multiwoven-postgresql
   dbPassword: password
   dbPort: "5432"
