@@ -163,6 +163,6 @@ spec:
             name: '{{ include "chart.fullname" . }}-box'
             port:
               number: {{ (index .Values.box.ports 0).port }}
-        path: /admin
+        path: /
         pathType: Prefix
 {{ end }}

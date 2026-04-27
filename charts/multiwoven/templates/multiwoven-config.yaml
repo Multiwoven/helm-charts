@@ -37,6 +37,7 @@ data:
   CODING_AGENT_MODEL: {{ .Values.sandboxConfig.codingAgentModel | quote }}
   CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
   DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
+  ENABLE_GEO_SUBSCRIBER: {{ .Values.multiwovenConfig.enableGeoSubscriber | quote }}
   DB_NAME: {{ .Values.multiwovenConfig.dbName | quote }}
   DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
   DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
