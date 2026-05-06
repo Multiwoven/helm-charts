@@ -35,6 +35,9 @@ multiwovenConfig:
   leadCaptureEnabled: "false"
   maxmindAccountId: ""
   maxmindLicenseKey: ""
+  neonApiKey: ""
+  neonApiBaseUrl: ""
+  neonDefaultRegion: ""
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   openrouterApiKey: ""
@@ -111,6 +114,7 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 sandboxConfig:
+  agenticCodingDbProvider: ""
   agenticCodingSandboxProvider: "modal"
   agenticCodingSandboxTimeout: "3600"
   agenticCodingSandboxIdleTimeout: "1200"

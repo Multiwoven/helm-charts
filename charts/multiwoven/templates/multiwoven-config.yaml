@@ -13,6 +13,7 @@ data:
   AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
   AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
   AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
   AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
   AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
   AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
@@ -61,6 +62,9 @@ data:
   MAXMIND_LICENSE_KEY: {{ .Values.multiwovenConfig.maxmindLicenseKey | quote }}
   MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
   MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
+  NEON_API_KEY: {{ .Values.multiwovenConfig.neonApiKey | quote }}
+  NEON_API_BASE_URL: {{ .Values.multiwovenConfig.neonApiBaseUrl | quote }}
+  NEON_DEFAULT_REGION: {{ .Values.multiwovenConfig.neonDefaultRegion | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
