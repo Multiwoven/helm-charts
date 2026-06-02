@@ -53,7 +53,7 @@ spec:
             runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
             privileged: false
             allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
+            readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
             capabilities:
               drop:
               {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -123,7 +123,7 @@ spec:
           runAsGroup: {{ .Values.multiwovenServer.multiwovenServer.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
-          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }} 
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
           capabilities:
             drop:
             {{- if .Values.securityContext.capabilities.drop.permissions }}
@@ -144,7 +144,7 @@ spec:
           httpGet:
             path: /
             port: {{ (index .Values.multiwovenServer.ports 0).port }}
-          initialDelaySeconds: 5
+          initialDelaySeconds: 10
           periodSeconds: 10
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
         imagePullPolicy: Always
