@@ -9,9 +9,9 @@ metadata:
 data:
   PORT: {{ (index .Values.lightning.ports 0).port | quote }}
  
-  BABEL_API_KEY: {{ .Values.lightningConfig.babelApiKey | quote }}
-  BABEL_ENDPOINT: {{ .Values.lightningConfig.babelEndpoint | quote }}
-  BABEL_MODEL: {{ .Values.lightningConfig.babelModel | quote }}
+  POLY_API_KEY: {{ .Values.lightningConfig.polyApiKey | quote }}
+  POLY_ENDPOINT: {{ .Values.lightningConfig.polyEndpoint | quote }}
+  POLY_MODEL: {{ .Values.lightningConfig.polyModel | quote }}
  
   CHAT_API_KEY: {{ .Values.lightningConfig.chatApiKey | quote }}
   CHAT_ENDPOINT: {{ .Values.lightningConfig.chatEndpoint | quote }}

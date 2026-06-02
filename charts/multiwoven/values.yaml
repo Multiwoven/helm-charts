@@ -142,9 +142,9 @@ lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
   lightningHealthHost: lightning.multiwoven.com
 
-  babelApiKey: ""
-  babelEndpoint: ""
-  babelModel: ""
+  polyApiKey: ""
+  polyEndpoint: ""
+  polyModel: ""
 
   chatApiKey: ""
   chatEndpoint: ""
