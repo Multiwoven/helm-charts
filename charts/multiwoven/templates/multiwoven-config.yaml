@@ -8,17 +8,22 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
-  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
-  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
-  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
-  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
-  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
   AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
   AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
   AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
-  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
   AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
+  AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
+  AGENTIC_CODING_S3_REGION: {{ .Values.sandboxConfig.agenticCodingS3Region | quote }}
+  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
   AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.sandboxConfig.agenticCodingSandboxDomain | quote }}
+  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
+  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
+  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
+  AGENTIC_CODING_STORAGE_PROVIDER: {{ .Values.sandboxConfig.agenticCodingStorageProvider | quote }}
+  AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
+  AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
