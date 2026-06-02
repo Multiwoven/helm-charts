@@ -146,6 +146,10 @@ lightningConfig:
   babelEndpoint: ""
   babelModel: ""
 
+  polyApiKey: ""
+  polyEndpoint: ""
+  polyModel: ""
+
   chatApiKey: ""
   chatEndpoint: ""
   chatModel: ""
