@@ -25,6 +25,7 @@ data:
   AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
   AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
   ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
+  APPGEN_PUBLISHED_DOMAIN: {{ .Values.appbuilderIngress.appgenPublishedDomain | quote }}
   API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
   APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
   APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
