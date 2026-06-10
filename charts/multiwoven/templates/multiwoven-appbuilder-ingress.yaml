@@ -1,0 +1,67 @@
+{{- if .Values.appbuilderIngress.enabled }}
+{{- $appbuilderHost := printf "*.%s" .Values.appbuilderIngress.appgenPublishedDomain }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "chart.fullname" . }}-appbuilder-ingress
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.externalDNS.enabled }}
+    external-dns.alpha.kubernetes.io/hostname: {{ $appbuilderHost | quote }}
+    {{- end }}
+    {{- if .Values.nginxIngress.enabled }}
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.appbuilderIngress.proxyBodySize | quote }}
+    nginx.ingress.kubernetes.io/proxy-buffering: {{ .Values.appbuilderIngress.proxyBuffering | quote }}
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.appbuilderIngress.proxyReadTimeout | quote }}
+    nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.appbuilderIngress.proxySendTimeout | quote }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |-
+      gzip off;
+      proxy_set_header Connection "";
+      chunked_transfer_encoding on;
+    nginx.ingress.kubernetes.io/eventsource: "true"
+    {{- end }}
+    {{- if .Values.kongIngress.enabled }}
+    {{- if .Values.kongIngress.plugins.prometheus.enabled }}
+    konghq.com/plugins: 'prometheus-metrics'
+    {{- end }}
+    {{- end }}
+    {{- if .Values.awsIngress.enabled }}
+    alb.ingress.kubernetes.io/certificate-arn: "{{ .Values.awsIngress.acmCertificateArn }}"
+    alb.ingress.kubernetes.io/scheme: {{ .Values.awsIngress.albScheme }}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/ssl-policy: {{ .Values.awsIngress.sslPolicy }}
+    alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+    {{- end }}
+spec:
+  {{- if .Values.nginxIngress.enabled }}
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - {{ $appbuilderHost | quote }}
+    secretName: {{ .Values.appbuilderIngress.tlsSecretName }}
+  {{- end }}
+  {{- if .Values.kongIngress.enabled }}
+  ingressClassName: kong
+  {{- end }}
+  {{- if .Values.awsIngress.enabled }}
+  ingressClassName: alb
+  {{- end }}
+  rules:
+  - host: {{ $appbuilderHost | quote }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-server'
+            port:
+              number: {{ (index .Values.multiwovenServer.ports 0).port }}
+{{- end }}
