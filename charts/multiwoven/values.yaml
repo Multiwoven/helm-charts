@@ -3,9 +3,8 @@ kubernetesNamespace: multiwoven
 
 appbuilderIngress:
   enabled: false
-  appgenPublishedDomain: "appbuilder-qa.squared.ai"
+  appgenPublishedDomain: "appbuilder.qa.squared.ai"
   tlsSecretName: appbuilder-wildcard-tls
-  tlsCertIssuer: ""
   proxyBodySize: 100m
   proxyReadTimeout: 3600
   proxySendTimeout: 3600

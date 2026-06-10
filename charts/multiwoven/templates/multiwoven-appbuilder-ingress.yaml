@@ -13,9 +13,6 @@ metadata:
     {{- end }}
     {{- if .Values.nginxIngress.enabled }}
     kubernetes.io/ingress.class: nginx
-    {{- if .Values.appbuilderIngress.tlsCertIssuer }}
-    cert-manager.io/issuer: {{ .Values.appbuilderIngress.tlsCertIssuer }}
-    {{- end }}
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
