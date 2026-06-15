@@ -1,4 +1,4 @@
-{{ if .Values.multiwovenPostgresql.enabled }}
+{{ if .Values.aisquaredPostgresql.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

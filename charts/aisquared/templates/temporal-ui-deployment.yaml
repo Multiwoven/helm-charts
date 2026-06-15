@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.network/aisquared-server-default: "true"
         io.kompose.service: temporal-ui
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
@@ -101,8 +101,8 @@ spec:
           emptyDir: {}
         {{ end }}
       restartPolicy: Always
-       {{ if .Values.multiwovenConfig.privateRepo }}
+       {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
 {{ end }}

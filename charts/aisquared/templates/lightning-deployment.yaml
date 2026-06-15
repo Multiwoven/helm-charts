@@ -20,7 +20,7 @@ spec:
   template:
     metadata:
       labels:
-        io.kompose.network/multiwoven-server-default: "true"
+        io.kompose.network/aisquared-server-default: "true"
         io.kompose.service: {{ include "chart.fullname" . }}-lightning
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
@@ -62,8 +62,8 @@ spec:
             port: {{ (index .Values.lightning.ports 0).port }}
         resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
 {{ end }}

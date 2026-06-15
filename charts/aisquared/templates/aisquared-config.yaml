@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-config
+  {{- include "chart.labels" . | nindent 4 }}
+data:
+  ACTIVE_STORAGE_SERVICE: {{ .Values.aisquaredConfig.activeStorageService | quote }}
+  AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
+  AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
+  AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
+  AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
+  AGENTIC_CODING_S3_REGION: {{ .Values.sandboxConfig.agenticCodingS3Region | quote }}
+  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
+  AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.sandboxConfig.agenticCodingSandboxDomain | quote }}
+  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
+  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
+  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
+  AGENTIC_CODING_STORAGE_PROVIDER: {{ .Values.sandboxConfig.agenticCodingStorageProvider | quote }}
+  AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
+  AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
+  ALLOWED_HOST: {{ .Values.aisquaredConfig.allowedHost | quote }}
+  API_HOST: {{ .Values.aisquaredConfig.apiHost | quote }}
+  APP_ENV: {{ .Values.aisquaredConfig.appEnv | quote }}
+  APP_REVISION: {{ .Values.aisquaredConfig.appRevision | quote }}
+  APPSIGNAL_APP_ENV: {{ .Values.aisquaredConfig.appEnv | quote }}
+  APPSIGNAL_PUSH_API_KEY: {{ .Values.aisquaredConfig.appsignalPushApiKey | quote }}
+  AWS_ACCESS_KEY_ID: {{ .Values.aisquaredConfig.awsAccessKeyId | quote }}
+  AWS_LAMBDA_API_URL: {{ .Values.aisquaredConfig.awsLambdaApiUrl | quote }}
+  AWS_REGION: {{ .Values.aisquaredConfig.awsRegion | quote }}
+  AWS_S3_BUCKET: {{ .Values.aisquaredConfig.awsS3Bucket | quote }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.aisquaredConfig.awsSecretAccessKey | quote }}
+  BOX_API_KEY: {{ .Values.aisquaredConfig.boxApiKey | quote }}
+  BOX_BASE_URL: {{ .Values.aisquaredConfig.boxBaseUrl | quote }}
+  BRAND_NAME: {{ .Values.aisquaredConfig.smtpBrandName | quote }}
+  CODE_EXEC_SIGNING_SECRET: {{ .Values.aisquaredConfig.codeExecSigningSecret | quote }}
+  CODING_AGENT_PROVIDER: {{ .Values.sandboxConfig.codingAgentProvider | quote }}
+  CODING_AGENT_MODEL: {{ .Values.sandboxConfig.codingAgentModel | quote }}
+  CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
+  DATABRICKS_DRIVER_PATH: {{ .Values.aisquaredConfig.databricksDriverPath | quote }}
+  ENABLE_GEO_SUBSCRIBER: {{ .Values.aisquaredConfig.enableGeoSubscriber | quote }}
+  DB_NAME: {{ .Values.aisquaredConfig.dbName | quote }}
+  DB_PORT: {{ .Values.aisquaredConfig.dbPort | quote }}
+  DB_HOST: {{ .Values.aisquaredConfig.dbHost | quote }}
+  {{ if not .Values.secretsStore.enabled }}
+  DB_PASSWORD: {{ .Values.aisquaredConfig.dbPassword | quote }}
+  DB_USERNAME: {{ .Values.aisquaredConfig.dbUsername | quote }}
+  {{ end }}
+  DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.sandboxConfig.dockerHubRegistryUsername | quote }}
+  DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.sandboxConfig.dockerHubRegistryPassword | quote }}
+  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.aisquaredConfig.grpcEnableForkSupport | quote }}
+  HOSTED_VECTOR_DB_HOST: {{ .Values.aisquaredConfig.hostedVectorDbHost | quote }}
+  HOSTED_VECTOR_DB_DATABASE: {{ .Values.aisquaredConfig.hostedVectorDbDatabase | quote }}
+  HOSTED_VECTOR_DB_USERNAME: {{ .Values.aisquaredConfig.hostedVectorDbUsername | quote }}
+  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.aisquaredConfig.hostedVectorDbPassword | quote }}
+  HOSTED_VECTOR_DB_PORT: {{ .Values.aisquaredConfig.hostedVectorDbPort | quote }}
+  HUBSPOT_API_KEY: {{ .Values.aisquaredConfig.hubspotApiKey | quote }}
+  JWT_SECRET: {{ .Values.aisquaredConfig.jwtSecret | quote }}
+  LEAD_CAPTURE_ENABLED: {{ .Values.aisquaredConfig.leadCaptureEnabled | quote }}
+  LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
+  MAXMIND_ACCOUNT_ID: {{ .Values.aisquaredConfig.maxmindAccountId | quote }}
+  MAXMIND_LICENSE_KEY: {{ .Values.aisquaredConfig.maxmindLicenseKey | quote }}
+  MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
+  MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
+  NEON_API_KEY: {{ .Values.aisquaredConfig.neonApiKey | quote }}
+  NEON_API_BASE_URL: {{ .Values.aisquaredConfig.neonApiBaseUrl | quote }}
+  NEON_DEFAULT_REGION: {{ .Values.aisquaredConfig.neonDefaultRegion | quote }}
+  NEW_RELIC_KEY: {{ .Values.aisquaredConfig.newRelicKey | quote }}
+  OPENROUTER_API_KEY: {{ .Values.aisquaredConfig.openrouterApiKey | quote }}
+  P2W_LLM_PROVIDER: {{ .Values.aisquaredConfig.p2wLlmProvider | quote }}
+  P2W_LLM_API_KEY: {{ .Values.aisquaredConfig.p2wLlmApiKey | quote }}
+  P2W_LLM_MODEL: {{ .Values.aisquaredConfig.p2wLlmModel | quote }}
+  P2W_LLM_TEMPERATURE: {{ .Values.aisquaredConfig.p2wLlmTemperature | quote }}
+  PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.aisquaredConfig.promptToWorkflowProvider | quote }}
+  PROMPT_TO_WORKFLOW_MODEL: {{ .Values.aisquaredConfig.promptToWorkflowModel | quote }}
+  PROMPT_TO_WORKFLOW_API_URL: {{ .Values.aisquaredConfig.promptToWorkflowApiUrl | quote }}
+  PROMPT_TO_WORKFLOW_API_KEY: {{ .Values.aisquaredConfig.promptToWorkflowApiKey | quote }}
+  RAILS_ENV: {{ .Values.aisquaredConfig.railsEnv | quote }}
+  RAILS_LOG_LEVEL: {{ .Values.aisquaredConfig.railsLogLevel | quote }}
+  REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.aisquaredConfig.remoteCodeExecutionProvider | quote }}
+  S3_SSE_TYPE: {{ .Values.aisquaredConfig.s3SseType | quote }}
+  S3_KMS_KEY_ID: {{ .Values.aisquaredConfig.s3KmsKeyId | quote }}
+  SECRET_KEY_BASE: {{ .Values.aisquaredConfig.secretKeyBase | quote }}
+  SKIP_DB_MIGRATION: {{ .Values.aisquaredConfig.skipDbMigration | quote }}
+  SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.aisquaredConfig.slackSignupChannelEmail | quote }}
+  SMTP_ADDRESS: {{ .Values.aisquaredConfig.smtpAddress | quote }}
+  SMTP_HOST: {{ .Values.aisquaredConfig.smtpHost | quote }}
+  SMTP_PASSWORD: {{ .Values.aisquaredConfig.smtpPassword | quote }}
+  SMTP_PORT: {{ .Values.aisquaredConfig.smtpPort | quote }}
+  SMTP_USERNAME: {{ .Values.aisquaredConfig.smtpUsername | quote }}
+  SMTP_SENDER_EMAIL: {{ .Values.aisquaredConfig.smtpSenderEmail | quote }}
+  SNOWFLAKE_DRIVER_PATH: {{ .Values.aisquaredConfig.snowflakeDriverPath | quote }}
+  STORAGE_ACCESS_KEY: {{ .Values.aisquaredConfig.storageAccessKey }}
+  STORAGE_ACCOUNT_NAME: {{ .Values.aisquaredConfig.storageAccountName }}
+  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.aisquaredConfig.syncExtractorBatchSize | quote }}
+  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.syncExtractorThreadPoolSize | quote }}
+  SYNC_LOADER_BATCH_SIZE: {{ .Values.aisquaredConfig.syncLoaderBatchSize | quote }}
+  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.syncLoaderThreadPoolSize | quote }}
+  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.temporalActivityThreadPoolSize | quote }}
+  TEMPORAL_CLIENT_CHAIN: {{ .Values.aisquaredConfig.temporalClientChain | quote }}
+  TEMPORAL_CLIENT_KEY: {{ .Values.aisquaredConfig.temporalClientKey | quote }}
+  TEMPORAL_HOST: {{ .Values.aisquaredConfig.temporalHost | quote }}
+  TEMPORAL_NAMESPACE: {{ .Values.aisquaredConfig.temporalNamespace | quote }}
+  TEMPORAL_PORT: {{ .Values.aisquaredConfig.temporalPort | quote }}
+  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.aisquaredConfig.temporalPostgresDefaultPort | quote }}
+  {{ if not .Values.secretsStore.enabled }}
+  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.aisquaredConfig.temporalPostgresPassword | quote }}
+  {{ end }}
+  TEMPORAL_POSTGRES_USER: {{ .Values.aisquaredConfig.temporalPostgresUser | quote }}
+  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.aisquaredConfig.temporalPostgresqlVersion | quote }}
+  TEMPORAL_ROOT_CERT: {{ .Values.aisquaredConfig.temporalRootCert | quote }}
+  TEMPORAL_TASK_QUEUE: {{ .Values.aisquaredConfig.temporalTaskQueue | quote }}
+  TEMPORAL_UI_VERSION: {{ .Values.aisquaredConfig.temporalUiVersion | quote }}
+  TEMPORAL_VERSION: {{ .Values.aisquaredConfig.temporalVersion | quote }}
+  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.aisquaredConfig.temporalWorkflowThreadPoolSize | quote }}
+  TEXTRACT_ACCESS_KEY_ID: {{ .Values.aisquaredConfig.textractAccessKeyId | quote }}
+  TEXTRACT_BUCKET_NAME: {{ .Values.aisquaredConfig.textractBucketName | quote }}
+  TEXTRACT_REGION: {{ .Values.aisquaredConfig.textractRegion | quote }}
+  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.aisquaredConfig.textractSecretAccessKey | quote }}
+  TRACK: {{ .Values.aisquaredConfig.track | quote }}
+  UI_HOST: {{ .Values.aisquaredConfig.uiHost | quote }}
+  USER_EMAIL_VERIFICATION: {{ .Values.aisquaredConfig.userEmailVerification | quote }}
+  VITE_API_HOST: {{ .Values.aisquaredConfig.viteApiHost | quote }}
+  VITE_APPSIGNAL_PUSH_API_KEY: {{ .Values.aisquaredConfig.viteAppsignalPushApiKey | quote }}
+  VITE_BRAND_NAME: {{ .Values.aisquaredConfig.viteBrandName | quote }}
+  VITE_LOGO_URL: {{ .Values.aisquaredConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.aisquaredConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.aisquaredConfig.viteBrandHoverColor | quote }}
+  VITE_FAV_ICON_URL: {{ .Values.aisquaredConfig.viteFavIconUrl | quote }}
+  VITE_PUBLIC_POSTHOG_KEY: {{ .Values.aisquaredConfig.vitePublicPosthogKey | quote }}
+  VITE_PUBLIC_POSTHOG_HOST: {{ .Values.aisquaredConfig.vitePublicPosthogHost | quote }}

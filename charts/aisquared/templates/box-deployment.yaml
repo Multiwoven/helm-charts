@@ -78,8 +78,8 @@ spec:
             port: {{ $boxPort }}
         resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
 {{ end }}

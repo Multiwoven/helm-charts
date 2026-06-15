@@ -8,11 +8,11 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-ui
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenUI.annotations }}
+    {{- with .Values.aisquaredUI.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenUI.replicas }}
+  replicas: {{ .Values.aisquaredUI.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-ui
@@ -25,23 +25,23 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-ui
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenUI.annotations }}
+        {{- with .Values.aisquaredUI.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenUI.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.aisquaredUI.podSecurityContext.fsGroup }}
       containers:
       - env:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
-        image: {{ .Values.multiwovenUI.multiwovenUI.image.repository }}:{{ .Values.multiwovenUI.multiwovenUI.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.aisquaredUI.aisquaredUI.image.repository }}:{{ .Values.aisquaredUI.aisquaredUI.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenUI.multiwovenUI.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.aisquaredUI.aisquaredUI.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.aisquaredUI.aisquaredUI.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -55,22 +55,22 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: {{ (index .Values.multiwovenUI.ports 0).port }}
+            port: {{ (index .Values.aisquaredUI.ports 0).port }}
           initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-ui
         ports:
-        - containerPort: {{ (index .Values.multiwovenUI.ports 0).port }}
+        - containerPort: {{ (index .Values.aisquaredUI.ports 0).port }}
         readinessProbe:
           httpGet:
             path: /
-            port: {{ (index .Values.multiwovenUI.ports 0).port }}
+            port: {{ (index .Values.aisquaredUI.ports 0).port }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenUI.multiwovenUI.resources | nindent 10 }}
+        resources: {{- toYaml .Values.aisquaredUI.aisquaredUI.resources | nindent 10 }}
         imagePullPolicy: Always
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.aisquaredConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.aisquaredConfig.registrySecretName }}
       {{ end }}
