@@ -17,6 +17,7 @@ data:
   AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
   AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.sandboxConfig.agenticCodingSandboxDomain | quote }}
   AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_IMAGE: {{ .Values.sandboxConfig.agenticCodingSandboxImage | quote }}
   AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
   AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
   AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
