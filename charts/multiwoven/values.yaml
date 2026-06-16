@@ -133,6 +133,7 @@ sandboxConfig:
   agenticCodingSandboxCpu: "2000"
   agenticCodingSandboxDomain: "agentic-coding-sandbox.multiwoven.com"
   agenticCodingSandboxIdleTimeout: "1200"
+  agenticCodingSandboxImage: ""
   agenticCodingSandboxMemory: "4096"
   agenticCodingSandboxProvider: "modal"
   agenticCodingSandboxTimeout: "3600"
