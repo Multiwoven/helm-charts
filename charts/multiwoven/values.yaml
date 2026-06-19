@@ -708,8 +708,8 @@ boxConfig:
   boxPort: "8080"
   boxK8sInCluster: "true"
   boxK8sNamespace: "box-sandboxes"
+  boxReleasesNamespace: "box-releases"
   boxIngressDomain: ""
-  boxAdminHost: ""
   boxIngressClass: "nginx"
   boxIngressNamespace: "ingress-nginx"
   boxImagePullSecret: ""
@@ -720,9 +720,38 @@ boxConfig:
   boxPvcSize: "10Gi"
   boxDefaultCpu: "2000"
   boxDefaultMemoryMb: "4096"
+  # Released-app (deploy) resources — Guaranteed QoS (requests==limits) in box.
+  # 500m/1.5Gi aligns with Modal's deploy tuning; raised from box's 250m/512Mi
+  # default so heavier SSR/data apps don't OOM (512Mi was a hard Guaranteed cap).
+  boxReleaseCpu: "500"
+  boxReleaseMemoryMb: "1536"
+  boxReleaseReadyTimeout: "180s"
   boxDefaultTimeout: "3600"
   boxDefaultIdleTimeout: "300"
   boxReaperInterval: "60s"
+  boxProvisioningTimeout: "90s"
+  boxReapSnapshotTimeout: "180s"
+  boxStaleSecretMaxAge: "24h"
+  # Snapshot retention: age floor for orphan-reap (0 disables the age gate).
+  boxSnapshotMaxAgeHours: "0"
+  # Container ports — runtime contract with the sandbox/release image.
+  boxAgentPort: "4096"
+  boxVitePort: "5173"
+  # Dev sandbox pod request as a percent of its limit (Burstable QoS).
+  boxSandboxRequestRatioPercent: "50"
+  # Release probe tuning (startup gates Vite cold-start).
+  boxReleaseStartupProbeFailureThreshold: "20"
+  # Server-side default handler timeouts (caller may override per-request).
+  boxDeployDefaultTimeoutSecs: "120"
+  boxSnapshotFsDefaultTimeoutSecs: "300"
+  # HTTP server hardening / lifecycle.
+  boxShutdownTimeout: "30s"
+  # Postgres connection pool (boxDbMaxIdleConns should stay <= boxDbMaxOpenConns).
+  boxDbMaxOpenConns: "25"
+  boxDbMaxIdleConns: "10"
+  boxDbConnMaxLifetime: "5m"
+  # Admin API.
+  boxAdminEnabled: "true"
   boxLogLevel: "info"
   boxApiKey: ""
   boxEncryptionKey: ""

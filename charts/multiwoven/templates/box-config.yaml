@@ -20,6 +20,8 @@ data:
   BOX_PORT: {{ .Values.boxConfig.boxPort | quote }}
   BOX_K8S_IN_CLUSTER: {{ .Values.boxConfig.boxK8sInCluster | quote }}
   BOX_K8S_NAMESPACE: {{ .Values.boxConfig.boxK8sNamespace | quote }}
+  # Releases (deployed-app) namespace
+  BOX_RELEASES_NAMESPACE: {{ .Values.boxConfig.boxReleasesNamespace | quote }}
   BOX_INGRESS_DOMAIN: {{ .Values.boxConfig.boxIngressDomain | quote }}
   BOX_INGRESS_CLASS: {{ .Values.boxConfig.boxIngressClass | quote }}
   BOX_INGRESS_NAMESPACE: {{ .Values.boxConfig.boxIngressNamespace | quote }}
@@ -33,6 +35,8 @@ data:
   BOX_PVC_SIZE: {{ .Values.boxConfig.boxPvcSize | quote }}
   BOX_DEFAULT_CPU: {{ .Values.boxConfig.boxDefaultCpu | quote }}
   BOX_DEFAULT_MEMORY_MB: {{ .Values.boxConfig.boxDefaultMemoryMb | quote }}
+  BOX_RELEASE_CPU: {{ .Values.boxConfig.boxReleaseCpu | quote }}
+  BOX_RELEASE_MEMORY_MB: {{ .Values.boxConfig.boxReleaseMemoryMb | quote }}
   BOX_DEFAULT_TIMEOUT: {{ .Values.boxConfig.boxDefaultTimeout | quote }}
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
@@ -45,4 +49,29 @@ data:
   DB_PASSWORD: {{ .Values.boxConfig.dbPassword | quote }}
   DB_SSLMODE: {{ .Values.boxConfig.dbSslMode | quote }}
   BOX_DB_NAME: {{ .Values.boxConfig.boxDbName | quote }}
+  # Snapshot retention (0 disables the orphan-reap age gate)
+  BOX_SNAPSHOT_MAX_AGE_HOURS: {{ .Values.boxConfig.boxSnapshotMaxAgeHours | quote }}
+  # Reaper / provisioning / release-ready timeouts
+  BOX_RELEASE_READY_TIMEOUT: {{ .Values.boxConfig.boxReleaseReadyTimeout | quote }}
+  BOX_PROVISIONING_TIMEOUT: {{ .Values.boxConfig.boxProvisioningTimeout | quote }}
+  BOX_REAP_SNAPSHOT_TIMEOUT: {{ .Values.boxConfig.boxReapSnapshotTimeout | quote }}
+  BOX_STALE_SECRET_MAX_AGE: {{ .Values.boxConfig.boxStaleSecretMaxAge | quote }}
+  # Container ports (runtime contract with the sandbox/release image)
+  BOX_AGENT_PORT: {{ .Values.boxConfig.boxAgentPort | quote }}
+  BOX_VITE_PORT: {{ .Values.boxConfig.boxVitePort | quote }}
+  # Dev sandbox request/limit ratio (Burstable QoS)
+  BOX_SANDBOX_REQUEST_RATIO_PERCENT: {{ .Values.boxConfig.boxSandboxRequestRatioPercent | quote }}
+  # Release probes (startup failure threshold)
+  BOX_RELEASE_STARTUP_PROBE_FAILURE_THRESHOLD: {{ .Values.boxConfig.boxReleaseStartupProbeFailureThreshold | quote }}
+  # Handler default timeouts (caller may override per-request)
+  BOX_DEPLOY_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxDeployDefaultTimeoutSecs | quote }}
+  BOX_SNAPSHOT_FS_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxSnapshotFsDefaultTimeoutSecs | quote }}
+  # HTTP server hardening / lifecycle
+  BOX_SHUTDOWN_TIMEOUT: {{ .Values.boxConfig.boxShutdownTimeout | quote }}
+  # Postgres connection pool
+  BOX_DB_MAX_OPEN_CONNS: {{ .Values.boxConfig.boxDbMaxOpenConns | quote }}
+  BOX_DB_MAX_IDLE_CONNS: {{ .Values.boxConfig.boxDbMaxIdleConns | quote }}
+  BOX_DB_CONN_MAX_LIFETIME: {{ .Values.boxConfig.boxDbConnMaxLifetime | quote }}
+  # Admin API
+  BOX_ADMIN_ENABLED: {{ .Values.boxConfig.boxAdminEnabled | quote }}
 {{- end }}
