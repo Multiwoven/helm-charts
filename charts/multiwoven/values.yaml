@@ -720,6 +720,11 @@ boxConfig:
   boxPvcSize: "10Gi"
   boxDefaultCpu: "2000"
   boxDefaultMemoryMb: "4096"
+  # Released-app (deploy) resources — Guaranteed QoS (requests==limits) in box.
+  # 500m/1.5Gi aligns with Modal's deploy tuning; raised from box's 250m/512Mi
+  # default so heavier SSR/data apps don't OOM (512Mi was a hard Guaranteed cap).
+  boxReleaseCpu: "500"
+  boxReleaseMemoryMb: "1536"
   boxDefaultTimeout: "3600"
   boxDefaultIdleTimeout: "300"
   boxReaperInterval: "60s"

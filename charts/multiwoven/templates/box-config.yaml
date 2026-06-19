@@ -33,6 +33,8 @@ data:
   BOX_PVC_SIZE: {{ .Values.boxConfig.boxPvcSize | quote }}
   BOX_DEFAULT_CPU: {{ .Values.boxConfig.boxDefaultCpu | quote }}
   BOX_DEFAULT_MEMORY_MB: {{ .Values.boxConfig.boxDefaultMemoryMb | quote }}
+  BOX_RELEASE_CPU: {{ .Values.boxConfig.boxReleaseCpu | quote }}
+  BOX_RELEASE_MEMORY_MB: {{ .Values.boxConfig.boxReleaseMemoryMb | quote }}
   BOX_DEFAULT_TIMEOUT: {{ .Values.boxConfig.boxDefaultTimeout | quote }}
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
