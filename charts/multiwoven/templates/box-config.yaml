@@ -69,25 +69,12 @@ data:
   BOX_VITE_PORT: {{ .Values.boxConfig.boxVitePort | quote }}
   # Dev sandbox request/limit ratio (Burstable QoS)
   BOX_SANDBOX_REQUEST_RATIO_PERCENT: {{ .Values.boxConfig.boxSandboxRequestRatioPercent | quote }}
-  # Release probes (startup + readiness)
-  BOX_RELEASE_STARTUP_PROBE_PERIOD: {{ .Values.boxConfig.boxReleaseStartupProbePeriod | quote }}
-  BOX_RELEASE_STARTUP_PROBE_TIMEOUT: {{ .Values.boxConfig.boxReleaseStartupProbeTimeout | quote }}
+  # Release probes (startup failure threshold)
   BOX_RELEASE_STARTUP_PROBE_FAILURE_THRESHOLD: {{ .Values.boxConfig.boxReleaseStartupProbeFailureThreshold | quote }}
-  BOX_RELEASE_READINESS_PROBE_PERIOD: {{ .Values.boxConfig.boxReleaseReadinessProbePeriod | quote }}
-  BOX_RELEASE_READINESS_PROBE_TIMEOUT: {{ .Values.boxConfig.boxReleaseReadinessProbeTimeout | quote }}
-  BOX_RELEASE_READINESS_PROBE_FAILURE_THRESHOLD: {{ .Values.boxConfig.boxReleaseReadinessProbeFailureThreshold | quote }}
-  # Poll intervals (cadence; deadline is the caller's timeout)
-  BOX_HEALTH_POLL_INTERVAL: {{ .Values.boxConfig.boxHealthPollInterval | quote }}
-  BOX_EXEC_WAIT_POLL_INTERVAL: {{ .Values.boxConfig.boxExecWaitPollInterval | quote }}
-  BOX_SNAPSHOT_POLL_INTERVAL: {{ .Values.boxConfig.boxSnapshotPollInterval | quote }}
-  BOX_LOG_STREAM_HEARTBEAT_INTERVAL: {{ .Values.boxConfig.boxLogStreamHeartbeatInterval | quote }}
   # Handler default timeouts (caller may override per-request)
-  BOX_EXEC_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxExecDefaultTimeoutSecs | quote }}
-  BOX_GET_TASK_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxGetTaskDefaultTimeoutSecs | quote }}
   BOX_DEPLOY_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxDeployDefaultTimeoutSecs | quote }}
   BOX_SNAPSHOT_FS_DEFAULT_TIMEOUT_SECS: {{ .Values.boxConfig.boxSnapshotFsDefaultTimeoutSecs | quote }}
   # HTTP server hardening / lifecycle
-  BOX_HTTP_READ_HEADER_TIMEOUT: {{ .Values.boxConfig.boxHttpReadHeaderTimeout | quote }}
   BOX_SHUTDOWN_TIMEOUT: {{ .Values.boxConfig.boxShutdownTimeout | quote }}
   # Postgres connection pool
   BOX_DB_MAX_OPEN_CONNS: {{ .Values.boxConfig.boxDbMaxOpenConns | quote }}

@@ -745,25 +745,12 @@ boxConfig:
   boxVitePort: "5173"
   # Dev sandbox pod request as a percent of its limit (Burstable QoS).
   boxSandboxRequestRatioPercent: "50"
-  # Release probe tuning (startup gates Vite cold-start; readiness re-checks).
-  boxReleaseStartupProbePeriod: "3"
-  boxReleaseStartupProbeTimeout: "3"
+  # Release probe tuning (startup gates Vite cold-start).
   boxReleaseStartupProbeFailureThreshold: "20"
-  boxReleaseReadinessProbePeriod: "5"
-  boxReleaseReadinessProbeTimeout: "3"
-  boxReleaseReadinessProbeFailureThreshold: "3"
-  # Poll cadences (overall deadline is the caller's timeout).
-  boxHealthPollInterval: "1s"
-  boxExecWaitPollInterval: "500ms"
-  boxSnapshotPollInterval: "3s"
-  boxLogStreamHeartbeatInterval: "15s"
   # Server-side default handler timeouts (caller may override per-request).
-  boxExecDefaultTimeoutSecs: "300"
-  boxGetTaskDefaultTimeoutSecs: "120"
   boxDeployDefaultTimeoutSecs: "120"
   boxSnapshotFsDefaultTimeoutSecs: "300"
   # HTTP server hardening / lifecycle.
-  boxHttpReadHeaderTimeout: "10s"
   boxShutdownTimeout: "30s"
   # Postgres connection pool (boxDbMaxIdleConns should stay <= boxDbMaxOpenConns).
   boxDbMaxOpenConns: "25"
