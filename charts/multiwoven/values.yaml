@@ -713,12 +713,6 @@ boxConfig:
   boxIngressClass: "nginx"
   boxIngressNamespace: "ingress-nginx"
   boxImagePullSecret: ""
-  # Docker registry credentials for pulling sandbox images. SECRET MATERIAL —
-  # only emitted into the ConfigMap when boxDockerToken is set; move to a
-  # Secret / secrets-store CSI mount later rather than leaving them here.
-  boxDockerServer: ""
-  boxDockerUsername: ""
-  boxDockerToken: ""
   boxImageRegistry: ""
   boxSandboxBaseImage: ""
   boxStorageClass: "standard"
