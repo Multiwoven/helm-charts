@@ -146,6 +146,7 @@ sandboxConfig:
   codingAgentModelApiKey: ""
   modalTokenId: ""
   modalTokenSecret: ""
+  opencodeOtlpEndpoint: ""
   dockerHubRegistryUsername: ""
   dockerHubRegistryPassword: ""
 
@@ -196,6 +197,19 @@ lightningConfig:
   xpertApiKey: ""
   xpertEndpoint: ""
   xpertModel: ""
+
+  inferenceBackend: "huggingface"
+  inferenceAwsRegion: ""
+
+  chatSagemakerEndpoint: ""
+  embeddingSagemakerEndpoint: ""
+  judySagemakerEndpoint: ""
+  multimodalChatSagemakerEndpoint: ""
+  pathfinderSagemakerEndpoint: ""
+  polySagemakerEndpoint: ""
+  seemoreSagemakerEndpoint: ""
+  sentinelSagemakerEndpoint: ""
+  structuredExtractionSagemakerEndpoint: ""
 
 
 automountServiceAccountToken:

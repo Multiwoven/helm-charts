@@ -52,4 +52,17 @@ data:
   XPERT_API_KEY: {{ .Values.lightningConfig.xpertApiKey | quote }}
   XPERT_ENDPOINT: {{ .Values.lightningConfig.xpertEndpoint | quote }}
   XPERT_MODEL: {{ .Values.lightningConfig.xpertModel | quote }}
+
+  INFERENCE_BACKEND: {{ .Values.lightningConfig.inferenceBackend | quote }}
+  INFERENCE_AWS_REGION: {{ .Values.lightningConfig.inferenceAwsRegion | quote }}
+
+  CHAT_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.chatSagemakerEndpoint | quote }}
+  EMBEDDING_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.embeddingSagemakerEndpoint | quote }}
+  JUDY_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.judySagemakerEndpoint | quote }}
+  MULTIMODAL_CHAT_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.multimodalChatSagemakerEndpoint | quote }}
+  PATHFINDER_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.pathfinderSagemakerEndpoint | quote }}
+  POLY_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.polySagemakerEndpoint | quote }}
+  SEEMORE_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.seemoreSagemakerEndpoint | quote }}
+  SENTINEL_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.sentinelSagemakerEndpoint | quote }}
+  STRUCTURED_EXTRACTION_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.structuredExtractionSagemakerEndpoint | quote }}
 {{- end }}
