@@ -54,7 +54,7 @@ data:
   XPERT_MODEL: {{ .Values.lightningConfig.xpertModel | quote }}
 
   INFERENCE_BACKEND: {{ .Values.lightningConfig.inferenceBackend | quote }}
-  AWS_REGION: {{ .Values.lightningConfig.awsRegion | quote }}
+  INFERENCE_AWS_REGION: {{ .Values.lightningConfig.inferenceAwsRegion | quote }}
 
   CHAT_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.chatSagemakerEndpoint | quote }}
   EMBEDDING_SAGEMAKER_ENDPOINT: {{ .Values.lightningConfig.embeddingSagemakerEndpoint | quote }}
