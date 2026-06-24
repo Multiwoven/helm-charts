@@ -8,8 +8,10 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
+  AGENTIC_CODING_BUILD_TOKEN: {{ .Values.sandboxConfig.agenticCodingBuildToken | quote }}
   AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
   AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOY_ROTATE_ENABLED: {{ .Values.sandboxConfig.agenticCodingDeployRotateEnabled | quote }}
   AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
   AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
   AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
