@@ -4,7 +4,7 @@ description: |
   Multiwoven is an open-source reverse ETL tool, offering an alternative to qHightouch, Census, and similar platforms. 🔥
 # kubeVersion: ">=1.16.0"
 type: application
-version: 0.95.1
+version: 0.96.0
 appVersion: "0.95.0"
 home: https://github.com/Multiwoven/multiwoven
 sources:
