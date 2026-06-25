@@ -8,8 +8,10 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
+  AGENTIC_CODING_BUILD_TOKEN: {{ .Values.sandboxConfig.agenticCodingBuildToken | quote }}
   AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
   AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOY_ROTATE_ENABLED: {{ .Values.sandboxConfig.agenticCodingDeployRotateEnabled | quote }}
   AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
   AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
   AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
@@ -73,6 +75,7 @@ data:
   NEON_API_BASE_URL: {{ .Values.multiwovenConfig.neonApiBaseUrl | quote }}
   NEON_DEFAULT_REGION: {{ .Values.multiwovenConfig.neonDefaultRegion | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  OPENCODE_OTLP_ENDPOINT: {{ .Values.sandboxConfig.opencodeOtlpEndpoint | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
   P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}

@@ -124,8 +124,10 @@ multiwovenConfig:
   workerHost: worker.multiwoven.com
 
 sandboxConfig:
+  agenticCodingBuildToken: ""
   agenticCodingDbProvider: ""
   agenticCodingDeployCpu: "1000"
+  agenticCodingDeployRotateEnabled: "false"
   agenticCodingDeployMemory: "2048"
   agenticCodingIdleThreshold: "10"
   agenticCodingS3Bucket: ""
@@ -146,6 +148,7 @@ sandboxConfig:
   codingAgentModelApiKey: ""
   modalTokenId: ""
   modalTokenSecret: ""
+  opencodeOtlpEndpoint: ""
   dockerHubRegistryUsername: ""
   dockerHubRegistryPassword: ""
 
@@ -196,6 +199,19 @@ lightningConfig:
   xpertApiKey: ""
   xpertEndpoint: ""
   xpertModel: ""
+
+  inferenceBackend: "huggingface"
+  inferenceAwsRegion: ""
+
+  chatSagemakerEndpoint: ""
+  embeddingSagemakerEndpoint: ""
+  judySagemakerEndpoint: ""
+  multimodalChatSagemakerEndpoint: ""
+  pathfinderSagemakerEndpoint: ""
+  polySagemakerEndpoint: ""
+  seemoreSagemakerEndpoint: ""
+  sentinelSagemakerEndpoint: ""
+  structuredExtractionSagemakerEndpoint: ""
 
 
 automountServiceAccountToken:
