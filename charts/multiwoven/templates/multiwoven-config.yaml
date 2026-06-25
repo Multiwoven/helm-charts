@@ -81,6 +81,8 @@ data:
   P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}
   P2W_LLM_MODEL: {{ .Values.multiwovenConfig.p2wLlmModel | quote }}
   P2W_LLM_TEMPERATURE: {{ .Values.multiwovenConfig.p2wLlmTemperature | quote }}
+  PROMETHEUS_METRICS_PASSWORD: {{ .Values.multiwovenConfig.prometheusMetricsPassword | quote }}
+  PROMETHEUS_METRICS_USERNAME: {{ .Values.multiwovenConfig.prometheusMetricsUsername | quote }}
   PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
   PROMPT_TO_WORKFLOW_MODEL: {{ .Values.multiwovenConfig.promptToWorkflowModel | quote }}
   PROMPT_TO_WORKFLOW_API_URL: {{ .Values.multiwovenConfig.promptToWorkflowApiUrl | quote }}
