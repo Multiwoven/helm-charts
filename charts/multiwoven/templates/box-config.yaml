@@ -35,8 +35,14 @@ data:
   BOX_PVC_SIZE: {{ .Values.boxConfig.boxPvcSize | quote }}
   BOX_DEFAULT_CPU: {{ .Values.boxConfig.boxDefaultCpu | quote }}
   BOX_DEFAULT_MEMORY_MB: {{ .Values.boxConfig.boxDefaultMemoryMb | quote }}
-  BOX_RELEASE_CPU: {{ .Values.boxConfig.boxReleaseCpu | quote }}
-  BOX_RELEASE_MEMORY_MB: {{ .Values.boxConfig.boxReleaseMemoryMb | quote }}
+  BOX_DEV_CPU_LIMIT: {{ .Values.boxConfig.boxDevCpuLimit | quote }}
+  BOX_DEV_CPU_REQUEST: {{ .Values.boxConfig.boxDevCpuRequest | quote }}
+  BOX_DEV_MEMORY_LIMIT_MB: {{ .Values.boxConfig.boxDevMemoryLimitMb | quote }}
+  BOX_DEV_MEMORY_REQUEST_MB: {{ .Values.boxConfig.boxDevMemoryRequestMb | quote }}
+  BOX_RELEASE_CPU_LIMIT: {{ .Values.boxConfig.boxReleaseCpuLimit | quote }}
+  BOX_RELEASE_CPU_REQUEST: {{ .Values.boxConfig.boxReleaseCpuRequest | quote }}
+  BOX_RELEASE_MEMORY_LIMIT_MB: {{ .Values.boxConfig.boxReleaseMemoryLimitMb | quote }}
+  BOX_RELEASE_MEMORY_REQUEST_MB: {{ .Values.boxConfig.boxReleaseMemoryRequestMb | quote }}
   BOX_DEFAULT_TIMEOUT: {{ .Values.boxConfig.boxDefaultTimeout | quote }}
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
@@ -59,8 +65,6 @@ data:
   # Container ports (runtime contract with the sandbox/release image)
   BOX_AGENT_PORT: {{ .Values.boxConfig.boxAgentPort | quote }}
   BOX_VITE_PORT: {{ .Values.boxConfig.boxVitePort | quote }}
-  # Dev sandbox request/limit ratio (Burstable QoS)
-  BOX_SANDBOX_REQUEST_RATIO_PERCENT: {{ .Values.boxConfig.boxSandboxRequestRatioPercent | quote }}
   # Release probes (startup failure threshold)
   BOX_RELEASE_STARTUP_PROBE_FAILURE_THRESHOLD: {{ .Values.boxConfig.boxReleaseStartupProbeFailureThreshold | quote }}
   # Handler default timeouts (caller may override per-request)
