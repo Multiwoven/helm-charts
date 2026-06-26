@@ -738,11 +738,16 @@ boxConfig:
   boxPvcSize: "10Gi"
   boxDefaultCpu: "2000"
   boxDefaultMemoryMb: "4096"
-  # Released-app (deploy) resources — Guaranteed QoS (requests==limits) in box.
-  # 500m/1.5Gi aligns with Modal's deploy tuning; raised from box's 250m/512Mi
-  # default so heavier SSR/data apps don't OOM (512Mi was a hard Guaranteed cap).
-  boxReleaseCpu: "500"
-  boxReleaseMemoryMb: "1536"
+  # Dev sandbox resources.
+  boxDevCpuLimit: "4000"
+  boxDevCpuRequest: "2000"
+  boxDevMemoryLimitMb: "6144"
+  boxDevMemoryRequestMb: "4096"
+  # Released-app (deploy) resources.
+  boxReleaseCpuLimit: "2000"
+  boxReleaseCpuRequest: "1000"
+  boxReleaseMemoryLimitMb: "2048"
+  boxReleaseMemoryRequestMb: "1024"
   boxReleaseReadyTimeout: "180s"
   boxDefaultTimeout: "3600"
   boxDefaultIdleTimeout: "300"
@@ -755,8 +760,6 @@ boxConfig:
   # Container ports — runtime contract with the sandbox/release image.
   boxAgentPort: "4096"
   boxVitePort: "5173"
-  # Dev sandbox pod request as a percent of its limit (Burstable QoS).
-  boxSandboxRequestRatioPercent: "50"
   # Release probe tuning (startup gates Vite cold-start).
   boxReleaseStartupProbeFailureThreshold: "20"
   # Server-side default handler timeouts (caller may override per-request).
