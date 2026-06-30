@@ -1,0 +1,14 @@
+# Box PriorityClass
+# Gives Box sandbox and release workloads high scheduling/preemption priority.
+{{- if and .Values.box.enabled .Values.box.priorityClass.create }}
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ .Values.box.priorityClass.name | quote }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+value: {{ .Values.box.priorityClass.value | int }}
+globalDefault: {{ .Values.box.priorityClass.globalDefault }}
+preemptionPolicy: {{ .Values.box.priorityClass.preemptionPolicy | quote }}
+description: {{ .Values.box.priorityClass.description | quote }}
+{{- end }}

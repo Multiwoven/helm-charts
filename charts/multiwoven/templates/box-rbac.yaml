@@ -4,6 +4,7 @@
 # ClusterRole: defines permissions box needs to manage sandbox resources:
 #   - pods, services, secrets, PVCs in the sandbox namespace
 #   - deployments and replicasets for Deployment-based releases
+#   - poddisruptionbudgets for release eviction protection
 #   - ingresses and network policies for sandbox isolation
 #   - volumesnapshots for sandbox snapshotting
 #
@@ -47,6 +48,9 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments", "replicasets"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["policy"]
+    resources: ["poddisruptionbudgets"]
+    verbs: ["get", "list", "watch", "create", "delete"]
 
 ---
 
@@ -67,4 +71,3 @@ subjects:
     namespace: {{ .Values.kubernetesNamespace }}
 
 {{- end }}
-
