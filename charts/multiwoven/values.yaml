@@ -696,6 +696,13 @@ box:
   enabled: false
   rbac:
     create: true
+  priorityClass:
+    create: true
+    name: "box-critical"
+    value: 1000000000
+    preemptionPolicy: "PreemptLowerPriority"
+    globalDefault: false
+    description: "Highest priority for Box sandbox and release workloads"
   namespaces:
     create: true
   annotations: {}
@@ -743,11 +750,13 @@ boxConfig:
   boxDevCpuRequest: "2000"
   boxDevMemoryLimitMb: "6144"
   boxDevMemoryRequestMb: "4096"
+  boxSandboxPriorityClassName: "box-critical"
   # Released-app (deploy) resources.
   boxReleaseCpuLimit: "2000"
   boxReleaseCpuRequest: "1000"
   boxReleaseMemoryLimitMb: "2048"
   boxReleaseMemoryRequestMb: "1024"
+  boxReleasePriorityClassName: "box-critical"
   boxReleaseReadyTimeout: "180s"
   boxDefaultTimeout: "3600"
   boxDefaultIdleTimeout: "300"
