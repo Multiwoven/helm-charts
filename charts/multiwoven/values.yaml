@@ -27,7 +27,7 @@ multiwovenConfig:
   boxApiKey: ""
   boxBaseUrl: ""
   codeExecSigningSecret: ""
-  codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
+  # codingAgentBedrockModelId moved to sandboxConfig
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   enableGeoSubscriber: "false"
   dbHost: multiwoven-postgresql
@@ -149,6 +149,7 @@ sandboxConfig:
   codingAgentProvider: "opencode"
   codingAgentModel: "anthropic/claude-sonnet-4-20250514"
   codingAgentModelApiKey: ""
+  codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
   modalTokenId: ""
   modalTokenSecret: ""
   opencodeOtlpEndpoint: ""
