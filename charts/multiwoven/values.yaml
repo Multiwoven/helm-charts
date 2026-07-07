@@ -148,6 +148,7 @@ sandboxConfig:
   codingAgentProvider: "opencode"
   codingAgentModel: "anthropic/claude-sonnet-4-20250514"
   codingAgentModelApiKey: ""
+  codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
   modalTokenId: ""
   modalTokenSecret: ""
   opencodeOtlpEndpoint: ""
