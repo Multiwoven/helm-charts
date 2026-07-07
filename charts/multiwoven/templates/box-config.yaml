@@ -9,6 +9,8 @@
 #       A secret management solution (e.g. secrets-store CSI) should be wired in later.
 # Enabled via box.enabled. Disabled by default.
 {{- if .Values.box.enabled }}
+{{- $sandboxPriorityClassName := default .Values.box.priorityClass.name .Values.boxConfig.boxSandboxPriorityClassName }}
+{{- $releasePriorityClassName := default .Values.box.priorityClass.name .Values.boxConfig.boxReleasePriorityClassName }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -39,10 +41,12 @@ data:
   BOX_DEV_CPU_REQUEST: {{ .Values.boxConfig.boxDevCpuRequest | quote }}
   BOX_DEV_MEMORY_LIMIT_MB: {{ .Values.boxConfig.boxDevMemoryLimitMb | quote }}
   BOX_DEV_MEMORY_REQUEST_MB: {{ .Values.boxConfig.boxDevMemoryRequestMb | quote }}
+  BOX_SANDBOX_PRIORITY_CLASS_NAME: {{ $sandboxPriorityClassName | quote }}
   BOX_RELEASE_CPU_LIMIT: {{ .Values.boxConfig.boxReleaseCpuLimit | quote }}
   BOX_RELEASE_CPU_REQUEST: {{ .Values.boxConfig.boxReleaseCpuRequest | quote }}
   BOX_RELEASE_MEMORY_LIMIT_MB: {{ .Values.boxConfig.boxReleaseMemoryLimitMb | quote }}
   BOX_RELEASE_MEMORY_REQUEST_MB: {{ .Values.boxConfig.boxReleaseMemoryRequestMb | quote }}
+  BOX_RELEASE_PRIORITY_CLASS_NAME: {{ $releasePriorityClassName | quote }}
   BOX_DEFAULT_TIMEOUT: {{ .Values.boxConfig.boxDefaultTimeout | quote }}
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}

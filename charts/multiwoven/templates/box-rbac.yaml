@@ -67,4 +67,3 @@ subjects:
     namespace: {{ .Values.kubernetesNamespace }}
 
 {{- end }}
-
