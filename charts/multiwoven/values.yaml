@@ -129,6 +129,7 @@ sandboxConfig:
   agenticCodingBuildToken: ""
   agenticCodingDbProvider: ""
   agenticCodingDeployCpu: "1000"
+  agenticCodingDeploymentEnv: ""
   agenticCodingDeployRotateEnabled: "false"
   agenticCodingDeployMemory: "2048"
   agenticCodingIdleThreshold: "10"
