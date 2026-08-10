@@ -73,6 +73,7 @@ data:
   MAXMIND_LICENSE_KEY: {{ .Values.multiwovenConfig.maxmindLicenseKey | quote }}
   MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
   MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
+  MODAL_ENVIRONMENT: {{ .Values.sandboxConfig.modalEnvironment | quote }}
   NEON_API_KEY: {{ .Values.multiwovenConfig.neonApiKey | quote }}
   NEON_API_BASE_URL: {{ .Values.multiwovenConfig.neonApiBaseUrl | quote }}
   NEON_DEFAULT_REGION: {{ .Values.multiwovenConfig.neonDefaultRegion | quote }}
