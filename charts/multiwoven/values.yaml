@@ -152,6 +152,7 @@ sandboxConfig:
   codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
   modalTokenId: ""
   modalTokenSecret: ""
+  modalEnvironment: ""
   opencodeOtlpEndpoint: ""
   dockerHubRegistryUsername: ""
   dockerHubRegistryPassword: ""
