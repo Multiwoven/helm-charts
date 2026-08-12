@@ -114,7 +114,7 @@ multiwovenConfig:
   uiHost: app.multiwoven.com
   userEmailVerification: "false"
   viteApiHost: api.multiwoven.com
-  viteAppsignalPushApiKey: yourkey
+  viteAppsignalMonitoringKey: yourkey
   viteBrandName: "Multiwoven"
   viteLogoUrl: ""
   viteBrandColor: ""
@@ -152,6 +152,7 @@ sandboxConfig:
   codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
   modalTokenId: ""
   modalTokenSecret: ""
+  modalEnvironment: ""
   opencodeOtlpEndpoint: ""
   dockerHubRegistryUsername: ""
   dockerHubRegistryPassword: ""
