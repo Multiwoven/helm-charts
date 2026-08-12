@@ -114,7 +114,7 @@ multiwovenConfig:
   uiHost: app.multiwoven.com
   userEmailVerification: "false"
   viteApiHost: api.multiwoven.com
-  viteAppsignalPushApiKey: yourkey
+  viteAppsignalMonitoringKey: yourkey
   viteBrandName: "Multiwoven"
   viteLogoUrl: ""
   viteBrandColor: ""

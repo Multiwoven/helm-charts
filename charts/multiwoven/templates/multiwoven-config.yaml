@@ -136,7 +136,7 @@ data:
   UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
   VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
-  VITE_APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.viteAppsignalPushApiKey | quote }}
+  VITE_APPSIGNAL_MONITORING_KEY: {{ .Values.multiwovenConfig.viteAppsignalMonitoringKey | quote }}
   VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
   VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
   VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
