@@ -140,7 +140,7 @@ spec:
           value: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
         - name: TEMPORAL_DEFAULT_USER
           {{ if not .Values.secretsStore.temporalSecretEnabled }}
-          value: {{ .Values.multipleDbHosts.temporalDbUsername }}
+          value: {{ .Values.multiwovenConfig.temporalPostgresUser }}
           {{ end }}
           {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
@@ -150,7 +150,7 @@ spec:
           {{end }}
         - name: TEMPORAL_DEFAULT_PASSWORD
           {{ if not .Values.secretsStore.temporalSecretEnabled }}
-          value: {{ .Values.multipleDbHosts.temporalDbPassword }}
+          value: {{ .Values.multiwovenConfig.temporalPostgresPassword }}
           {{ end }}
           {{ if .Values.secretsStore.temporalSecretEnabled }}
           valueFrom:
@@ -169,7 +169,7 @@ spec:
                 name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
                 key: TPV_DB_USERNAME
           {{ else }}
-          value: {{ .Values.multipleDbHosts.temporalVisibilityDbUsername }}
+          value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresUser }}
           {{end }}
         - name: TEMPORAL_VISIBILITY_PASSWORD
           {{ if .Values.secretsStore.temporalSecretEnabled }}
@@ -178,7 +178,7 @@ spec:
                 name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
                 key: TPV_DB_PASSWORD
           {{ else }}
-          value: {{ .Values.multipleDbHosts.temporalVisibilityDbPassword }}
+          value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresPassword }}
           {{end }}
         {{ end }}
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default "latest" }}

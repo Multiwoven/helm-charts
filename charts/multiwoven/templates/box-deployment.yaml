@@ -41,6 +41,10 @@ spec:
       - envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-box-config
+        {{ if .Values.secretsStore.boxSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.boxSecretAlias }}
+        {{ end }}
         image: {{ .Values.box.box.image.repository }}:{{ .Values.box.box.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         # command: ["sleep", "3600"] # Uncomment for debugging
@@ -77,6 +81,21 @@ spec:
             path: /readyz
             port: {{ $boxPort }}
         resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
+        {{ if .Values.secretsStore.boxSecretEnabled }}
+        volumeMounts:
+        - name: multiwoven-box-secrets-store
+          mountPath: /run/secrets/box-secrets
+          readOnly: true
+        {{ end }}
+      {{ if .Values.secretsStore.boxSecretEnabled }}
+      volumes:
+      - name: multiwoven-box-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-box
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

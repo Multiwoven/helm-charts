@@ -425,7 +425,12 @@ One new file per group, same shape as
 [multiwoven-secret-provider-class-mw.yaml](../templates/multiwoven-secret-provider-class-mw.yaml).
 Because these groups have many keys (not just `u`/`p`), name the `jmesPath`
 aliases after the target env var directly rather than inventing short codes
-— there's no reuse pressure like the DB case had:
+— there's no reuse pressure like the DB case had. The `jmesPath` **source**
+(`path:`), in turn, matches the field's existing `values.yaml` key name
+(e.g. `awsAccessKeyId`, not a re-invented `aws_access_key_id`) — the AWS
+secret's JSON is then a 1:1 mirror of the `values.yaml` block it's replacing,
+so there's exactly one naming scheme to keep in your head, not three
+(`values.yaml` key → env var → AWS secret field, each spelled differently):
 
 `templates/multiwoven-secret-provider-class-app.yaml`:
 
@@ -447,49 +452,49 @@ spec:
       - objectName: {{ required "AppCredsSecretName is required" .Values.secretsStore.AppCredsSecretName }}
         objectType: secretsmanager
         jmesPath:
-          - path: aws_access_key_id
+          - path: awsAccessKeyId
             objectAlias: AWS_ACCESS_KEY_ID
-          - path: aws_secret_access_key
+          - path: awsSecretAccessKey
             objectAlias: AWS_SECRET_ACCESS_KEY
-          - path: appsignal_push_api_key
+          - path: appsignalPushApiKey
             objectAlias: APPSIGNAL_PUSH_API_KEY
-          - path: box_api_key
+          - path: boxApiKey
             objectAlias: BOX_API_KEY
-          - path: code_exec_signing_secret
+          - path: codeExecSigningSecret
             objectAlias: CODE_EXEC_SIGNING_SECRET
-          - path: hosted_vector_db_username
+          - path: hostedVectorDbUsername
             objectAlias: HOSTED_VECTOR_DB_USERNAME
-          - path: hosted_vector_db_password
+          - path: hostedVectorDbPassword
             objectAlias: HOSTED_VECTOR_DB_PASSWORD
-          - path: hubspot_api_key
+          - path: hubspotApiKey
             objectAlias: HUBSPOT_API_KEY
-          - path: jwt_secret
+          - path: jwtSecret
             objectAlias: JWT_SECRET
-          - path: maxmind_license_key
+          - path: maxmindLicenseKey
             objectAlias: MAXMIND_LICENSE_KEY
-          - path: neon_api_key
+          - path: neonApiKey
             objectAlias: NEON_API_KEY
-          - path: openrouter_api_key
+          - path: openrouterApiKey
             objectAlias: OPENROUTER_API_KEY
-          - path: p2w_llm_api_key
+          - path: p2wLlmApiKey
             objectAlias: P2W_LLM_API_KEY
-          - path: prometheus_metrics_username
+          - path: prometheusMetricsUsername
             objectAlias: PROMETHEUS_METRICS_USERNAME
-          - path: prometheus_metrics_password
+          - path: prometheusMetricsPassword
             objectAlias: PROMETHEUS_METRICS_PASSWORD
-          - path: prompt_to_workflow_api_key
+          - path: promptToWorkflowApiKey
             objectAlias: PROMPT_TO_WORKFLOW_API_KEY
-          - path: secret_key_base
+          - path: secretKeyBase
             objectAlias: SECRET_KEY_BASE
-          - path: smtp_username
+          - path: smtpUsername
             objectAlias: SMTP_USERNAME
-          - path: smtp_password
+          - path: smtpPassword
             objectAlias: SMTP_PASSWORD
-          - path: storage_access_key
+          - path: storageAccessKey
             objectAlias: STORAGE_ACCESS_KEY
-          - path: textract_access_key_id
+          - path: textractAccessKeyId
             objectAlias: TEXTRACT_ACCESS_KEY_ID
-          - path: textract_secret_access_key
+          - path: textractSecretAccessKey
             objectAlias: TEXTRACT_SECRET_ACCESS_KEY
   secretObjects:
   - secretName: {{ .Values.secretsStore.appSecretAlias }}
@@ -550,13 +555,13 @@ The corresponding AWS Secrets Manager secret (`<env>-multiwoven/app`, e.g.
 
 ```json
 {
-  "aws_access_key_id": "...",
-  "aws_secret_access_key": "...",
-  "appsignal_push_api_key": "...",
-  "jwt_secret": "...",
-  "secret_key_base": "...",
-  "smtp_username": "...",
-  "smtp_password": "..."
+  "awsAccessKeyId": "...",
+  "awsSecretAccessKey": "...",
+  "appsignalPushApiKey": "...",
+  "jwtSecret": "...",
+  "secretKeyBase": "...",
+  "smtpUsername": "...",
+  "smtpPassword": "..."
 }
 ```
 

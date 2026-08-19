@@ -8,48 +8,70 @@ metadata:
     {{- include "chart.labels" . | nindent 4 }}
 data:
   PORT: {{ (index .Values.lightning.ports 0).port | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   BABEL_API_KEY: {{ .Values.lightningConfig.babelApiKey | quote }}
+  {{- end }}
   BABEL_ENDPOINT: {{ .Values.lightningConfig.babelEndpoint | quote }}
   BABEL_MODEL: {{ .Values.lightningConfig.babelModel | quote }}
 
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   POLY_API_KEY: {{ .Values.lightningConfig.polyApiKey | quote }}
+  {{- end }}
   POLY_ENDPOINT: {{ .Values.lightningConfig.polyEndpoint | quote }}
   POLY_MODEL: {{ .Values.lightningConfig.polyModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   CHAT_API_KEY: {{ .Values.lightningConfig.chatApiKey | quote }}
+  {{- end }}
   CHAT_ENDPOINT: {{ .Values.lightningConfig.chatEndpoint | quote }}
   CHAT_MODEL: {{ .Values.lightningConfig.chatModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   EMBEDDING_API_KEY: {{ .Values.lightningConfig.embeddingApiKey | quote }}
+  {{- end }}
   EMBEDDING_ENDPOINT: {{ .Values.lightningConfig.embeddingEndpoint | quote }}
   EMBEDDING_MODEL: {{ .Values.lightningConfig.embeddingModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   JUDY_API_KEY: {{ .Values.lightningConfig.judyApiKey | quote }}
+  {{- end }}
   JUDY_ENDPOINT: {{ .Values.lightningConfig.judyEndpoint | quote }}
   JUDY_MODEL: {{ .Values.lightningConfig.judyModel | quote }}
 
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   MULTIMODAL_CHAT_API_KEY: {{ .Values.lightningConfig.multimodalChatApiKey | quote }}
+  {{- end }}
   MULTIMODAL_CHAT_ENDPOINT: {{ .Values.lightningConfig.multimodalChatEndpoint | quote }}
   MULTIMODAL_CHAT_MODEL: {{ .Values.lightningConfig.multimodalChatModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   PATHFINDER_API_KEY: {{ .Values.lightningConfig.pathfinderApiKey | quote }}
+  {{- end }}
   PATHFINDER_ENDPOINT: {{ .Values.lightningConfig.pathfinderEndpoint | quote }}
   PATHFINDER_MODEL: {{ .Values.lightningConfig.pathfinderModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   SEEMORE_API_KEY: {{ .Values.lightningConfig.seemoreApiKey | quote }}
+  {{- end }}
   SEEMORE_VLM: {{ .Values.lightningConfig.seemoreVlm | quote }}
   SEEMORE_ENDPOINT: {{ .Values.lightningConfig.seemoreEndpoint | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   SENTINEL_API_KEY: {{ .Values.lightningConfig.sentinelApiKey | quote }}
+  {{- end }}
   SENTINEL_ENDPOINT: {{ .Values.lightningConfig.sentinelEndpoint | quote }}
   SENTINEL_MODEL: {{ .Values.lightningConfig.sentinelModel | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   STRUCTURED_EXTRACTION_API_KEY: {{ .Values.lightningConfig.structuredExtractionApiKey | quote }}
+  {{- end }}
   STRUCTURED_EXTRACTION_MODEL: {{ .Values.lightningConfig.structuredExtractionModel | quote }}
   STRUCTURED_EXTRACTION_ENDPOINT: {{ .Values.lightningConfig.structuredExtractionEndpoint | quote }}
- 
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
   XPERT_API_KEY: {{ .Values.lightningConfig.xpertApiKey | quote }}
+  {{- end }}
   XPERT_ENDPOINT: {{ .Values.lightningConfig.xpertEndpoint | quote }}
   XPERT_MODEL: {{ .Values.lightningConfig.xpertModel | quote }}
 

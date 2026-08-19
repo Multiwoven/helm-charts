@@ -32,6 +32,10 @@ spec:
       - envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-lightning-config
+        {{ if .Values.secretsStore.lightningSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.lightningSecretAlias }}
+        {{ end }}
         image: {{ .Values.lightning.lightning.image.repository }}:{{ .Values.lightning.lightning.image.tag | default .Chart.AppVersion }}
         # command: ["sleep", "3600"] # Uncomment for debugging
         securityContext:
@@ -61,6 +65,21 @@ spec:
           tcpSocket:
             port: {{ (index .Values.lightning.ports 0).port }}
         resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
+        {{ if .Values.secretsStore.lightningSecretEnabled }}
+        volumeMounts:
+        - name: multiwoven-lightning-secrets-store
+          mountPath: /run/secrets/lightning-secrets
+          readOnly: true
+        {{ end }}
+      {{ if .Values.secretsStore.lightningSecretEnabled }}
+      volumes:
+      - name: multiwoven-lightning-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-lightning
+      {{ end }}
       restartPolicy: Always
       {{ if .Values.multiwovenConfig.privateRepo }}
       imagePullSecrets:

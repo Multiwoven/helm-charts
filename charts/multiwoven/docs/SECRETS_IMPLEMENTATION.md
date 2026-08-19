@@ -200,65 +200,68 @@ just doing all of these calls for you.
 Create one JSON secret per group, named `<env>-multiwoven/<group>` — the
 `<env>-` prefix matches the IAM policy scoped in Phase 0.3, and is required
 (not optional) whenever this account hosts more than one environment for
-this chart, which is the common case, not the exception. Use the field
-names exactly as shown — they become the `jmesPath` source paths in Phase 3.
+this chart, which is the common case, not the exception. Field names match
+the corresponding `values.yaml` key exactly (e.g. `awsAccessKeyId`, not a
+re-invented `aws_access_key_id`) — they become the `jmesPath` source paths
+in Phase 3, so this is the one place you need to spell each field, not
+three.
 
 ```bash
 ENV="dev"   # dev | qa | staging | prod — whichever this run is for
 
 aws secretsmanager create-secret --name "${ENV}-multiwoven/app" --secret-string '{
-  "aws_access_key_id": "",
-  "aws_secret_access_key": "",
-  "appsignal_push_api_key": "",
-  "box_api_key": "",
-  "code_exec_signing_secret": "",
-  "hosted_vector_db_username": "",
-  "hosted_vector_db_password": "",
-  "hubspot_api_key": "",
-  "jwt_secret": "",
-  "maxmind_license_key": "",
-  "neon_api_key": "",
-  "openrouter_api_key": "",
-  "p2w_llm_api_key": "",
-  "prometheus_metrics_username": "",
-  "prometheus_metrics_password": "",
-  "prompt_to_workflow_api_key": "",
-  "secret_key_base": "",
-  "smtp_username": "",
-  "smtp_password": "",
-  "storage_access_key": "",
-  "textract_access_key_id": "",
-  "textract_secret_access_key": ""
+  "awsAccessKeyId": "",
+  "awsSecretAccessKey": "",
+  "appsignalPushApiKey": "",
+  "boxApiKey": "",
+  "codeExecSigningSecret": "",
+  "hostedVectorDbUsername": "",
+  "hostedVectorDbPassword": "",
+  "hubspotApiKey": "",
+  "jwtSecret": "",
+  "maxmindLicenseKey": "",
+  "neonApiKey": "",
+  "openrouterApiKey": "",
+  "p2wLlmApiKey": "",
+  "prometheusMetricsUsername": "",
+  "prometheusMetricsPassword": "",
+  "promptToWorkflowApiKey": "",
+  "secretKeyBase": "",
+  "smtpUsername": "",
+  "smtpPassword": "",
+  "storageAccessKey": "",
+  "textractAccessKeyId": "",
+  "textractSecretAccessKey": ""
 }'
 
 aws secretsmanager create-secret --name "${ENV}-multiwoven/sandbox" --secret-string '{
-  "agentic_coding_build_token": "",
-  "coding_agent_model_api_key": "",
-  "modal_token_id": "",
-  "modal_token_secret": "",
-  "docker_hub_registry_username": "",
-  "docker_hub_registry_password": ""
+  "agenticCodingBuildToken": "",
+  "codingAgentModelApiKey": "",
+  "modalTokenId": "",
+  "modalTokenSecret": "",
+  "dockerHubRegistryUsername": "",
+  "dockerHubRegistryPassword": ""
 }'
 
 aws secretsmanager create-secret --name "${ENV}-multiwoven/box" --secret-string '{
-  "box_api_key": "",
-  "box_encryption_key": "",
-  "db_username": "",
-  "db_password": ""
+  "boxApiKey": "",
+  "boxEncryptionKey": "",
+  "dbUsername": "",
+  "dbPassword": ""
 }'
 
 aws secretsmanager create-secret --name "${ENV}-multiwoven/lightning" --secret-string '{
-  "babel_api_key": "",
-  "poly_api_key": "",
-  "chat_api_key": "",
-  "embedding_api_key": "",
-  "judy_api_key": "",
-  "multimodal_chat_api_key": "",
-  "pathfinder_api_key": "",
-  "seemore_api_key": "",
-  "sentinel_api_key": "",
-  "structured_extraction_api_key": "",
-  "xpert_api_key": ""
+  "babelApiKey": "",
+  "polyApiKey": "",
+  "chatApiKey": "",
+  "embeddingApiKey": "",
+  "judyApiKey": "",
+  "multimodalChatApiKey": "",
+  "pathfinderApiKey": "",
+  "seemoreApiKey": "",
+  "sentinelApiKey": "",
+  "structuredExtractionApiKey": "",
+  "xpertApiKey": ""
 }'
 ```
 

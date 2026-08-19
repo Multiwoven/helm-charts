@@ -97,6 +97,8 @@ multiwovenConfig:
   temporalPostgresSsl: false
   temporalPostgresTlsDisableHostVerification: false
   temporalPostgresUser: multiwoven
+  temporalVisibilityPostgresUser: ""
+  temporalVisibilityPostgresPassword: ""
   temporalPostgresqlVersion: "13"
   temporalRootCert: /certs/temporal.key
   temporalTaskQueue: sync-dev
@@ -265,6 +267,22 @@ secretsStore:
   TemporalVisibilityCredsSecretName: ""
   TempStoreCredsSecretName: ""
 
+  appSecretEnabled: false
+  appSecretAlias: multiwoven-app-f01dd256e712
+  AppCredsSecretName: ""
+
+  sandboxSecretEnabled: false
+  sandboxSecretAlias: multiwoven-sandbox-f01dd256e712
+  SandboxCredsSecretName: ""
+
+  boxSecretEnabled: false
+  boxSecretAlias: multiwoven-box-f01dd256e712
+  BoxCredsSecretName: ""
+
+  lightningSecretEnabled: false
+  lightningSecretAlias: multiwoven-lightning-f01dd256e712
+  LightningCredsSecretName: ""
+
 securityContext:
   readOnlyRootFilesystem: false
   allowPrivilegeEscalation: true
@@ -283,13 +301,9 @@ multipleDbHosts:
 
   temporalDbName: ""
   temporalDbHost: ""
-  temporalDbUsername: ""
-  temporalDbPassword: ""
 
   temporalVisibilityDbName: ""
   temporalVisibilityDbHost: ""
-  temporalVisibilityDbUsername: ""
-  temporalVisibilityDbPassword: ""
 
 hpa:
   enabled: true

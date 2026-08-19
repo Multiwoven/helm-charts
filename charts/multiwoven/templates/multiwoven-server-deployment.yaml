@@ -105,6 +105,28 @@ spec:
               key: TEMP_STORE_DB_PASSWORD
         {{ end }}
         {{ end }}
+        {{ if .Values.secretsStore.temporalSecretEnabled }}
+        - name: TEMPORAL_POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              key: TP_DB_USERNAME
+        - name: TEMPORAL_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              key: TP_DB_PASSWORD
+        - name: TEMPORAL_VISIBILITY_POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+              key: TPV_DB_USERNAME
+        - name: TEMPORAL_VISIBILITY_POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+              key: TPV_DB_PASSWORD
+        {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
           value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
@@ -116,6 +138,14 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.appSecretAlias }}
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.sandboxSecretAlias }}
+        {{ end }}
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
@@ -159,6 +189,16 @@ spec:
           mountPath: /run/secrets/temp-store-secrets
           readOnly: true
         {{ end }}
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - name: multiwoven-app-secrets-store
+          mountPath: /run/secrets/app-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - name: multiwoven-sandbox-secrets-store
+          mountPath: /run/secrets/sandbox-secrets
+          readOnly: true
+        {{ end }}
         {{ if not .Values.temporal.enabled }}
         - name: ssl
           mountPath: /certs
@@ -194,6 +234,22 @@ spec:
           readOnly: true
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temp-store
+      {{ end }}
+      {{ if .Values.secretsStore.appSecretEnabled }}
+      - name: multiwoven-app-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-app
+      {{ end }}
+      {{ if .Values.secretsStore.sandboxSecretEnabled }}
+      - name: multiwoven-sandbox-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-sandbox
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config
