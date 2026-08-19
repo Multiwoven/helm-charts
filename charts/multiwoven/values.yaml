@@ -231,6 +231,10 @@ nginxIngress:
   proxyReadTimeout: 300
   proxySendTimeout: 300
   proxyBuffering: "on"
+  # Adds an Ingress rule with no host, matched only when no other rule's
+  # host matches. Routes arbitrary/unknown hostnames (e.g. customer custom
+  # domains CNAMEd at this ingress) to the UI service instead of nginx's 404.
+  catchAllHost: false
 
 kongIngress:
   enabled: false

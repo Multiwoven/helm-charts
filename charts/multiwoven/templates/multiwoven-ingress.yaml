@@ -166,3 +166,14 @@ spec:
         path: /
         pathType: Prefix
 {{ end }}
+{{ if and .Values.nginxIngress.enabled .Values.nginxIngress.catchAllHost }}
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-ui'
+            port:
+              number: {{ (index .Values.multiwovenUI.ports 0).port }}
+{{ end }}
