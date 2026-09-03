@@ -16,6 +16,13 @@ data:
   AGENTIC_CODING_DEPLOYMENT_ENV: {{ .Values.sandboxConfig.agenticCodingDeploymentEnv | quote }}
   AGENTIC_CODING_DEPLOY_ROTATE_ENABLED: {{ .Values.sandboxConfig.agenticCodingDeployRotateEnabled | quote }}
   AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
+  AGENTIC_CODING_GITHUB_APP_CLIENT_ID: {{ .Values.sandboxConfig.agenticCodingGithubAppClientId | quote }}
+  AGENTIC_CODING_GITHUB_APP_CLIENT_SECRET: {{ .Values.sandboxConfig.agenticCodingGithubAppClientSecret | quote }}
+  AGENTIC_CODING_GITHUB_APP_ID: {{ .Values.sandboxConfig.agenticCodingGithubAppId | quote }}
+  AGENTIC_CODING_GITHUB_APP_SLUG: {{ .Values.sandboxConfig.agenticCodingGithubAppSlug | quote }}
+  AGENTIC_CODING_GITHUB_BOT_EMAIL: {{ .Values.sandboxConfig.agenticCodingGithubBotEmail | quote }}
+  AGENTIC_CODING_GITHUB_BOT_NAME: {{ .Values.sandboxConfig.agenticCodingGithubBotName | quote }}
+  AGENTIC_CODING_GITHUB_WEBHOOK_SECRET: {{ .Values.sandboxConfig.agenticCodingGithubWebhookSecret | quote }}
   AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
   AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
   AGENTIC_CODING_S3_REGION: {{ .Values.sandboxConfig.agenticCodingS3Region | quote }}

@@ -158,6 +158,21 @@ sandboxConfig:
   opencodeOtlpEndpoint: ""
   dockerHubRegistryUsername: ""
   dockerHubRegistryPassword: ""
+  agenticCodingGithubAppSlug: ""
+  agenticCodingGithubAppId: ""
+  agenticCodingGithubAppClientId: ""
+  agenticCodingGithubAppClientSecret: ""
+  agenticCodingGithubWebhookSecret: ""
+  agenticCodingGithubBotEmail: "appbuilder-bot@example.com"
+  agenticCodingGithubBotName: "AppBuilder Bot"
+
+  # GitHub App private key: not stored here. Create a Kubernetes Secret
+  # out-of-band with the PEM under key "private-key.pem", e.g.:
+  #   kubectl create secret generic agentic-coding-github-app-key \
+  #     --from-file=private-key.pem=./github-app.pem -n <namespace>
+  # then set the name below. The chart mounts it and points
+  # AGENTIC_CODING_GITHUB_APP_PRIVATE_KEY_PATH at it. Leave blank to omit.
+  agenticCodingGithubAppPrivateKeyPath: ""
 
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000

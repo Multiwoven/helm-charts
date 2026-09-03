@@ -133,6 +133,10 @@ spec:
         - name: DB_NAME
           value: {{ .Values.multipleDbHosts.multiwovenDBName }}
         {{ end }}
+        {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+        - name: AGENTIC_CODING_GITHUB_APP_PRIVATE_KEY_PATH
+          value: /run/secrets/github-app/private-key.pem
+        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
@@ -204,6 +208,11 @@ spec:
           mountPath: /certs
           readOnly: false
         {{ end }}
+        {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+        - name: github-app-private-key
+          mountPath: /run/secrets/github-app
+          readOnly: true
+        {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
         - name: rails-config
           mountPath: /rails
@@ -218,6 +227,11 @@ spec:
             path: ./temporal.key
           - key: temporal-root-cert
             path: ./temporal.pem
+      {{ end }}
+      {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+      - name: github-app-private-key
+        secret:
+          secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
       {{ end }}
       {{ if .Values.secretsStore.enabled }}
       - name: multiwoven-secrets-store
