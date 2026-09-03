@@ -60,3 +60,16 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Whether any secretsStore group -- existing (mw/tempStore/temporal/
+temporalVisibility) or migrated (app/sandbox/box/lightning) -- is enabled.
+The CSI driver's ability to sync a group's secret into a real Kubernetes
+Secret depends on the same cluster-wide RBAC grant regardless of which
+group triggered it, so gate that shared resource on this helper rather than
+listing every group's flag inline at each call site. When a new group is
+added, this is the one place that needs updating.
+*/}}
+{{- define "chart.secretsStoreRbacNeeded" -}}
+{{- or .Values.secretsStore.enabled .Values.secretsStore.tempStoreSecretEnabled .Values.secretsStore.temporalSecretEnabled .Values.secretsStore.appSecretEnabled .Values.secretsStore.sandboxSecretEnabled .Values.secretsStore.boxSecretEnabled .Values.secretsStore.lightningSecretEnabled }}
+{{- end }}

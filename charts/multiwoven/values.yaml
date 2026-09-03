@@ -254,6 +254,13 @@ serviceAccount:
 
 secretsStore:
   enabled: false
+  # AWS region the Secrets Manager secrets live in. Every SecretProviderClass
+  # in this chart passes this through as the AWS provider's `region`
+  # parameter -- without it, the provider falls back to guessing the region
+  # (IMDS lookup, then a hardcoded list) and fails closed with "Failed to
+  # fetch secret from all regions" the first time a pod actually tries to
+  # mount, rather than at install/lint time.
+  secretRegion: us-east-1
   mwSecretAlias: mw-f01dd256e712
   temporalSecretAlias: temporal-f01dd256e712
   temporalVisibilitySecretAlias: temporal-visibility-f01dd256e712
@@ -711,6 +718,14 @@ lightning:
 
 box:
   enabled: false
+  # Deliberately separate from the top-level serviceAccount.annotations --
+  # box-controller carries its own, more narrowly-scoped IAM role (its RBAC
+  # in box-rbac.yaml is already broader/more sensitive than the main app's,
+  # so its AWS access should be narrower, not shared with it). See
+  # docs/SECRETS.md for the box-controller-specific policy/role.
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
   rbac:
     create: true
   priorityClass:
