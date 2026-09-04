@@ -127,6 +127,7 @@ multiwovenConfig:
 
 sandboxConfig:
   agenticCodingBuildToken: ""
+  agenticCodingCreateSessionTimeout: ""
   agenticCodingDbProvider: ""
   agenticCodingDeployCpu: "1000"
   agenticCodingDeploymentEnv: "staging"

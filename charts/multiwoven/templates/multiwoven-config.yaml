@@ -9,6 +9,7 @@ metadata:
 data:
   ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
   AGENTIC_CODING_BUILD_TOKEN: {{ .Values.sandboxConfig.agenticCodingBuildToken | quote }}
+  AGENTIC_CODING_CREATE_SESSION_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingCreateSessionTimeout | quote }}
   AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
   AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
   AGENTIC_CODING_DEPLOYMENT_ENV: {{ .Values.sandboxConfig.agenticCodingDeploymentEnv | quote }}
