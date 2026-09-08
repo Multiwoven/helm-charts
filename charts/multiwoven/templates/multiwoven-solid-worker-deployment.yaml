@@ -192,6 +192,8 @@ spec:
         {{ if .Values.secretsStore.sandboxSecretEnabled }}
         - name: multiwoven-sandbox-secrets-store
           mountPath: /run/secrets/sandbox-secrets
+          readOnly: true
+        {{ end }}
         {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
         - name: github-app-private-key
           mountPath: /run/secrets/github-app
