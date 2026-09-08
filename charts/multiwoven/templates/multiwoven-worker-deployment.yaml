@@ -11,6 +11,14 @@ metadata:
     {{- with .Values.multiwovenWorker.annotations }}
       {{ toYaml . | nindent 4 }}
       {{- end }}
+    {{- $reloaderSecrets := list }}
+    {{- if .Values.secretsStore.enabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.temporalSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalSecretAlias) .Values.secretsStore.temporalVisibilitySecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
+    {{- if $reloaderSecrets }}
+    secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
+    {{- end }}
 spec:
   replicas: {{ .Values.multiwovenWorker.replicas }}
   selector:

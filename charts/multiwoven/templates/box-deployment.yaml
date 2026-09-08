@@ -16,6 +16,9 @@ metadata:
     {{- with .Values.box.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+    {{- if .Values.secretsStore.boxSecretEnabled }}
+    secret.reloader.stakater.com/reload: {{ .Values.secretsStore.boxSecretAlias | quote }}
+    {{- end }}
 spec:
   replicas: {{ .Values.box.replicas }}
   selector:

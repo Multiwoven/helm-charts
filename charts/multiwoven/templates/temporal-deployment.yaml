@@ -11,6 +11,9 @@ metadata:
     {{- with .Values.temporal.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
+    {{- if .Values.secretsStore.temporalSecretEnabled }}
+    secret.reloader.stakater.com/reload: {{ join "," (list .Values.secretsStore.temporalSecretAlias .Values.secretsStore.temporalVisibilitySecretAlias) | quote }}
+    {{- end }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
   selector:

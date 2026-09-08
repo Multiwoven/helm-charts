@@ -616,35 +616,62 @@ Repeat this whole phase per group (`app`, then `sandbox`, `box`,
       should be scrubbed of anything that looks like a real-looking default
       — but that's a separate, smaller cleanup from this migration.
 
-## Phase 7 — Rotation (do after Phases 1–6 are stable)
+## Phase 7 — Rotation
 
 This closes the gap described in SECRETS.md: rotating the value in Secrets
 Manager alone does not update already-running pods, because env vars are
 snapshotted at container start.
 
-1. [ ] Confirm with the CSI driver's operator that
-       `--enable-secret-rotation=true` is set (Phase 0) — without this nothing
-       here works, the driver simply never re-fetches after initial mount.
-2. [ ] Install [Reloader](https://github.com/stakater/Reloader) in the
-       cluster if it isn't already (`helm install reloader
-       stakater/reloader`), and confirm it can `watch`/`list` `Secret`
-       objects in the `multiwoven` namespace (check its RBAC/ClusterRole).
-3. [ ] Annotate each affected Deployment's pod template with the group's
-       synced-secret alias, e.g. on `multiwoven-server-deployment.yaml`:
-       ```yaml
-       spec:
-         template:
-           metadata:
-             annotations:
-               secret.reloader.stakater.com/reload: "{{ .Values.secretsStore.appSecretAlias }},{{ .Values.secretsStore.sandboxSecretAlias }}"
-       ```
-       (comma-separated list if a Deployment consumes more than one group's
-       secret). Do the analogous single-value annotation for
-       `box-deployment.yaml` and `lightning-deployment.yaml`.
-4. [ ] Test end-to-end in non-prod: rotate a test value directly in Secrets
-       Manager, wait for the driver's poll interval, confirm the synced
-       `Secret` updates (`kubectl get secret ... -o yaml`), then confirm
-       Reloader triggers a rolling restart of the right Deployment
-       (`kubectl rollout history deployment/<name>`).
-5. [ ] Roll the annotation change out the same incremental,
-       one-group-at-a-time way as Phases 4–6.
+**Chart-side, done.** Every Deployment that consumes a `secretsStore` group
+(`multiwoven-server-deployment.yaml`, `-worker-`, `-solid-worker-`,
+`box-deployment.yaml`, `lightning-deployment.yaml`,
+`temporal-deployment.yaml`) carries a `secret.reloader.stakater.com/reload`
+annotation, built dynamically per-group so it always matches exactly what
+that Deployment's own `secretKeyRef`/`envFrom.secretRef` blocks reference —
+e.g. `multiwoven-server-deployment.yaml`:
+
+```yaml
+metadata:
+  annotations:
+    {{- $reloaderSecrets := list }}
+    {{- if .Values.secretsStore.enabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.tempStoreSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.tempStoreSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.temporalSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalSecretAlias) .Values.secretsStore.temporalVisibilitySecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
+    {{- if $reloaderSecrets }}
+    secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
+    {{- end }}
+```
+
+Box, lightning, and temporal are single- or two-group consumers (confirmed
+by grepping each template for which `secretsStore.*SecretAlias` values it
+actually references) so their versions are a plain `{{ if }}` rather than a
+built-up list.
+
+**One thing worth getting right that's easy to get wrong:** the annotation
+goes on the **Deployment's own `metadata.annotations`**, not
+`spec.template.metadata.annotations`. Reloader watches workload resources
+(Deployment/StatefulSet/DaemonSet) and reads the annotation off the resource
+itself, not the pod template nested inside it — an earlier draft of this doc
+had it on the pod template, which would silently do nothing (no error, no
+restart, just never triggers).
+
+Cluster-level, still needed for this to actually do anything:
+
+- [ ] Confirm `--enable-secret-rotation=true` (and
+      `--rotation-poll-interval`) is set on the Secrets Store CSI driver —
+      `implement-secrets-management.sh` step 1 sets this. Without it, the
+      driver never re-fetches from Secrets Manager after initial mount, so
+      the synced Secret Reloader watches never changes in the first place.
+- [ ] Install [Reloader](https://github.com/stakater/Reloader) —
+      `implement-secrets-management.sh` step 9:
+      ```bash
+      helm repo add stakater https://stakater.github.io/stakater-charts
+      helm upgrade -i reloader stakater/reloader --namespace kube-system
+      ```
+- [ ] Test end-to-end in non-prod: rotate a test value directly in Secrets
+      Manager, wait for the driver's poll interval, confirm the synced
+      `Secret` updates (`kubectl get secret ... -o yaml`), then confirm
+      Reloader triggers a rolling restart of the right Deployment
+      (`kubectl rollout history deployment/<name>`).
