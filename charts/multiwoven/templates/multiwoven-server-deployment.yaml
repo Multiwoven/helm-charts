@@ -101,6 +101,7 @@ spec:
             secretKeyRef:
               name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_USERNAME
+        {{ end }}
         {{ if .Values.secretsStore.tempStoreDbSecretEnabled }}
         - name: TEMP_STORE_DB_USERNAME
           valueFrom:
@@ -112,7 +113,6 @@ spec:
             secretKeyRef:
               name: {{ .Values.secretsStore.tempStoreDbSecretAlias }}
               key: TEMP_STORE_DB_PASSWORD
-        {{ end }}
         {{ end }}
         {{ if .Values.secretsStore.temporalDbSecretEnabled }}
         - name: TEMPORAL_POSTGRES_USER
