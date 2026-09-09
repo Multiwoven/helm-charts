@@ -14,7 +14,6 @@ metadata:
     {{- $reloaderSecrets := list }}
     {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.tempStoreDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.tempStoreDbSecretAlias }}{{ end }}
-    {{- if .Values.secretsStore.temporalDbSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalDbSecretAlias) .Values.secretsStore.temporalVisibilityDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
     {{- if $reloaderSecrets }}
@@ -113,28 +112,6 @@ spec:
             secretKeyRef:
               name: {{ .Values.secretsStore.tempStoreDbSecretAlias }}
               key: TEMP_STORE_DB_PASSWORD
-        {{ end }}
-        {{ if .Values.secretsStore.temporalDbSecretEnabled }}
-        - name: TEMPORAL_POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
-              key: TP_DB_USERNAME
-        - name: TEMPORAL_POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
-              key: TP_DB_PASSWORD
-        - name: TEMPORAL_VISIBILITY_POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
-              key: TPV_DB_USERNAME
-        - name: TEMPORAL_VISIBILITY_POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
-              key: TPV_DB_PASSWORD
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
