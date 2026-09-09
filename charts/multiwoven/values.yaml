@@ -264,8 +264,10 @@ awsIngress:
 serviceAccount:
   create: false
   name: multiwoven-service-account
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
+  # Example:
+  #   annotations:
+  #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
+  annotations: {}
 
 secretsStore:
   # The four *DbSecret* groups below hold actual database credentials
@@ -764,8 +766,10 @@ box:
   # so its AWS access should be narrower, not shared with it). See
   # docs/SECRETS.md for the box-controller-specific policy/role.
   serviceAccount:
-    annotations:
-      eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
+    # Example:
+    #   annotations:
+    #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<box-role>
+    annotations: {}
   rbac:
     create: true
   priorityClass:
