@@ -18,16 +18,16 @@ with the AWS provider:
 
 | Group | SecretProviderClass template | Toggle | AWS secret name (values) | Synced k8s Secret name |
 |---|---|---|---|---|
-| Multiwoven app DB | `multiwoven-secret-provider-class-mw.yaml` | `secretsStore.enabled` | `secretsStore.MWCredsSecretName` | `secretsStore.mwSecretAlias` |
-| Temp store DB | `multiwoven-secret-provider-class-temp-store.yaml` | `secretsStore.tempStoreSecretEnabled` | `secretsStore.TempStoreCredsSecretName` | `secretsStore.tempStoreSecretAlias` |
-| Temporal DB | `multiwoven-secret-provider-class-temporal.yaml` | `secretsStore.temporalSecretEnabled` | `secretsStore.TemporalCredsSecretName` | `secretsStore.temporalSecretAlias` |
-| Temporal visibility DB | `multiwoven-secret-provider-class-temporal-visibility.yaml` | `secretsStore.temporalSecretEnabled` | `secretsStore.TemporalVisibilityCredsSecretName` | `secretsStore.temporalVisibilitySecretAlias` |
+| Multiwoven app DB | `multiwoven-secret-provider-class-mw.yaml` | `secretsStore.mwDbSecretEnabled` | `secretsStore.MwDbCredsSecretName` | `secretsStore.mwDbSecretAlias` |
+| Temp store DB | `multiwoven-secret-provider-class-temp-store.yaml` | `secretsStore.tempStoreDbSecretEnabled` | `secretsStore.TempStoreDbCredsSecretName` | `secretsStore.tempStoreDbSecretAlias` |
+| Temporal DB | `multiwoven-secret-provider-class-temporal.yaml` | `secretsStore.temporalDbSecretEnabled` | `secretsStore.TemporalDbCredsSecretName` | `secretsStore.temporalDbSecretAlias` |
+| Temporal visibility DB | `multiwoven-secret-provider-class-temporal-visibility.yaml` | `secretsStore.temporalDbSecretEnabled` | `secretsStore.TemporalVisibilityDbCredsSecretName` | `secretsStore.temporalVisibilityDbSecretAlias` |
 
 The shape, using the mw group as the canonical example
 ([multiwoven-secret-provider-class-mw.yaml](../templates/multiwoven-secret-provider-class-mw.yaml)):
 
 ```yaml
-{{ if .Values.secretsStore.enabled }}
+{{ if .Values.secretsStore.mwDbSecretEnabled }}
 apiVersion: secrets-store.csi.x-k8s.io/v1
 kind: SecretProviderClass
 metadata:
@@ -36,7 +36,7 @@ spec:
   provider: aws
   parameters:
     objects: |
-      - objectName: {{ required "MWCredsSecretName is required" .Values.secretsStore.MWCredsSecretName }}
+      - objectName: {{ required "MwDbCredsSecretName is required" .Values.secretsStore.MwDbCredsSecretName }}
         objectType: secretsmanager
         jmesPath:
           - path: u
@@ -44,7 +44,7 @@ spec:
           - path: p
             objectAlias: MW_DB_PASSWORD
   secretObjects:
-  - secretName: {{ .Values.secretsStore.mwSecretAlias }}
+  - secretName: {{ .Values.secretsStore.mwDbSecretAlias }}
     type: Opaque
     data:
       - objectName: MW_DB_PASSWORD
@@ -65,7 +65,7 @@ Consumption in [multiwoven-server-deployment.yaml](../templates/multiwoven-serve
 - **Volume mount** — the CSI volume must be mounted for the sync to happen at all:
   ```yaml
   volumes:
-  {{ if .Values.secretsStore.enabled }}
+  {{ if .Values.secretsStore.mwDbSecretEnabled }}
   - name: multiwoven-secrets-store
     csi:
       driver: secrets-store.csi.k8s.io
@@ -77,15 +77,15 @@ Consumption in [multiwoven-server-deployment.yaml](../templates/multiwoven-serve
   mounted at `/run/secrets/mw-secrets` in the container.
 - **Env vars** — actual consumption is via `secretKeyRef` against the synced Secret, not the mounted files:
   ```yaml
-  {{ if .Values.secretsStore.enabled }}
+  {{ if .Values.secretsStore.mwDbSecretEnabled }}
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secretsStore.mwSecretAlias }}
+        name: {{ .Values.secretsStore.mwDbSecretAlias }}
         key: MW_DB_PASSWORD
   {{ end }}
   ```
-- **Plaintext fallback** — [multiwoven-config.yaml](../templates/multiwoven-config.yaml) only puts `DB_PASSWORD`/`DB_USERNAME` in the ConfigMap `{{ if not .Values.secretsStore.enabled }}`, so community/local installs that don't have AWS Secrets Manager still work out of the box.
+- **Plaintext fallback** — [multiwoven-config.yaml](../templates/multiwoven-config.yaml) only puts `DB_PASSWORD`/`DB_USERNAME` in the ConfigMap `{{ if not .Values.secretsStore.mwDbSecretEnabled }}`, so community/local installs that don't have AWS Secrets Manager still work out of the box.
 
 ### 1.2 Pre-existing `Secret` referenced by name only
 
@@ -157,13 +157,13 @@ to a hostname, port, feature flag, or other non-secret config.
 
 **† `dbUsername`/`dbPassword`** are already fully covered — no new work
 needed for these two specifically. They're gated `{{ if not
-.Values.secretsStore.enabled }}` in
+.Values.secretsStore.mwDbSecretEnabled }}` in
 [multiwoven-config.yaml:56-59](../templates/multiwoven-config.yaml), and
 every consuming Deployment (server/worker/solid-worker) sources them via
 `secretKeyRef` against the existing `mw` group
-(`secretsStore.mwSecretAlias`) when `secretsStore.enabled` is `true`. They're
+(`secretsStore.mwDbSecretAlias`) when `secretsStore.mwDbSecretEnabled` is `true`. They're
 listed here anyway because the table is meant to show everything that's
-plaintext **by default** (`secretsStore.enabled` defaults to `false`) — same
+plaintext **by default** (`secretsStore.mwDbSecretEnabled` defaults to `false`) — same
 caveat applies to every group flag proposed in §3, so it'd be inconsistent
 to hide these two just because their flag happens to already exist.
 
@@ -173,24 +173,24 @@ the rest of the table — the existing gating on `temporalPostgresPassword`
 is actively wrong:
 
 ```yaml
-{{ if not .Values.secretsStore.enabled }}
+{{ if not .Values.secretsStore.mwDbSecretEnabled }}
 TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
 {{ end }}
 TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
 ```
 
 Two problems:
-1. It's gated on `secretsStore.enabled` (the **mw** DB flag), not
-   `secretsStore.temporalSecretEnabled` (the flag that actually governs the
+1. It's gated on `secretsStore.mwDbSecretEnabled` (the **mw** DB flag), not
+   `secretsStore.temporalDbSecretEnabled` (the flag that actually governs the
    Temporal secret group these values belong to). An operator who enables
-   `temporalSecretEnabled` without also enabling the unrelated `enabled`
+   `temporalDbSecretEnabled` without also enabling the unrelated `mwDbSecretEnabled`
    flag gets no protection here at all — the value stays plaintext despite
    them believing they'd secured it.
 2. `TEMPORAL_POSTGRES_USER` isn't gated by anything, ever.
 3. There is no `secretKeyRef` fallback for either key anywhere in this
    chart (confirmed via `grep -rn "TEMPORAL_POSTGRES" templates/`) — so
    even in the one case where the password *is* correctly omitted
-   (`secretsStore.enabled: true`), nothing replaces it. It just goes
+   (`secretsStore.mwDbSecretEnabled: true`), nothing replaces it. It just goes
    missing from the env of every pod that pulls this ConfigMap
    (server/worker/solid-worker/ui, all via `envFrom.configMapRef`).
 
@@ -306,14 +306,14 @@ fallback one.
    `temporalVisibilityPostgresPassword` instead of the `multipleDbHosts`
    fields being removed. The `secretKeyRef` half of each branch is
    **unchanged** — it already points at the existing `temporal` /
-   `temporal-visibility` groups (`temporalSecretAlias`/`TP_DB_*`,
-   `temporalVisibilitySecretAlias`/`TPV_DB_*`) and that was already correct
+   `temporal-visibility` groups (`temporalDbSecretAlias`/`TP_DB_*`,
+   `temporalVisibilityDbSecretAlias`/`TPV_DB_*`) and that was already correct
    regardless of topology (see previous version of this doc, before this
    rewrite, for confirmation this part was never broken).
 4. Fix the `multiwoven-config.yaml` ConfigMap gating for
    `TEMPORAL_POSTGRES_USER`/`TEMPORAL_POSTGRES_PASSWORD` per the ‡ bug
-   above — gate both on `secretsStore.temporalSecretEnabled` (not
-   `secretsStore.enabled`) — and add the same treatment for a new
+   above — gate both on `secretsStore.temporalDbSecretEnabled` (not
+   `secretsStore.mwDbSecretEnabled`) — and add the same treatment for a new
    `TEMPORAL_VISIBILITY_POSTGRES_USER`/`TEMPORAL_VISIBILITY_POSTGRES_PASSWORD`
    pair, same flag.
 5. Give the server/worker/solid-worker Deployments an actual `secretKeyRef`
@@ -321,16 +321,16 @@ fallback one.
    [multiwoven-server-deployment.yaml](../templates/multiwoven-server-deployment.yaml),
    just pointed at the group that already exists:
    ```yaml
-   {{ if .Values.secretsStore.temporalSecretEnabled }}
+   {{ if .Values.secretsStore.temporalDbSecretEnabled }}
    - name: TEMPORAL_POSTGRES_USER
      valueFrom:
        secretKeyRef:
-         name: {{ .Values.secretsStore.temporalSecretAlias }}
+         name: {{ .Values.secretsStore.temporalDbSecretAlias }}
          key: TP_DB_USERNAME
    - name: TEMPORAL_POSTGRES_PASSWORD
      valueFrom:
        secretKeyRef:
-         name: {{ .Values.secretsStore.temporalSecretAlias }}
+         name: {{ .Values.secretsStore.temporalDbSecretAlias }}
          key: TP_DB_PASSWORD
    {{ end }}
    ```
@@ -346,7 +346,7 @@ about hosts and names.
 **Deliberately not changed:** the single-host default path (`{{ if not
 .Values.multipleDbHosts.enabled }}`) currently falls back to *reusing* the
 `mw` credentials (`DB_USERNAME`/`DB_PASSWORD` from the shared ConfigMap) for
-Temporal's Postgres connection when `temporalSecretEnabled` is off — i.e. in
+Temporal's Postgres connection when `temporalDbSecretEnabled` is off — i.e. in
 single-host mode, Temporal is assumed to share the same Postgres
 instance/user as the main app, just a different database. Switching that to
 also use the new canonical `temporalPostgresUser`/`temporalPostgresPassword`
@@ -416,8 +416,8 @@ secretsStore:
 ```
 
 Each flag defaults to `false` so existing installs are unaffected until an
-operator opts in per group, exactly like `tempStoreSecretEnabled` /
-`temporalSecretEnabled` do today.
+operator opts in per group, exactly like `tempStoreDbSecretEnabled` /
+`temporalDbSecretEnabled` do today.
 
 ### 3.3 `SecretProviderClass` templates
 
@@ -620,7 +620,7 @@ unconditional `data:` block into the guarded block for its group.
 `temporalPostgresUser`/`temporalPostgresPassword` are **not** part of this
 `appSecretEnabled` guard, despite living in the same `multiwovenConfig`
 values block and the same `multiwoven-config.yaml` ConfigMap as the keys
-above — see §2.5 for why they get gated on `secretsStore.temporalSecretEnabled`
+above — see §2.5 for why they get gated on `secretsStore.temporalDbSecretEnabled`
 and reuse the pre-existing `temporal` group instead.
 
 ## 4. IAM

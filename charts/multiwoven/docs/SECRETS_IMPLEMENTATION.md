@@ -413,7 +413,7 @@ need a different host). See SECRETS.md §2.5 for the full rationale.
   being put to actual use for the first time, not renamed.)
 - [ ] Remove from `multipleDbHosts`: `temporalDbUsername`, `temporalDbPassword`,
       `temporalVisibilityDbUsername`, `temporalVisibilityDbPassword`. It should
-      end up holding only `enabled`, `multiwovenDBHost`, `multiwovenDBName`,
+      end up holding only `mwDbSecretEnabled`, `multiwovenDBHost`, `multiwovenDBName`,
       `temporalDbName`, `temporalDbHost`, `temporalVisibilityDbName`,
       `temporalVisibilityDbHost`.
 - [ ] **This is a breaking values.yaml rename for anyone already running
@@ -428,12 +428,12 @@ need a different host). See SECRETS.md §2.5 for the full rationale.
       the chart version, or that environment silently falls back to an empty
       password on upgrade.
 - [ ] In `multiwoven-config.yaml`, fix the existing gating (currently
-      `secretsStore.enabled`, wrong flag — see SECRETS.md §2.1's ‡ note) and
+      `secretsStore.mwDbSecretEnabled`, wrong flag — see SECRETS.md §2.1's ‡ note) and
       add the new visibility pair, all four gated on the same flag that
       already governs both the `temporal` and `temporal-visibility`
       SecretProviderClasses:
   ```yaml
-  {{ if not .Values.secretsStore.temporalSecretEnabled }}
+  {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
   TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
   TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
   TEMPORAL_VISIBILITY_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalVisibilityPostgresUser | quote }}
@@ -442,31 +442,31 @@ need a different host). See SECRETS.md §2.5 for the full rationale.
   ```
 - [ ] In `multiwoven-server-deployment.yaml`, `multiwoven-worker-deployment.yaml`,
       and `multiwoven-solid-worker-deployment.yaml`, extend the existing
-      `{{ if .Values.secretsStore.enabled }}` env block (the one already
+      `{{ if .Values.secretsStore.mwDbSecretEnabled }}` env block (the one already
       providing `DB_PASSWORD`/`DB_USERNAME` from the `mw` group) with a
       sibling block reusing the `temporal` group — same secret, same keys
       Temporal's own deployment already reads:
   ```yaml
-  {{ if .Values.secretsStore.temporalSecretEnabled }}
+  {{ if .Values.secretsStore.temporalDbSecretEnabled }}
   - name: TEMPORAL_POSTGRES_USER
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secretsStore.temporalSecretAlias }}
+        name: {{ .Values.secretsStore.temporalDbSecretAlias }}
         key: TP_DB_USERNAME
   - name: TEMPORAL_POSTGRES_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secretsStore.temporalSecretAlias }}
+        name: {{ .Values.secretsStore.temporalDbSecretAlias }}
         key: TP_DB_PASSWORD
   - name: TEMPORAL_VISIBILITY_POSTGRES_USER
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+        name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
         key: TPV_DB_USERNAME
   - name: TEMPORAL_VISIBILITY_POSTGRES_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+        name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
         key: TPV_DB_PASSWORD
   {{ end }}
   ```
@@ -474,7 +474,7 @@ need a different host). See SECRETS.md §2.5 for the full rationale.
   Deployments don't need the CSI sync side-effect themselves, they just read
   the Secret that Temporal's own Deployment already triggers a sync for.
   That does mean the Temporal Deployment must be deployed/synced at least
-  once with `temporalSecretEnabled: true` before these three start relying
+  once with `temporalDbSecretEnabled: true` before these three start relying
   on the Secret existing — sequence matters on first rollout, not on
   steady-state.
 - [ ] In `temporal-deployment.yaml`, update the `multipleDbHosts.enabled`
@@ -634,9 +634,9 @@ e.g. `multiwoven-server-deployment.yaml`:
 metadata:
   annotations:
     {{- $reloaderSecrets := list }}
-    {{- if .Values.secretsStore.enabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwSecretAlias }}{{ end }}
-    {{- if .Values.secretsStore.tempStoreSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.tempStoreSecretAlias }}{{ end }}
-    {{- if .Values.secretsStore.temporalSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalSecretAlias) .Values.secretsStore.temporalVisibilitySecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.tempStoreDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.tempStoreDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.temporalDbSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalDbSecretAlias) .Values.secretsStore.temporalVisibilityDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
     {{- if $reloaderSecrets }}

@@ -12,8 +12,8 @@ metadata:
     {{ toYaml . | nindent 4 }}
     {{- end }}
     {{- $reloaderSecrets := list }}
-    {{- if .Values.secretsStore.enabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwSecretAlias }}{{ end }}
-    {{- if .Values.secretsStore.temporalSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalSecretAlias) .Values.secretsStore.temporalVisibilitySecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.temporalDbSecretEnabled }}{{ $reloaderSecrets = append (append $reloaderSecrets .Values.secretsStore.temporalDbSecretAlias) .Values.secretsStore.temporalVisibilityDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
     {{- if $reloaderSecrets }}
@@ -94,38 +94,38 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
           value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_USERNAME
         {{ end }}
-        {{ if .Values.secretsStore.temporalSecretEnabled }}
+        {{ if .Values.secretsStore.temporalDbSecretEnabled }}
         - name: TEMPORAL_POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
               key: TP_DB_USERNAME
         - name: TEMPORAL_POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
               key: TP_DB_PASSWORD
         - name: TEMPORAL_VISIBILITY_POSTGRES_USER
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+              name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
               key: TPV_DB_USERNAME
         - name: TEMPORAL_VISIBILITY_POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+              name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
               key: TPV_DB_PASSWORD
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
@@ -187,7 +187,7 @@ spec:
           mountPath: /certs
           readOnly: false
         {{ end }}
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: multiwoven-secrets-store
           mountPath: /run/secrets/store
           readOnly: true
@@ -227,7 +227,7 @@ spec:
         secret:
           secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
       {{ end }}
-      {{ if .Values.secretsStore.enabled }}
+      {{ if .Values.secretsStore.mwDbSecretEnabled }}
       - name: multiwoven-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io

@@ -268,7 +268,12 @@ serviceAccount:
     eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/example-role
 
 secretsStore:
-  enabled: false
+  # The four *DbSecret* groups below hold actual database credentials
+  # (username/password pairs); the "Db" in every field name here is
+  # deliberate, to visually separate them from the general-purpose secret
+  # bundles further down (app/sandbox/box/lightning), which are not
+  # necessarily database credentials at all.
+  mwDbSecretEnabled: false
   # AWS region the Secrets Manager secrets live in. Every SecretProviderClass
   # in this chart passes this through as the AWS provider's `region`
   # parameter -- without it, the provider falls back to guessing the region
@@ -276,19 +281,39 @@ secretsStore:
   # fetch secret from all regions" the first time a pod actually tries to
   # mount, rather than at install/lint time.
   secretRegion: us-east-1
-  mwSecretAlias: mw-f01dd256e712
-  temporalSecretAlias: temporal-f01dd256e712
-  temporalVisibilitySecretAlias: temporal-visibility-f01dd256e712
-  tempStoreSecretAlias: temp-store-f01dd256e712
+  mwDbSecretAlias: mw-f01dd256e712
+  temporalDbSecretAlias: temporal-f01dd256e712
+  temporalVisibilityDbSecretAlias: temporal-visibility-f01dd256e712
+  tempStoreDbSecretAlias: temp-store-f01dd256e712
 
-  tempStoreSecretEnabled: false
-  temporalSecretEnabled: false
+  tempStoreDbSecretEnabled: false
+  # Shared by both the temporal and temporal-visibility DB groups -- see
+  # SECRETS.md for why they're not split into two flags.
+  temporalDbSecretEnabled: false
 
-  MWCredsSecretName: ""
-  TemporalCredsSecretName: ""
-  TemporalVisibilityCredsSecretName: ""
-  TempStoreCredsSecretName: ""
+  # Edge Case:
+  # These name AWS Secrets Manager secrets that already exist. The chart
+  # only mounts them; it never creates or owns their contents. This is
+  # useful in two situations, which often show up together:
+  #   1. Your database infrastructure requires each service to live on a
+  #      separate host (some managed Postgres offerings, for example, only
+  #      allow one database per instance) -- see multipleDbHosts below for
+  #      the host-splitting side of that.
+  #   2. Your database credentials are provisioned by a separate team or
+  #      process, so there's no raw username/password for the chart to
+  #      take in the first place -- only a reference to a secret someone
+  #      else already created.
+  # Situation 2 is why this is "provide a secret name" rather than
+  # "provide a username/password", and it applies just as well with the
+  # default single-db-host topology -- these four fields aren't specific
+  # to multipleDbHosts. 
+  MwDbCredsSecretName: ""
+  TemporalDbCredsSecretName: ""
+  TemporalVisibilityDbCredsSecretName: ""
+  TempStoreDbCredsSecretName: ""
 
+  # Everything below is a general-purpose secret bundle, not specifically
+  # database credentials -- no "Db" in these names, on purpose.
   appSecretEnabled: false
   appSecretAlias: multiwoven-app-f01dd256e712
   AppCredsSecretName: ""

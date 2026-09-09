@@ -11,8 +11,8 @@ metadata:
     {{- with .Values.temporal.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
-    {{- if .Values.secretsStore.temporalSecretEnabled }}
-    secret.reloader.stakater.com/reload: {{ join "," (list .Values.secretsStore.temporalSecretAlias .Values.secretsStore.temporalVisibilitySecretAlias) | quote }}
+    {{- if .Values.secretsStore.temporalDbSecretEnabled }}
+    secret.reloader.stakater.com/reload: {{ join "," (list .Values.secretsStore.temporalDbSecretAlias .Values.secretsStore.temporalVisibilityDbSecretAlias) | quote }}
     {{- end }}
 spec:
   replicas: {{ .Values.temporal.replicas }}
@@ -66,38 +66,17 @@ spec:
       {{ end }}
       containers:
       - env:
-        {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
-        - name: POSTGRES_TLS_ENABLED
-          value: "true"
-        {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
-        - name: POSTGRES_TLS_DISABLE_HOST_VERIFICATION
-          value: "true"
-        {{ end }}
-        {{ end }}
-        - name: DB
-          value: {{ quote .Values.temporal.temporal.env.db }}
-        {{ if .Values.multiwovenConfig.skipDbMigration }}
-        - name: SKIP_DB_CREATE
-          value: "true"
-        - name: SKIP_SCHEMA_SETUP
-          value: "true"
-        {{ end }}
         {{ if not .Values.multipleDbHosts.enabled }}
-        - name: DB_PORT
-          valueFrom:
-            configMapKeyRef:
-              key: DB_PORT
-              name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_PWD
           valueFrom:
-            {{ if not .Values.secretsStore.temporalSecretEnabled }}
+            {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
             configMapKeyRef:
               key: DB_PASSWORD
               name: {{ include "chart.fullname" . }}-config
             {{ end }}
-            {{ if .Values.secretsStore.temporalSecretEnabled}}
+            {{ if .Values.secretsStore.temporalDbSecretEnabled}}
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
               key: TP_DB_PASSWORD
             {{ end }}
         - name: POSTGRES_SEEDS
@@ -107,83 +86,64 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: POSTGRES_USER
           valueFrom:
-            {{ if not .Values.secretsStore.temporalSecretEnabled }}
+            {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
             configMapKeyRef:
               key: DB_USERNAME
               name: {{ include "chart.fullname" . }}-config
             {{ end }}
-            {{ if .Values.secretsStore.temporalSecretEnabled}}
+            {{ if .Values.secretsStore.temporalDbSecretEnabled}}
             secretKeyRef:
-              name: {{ .Values.secretsStore.temporalSecretAlias }}
+              name: {{ .Values.secretsStore.temporalDbSecretAlias }}
               key: TP_DB_USERNAME
             {{ end }}
         {{ end }}
         {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
-        - name: TEMPORAL_TLS_REQUIRE_CLIENT_AUTH
-          value: 'true'
-        - name: SQL_TLS
-          value: 'true'
-        - name: SQL_TLS_ENABLED
-          value: 'true'
-        {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
-        - name: SQL_TLS_DISABLE_HOST_VERIFICATION
-          value: 'true'
-        - name: SQL_HOST_VERIFICATION
-          value: 'false'
-        {{ end }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
-        - name: TEMPORAL_DB_PLUGIN
-          value: {{ .Values.temporal.temporal.env.db | quote }}
-        - name: TEMPORAL_DEFAULT_DB_NAME
-          value: {{ .Values.multipleDbHosts.temporalDbName }}
-        - name: TEMPORAL_DEFAULT_CONNECT_ADDR
-          value: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
         - name: TEMPORAL_DEFAULT_USER
-          {{ if not .Values.secretsStore.temporalSecretEnabled }}
+          {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
           value: {{ .Values.multiwovenConfig.temporalPostgresUser }}
           {{ end }}
-          {{ if .Values.secretsStore.temporalSecretEnabled }}
+          {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.temporalSecretAlias }}
+                name: {{ .Values.secretsStore.temporalDbSecretAlias }}
                 key: TP_DB_USERNAME
           {{end }}
         - name: TEMPORAL_DEFAULT_PASSWORD
-          {{ if not .Values.secretsStore.temporalSecretEnabled }}
+          {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
           value: {{ .Values.multiwovenConfig.temporalPostgresPassword }}
           {{ end }}
-          {{ if .Values.secretsStore.temporalSecretEnabled }}
+          {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.temporalSecretAlias }}
+                name: {{ .Values.secretsStore.temporalDbSecretAlias }}
                 key: TP_DB_PASSWORD
           {{end }}
-        - name: TEMPORAL_VISIBILITY_DB_NAME
-          value: {{ .Values.multipleDbHosts.temporalVisibilityDbName }}
-        - name: TEMPORAL_VISIBILITY_CONNECT_ADDR
-          value: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
         - name: TEMPORAL_VISIBILITY_USER
-          {{ if .Values.secretsStore.temporalSecretEnabled }}
+          {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+                name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
                 key: TPV_DB_USERNAME
           {{ else }}
           value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresUser }}
           {{end }}
         - name: TEMPORAL_VISIBILITY_PASSWORD
-          {{ if .Values.secretsStore.temporalSecretEnabled }}
+          {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
             secretKeyRef:
-                name: {{ .Values.secretsStore.temporalVisibilitySecretAlias }}
+                name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
                 key: TPV_DB_PASSWORD
           {{ else }}
           value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresPassword }}
           {{end }}
         {{ end }}
+        envFrom:
+        - configMapRef:
+            name: {{ include "chart.fullname" . }}-temporal-config
         image: {{ .Values.temporal.temporal.image.repository }}:{{ .Values.temporal.temporal.image.tag | default "latest" }}
         # command: ["sleep", "3600"] # Prevent the container from crashing
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
@@ -205,7 +165,7 @@ spec:
         - containerPort: 7233
         resources: {{- toYaml .Values.temporal.temporal.resources | nindent 10 }}
         volumeMounts:
-        {{ if .Values.secretsStore.temporalSecretEnabled }}
+        {{ if .Values.secretsStore.temporalDbSecretEnabled }}
         - name: temporal-secrets-store
           mountPath: /run/secrets/temporal-secrets
           readOnly: true
@@ -223,7 +183,7 @@ spec:
           subPath: config_template.yaml
         {{ end }}
       volumes:
-      {{ if .Values.secretsStore.temporalSecretEnabled }}
+      {{ if .Values.secretsStore.temporalDbSecretEnabled }}
       - name: temporal-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
@@ -252,4 +212,3 @@ spec:
         - name: {{ .Values.multiwovenConfig.registrySecretName }}
       {{ end }}
 {{ end }}
-
