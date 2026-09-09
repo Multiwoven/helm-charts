@@ -71,5 +71,9 @@ listing every group's flag inline at each call site. When a new group is
 added, this is the one place that needs updating.
 */}}
 {{- define "chart.secretsStoreRbacNeeded" -}}
-{{- or .Values.secretsStore.mwDbSecretEnabled .Values.secretsStore.tempStoreDbSecretEnabled .Values.secretsStore.temporalDbSecretEnabled .Values.secretsStore.appSecretEnabled .Values.secretsStore.sandboxSecretEnabled .Values.secretsStore.boxSecretEnabled .Values.secretsStore.lightningSecretEnabled }}
+{{- if or .Values.secretsStore.mwDbSecretEnabled .Values.secretsStore.tempStoreDbSecretEnabled .Values.secretsStore.temporalDbSecretEnabled .Values.secretsStore.appSecretEnabled .Values.secretsStore.sandboxSecretEnabled .Values.secretsStore.boxSecretEnabled .Values.secretsStore.lightningSecretEnabled -}}
+true
+{{- else -}}
+false
+{{- end }}
 {{- end }}
