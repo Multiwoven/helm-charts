@@ -306,7 +306,7 @@ secretsStore:
   # Situation 2 is why this is "provide a secret name" rather than
   # "provide a username/password", and it applies just as well with the
   # default single-db-host topology -- these four fields aren't specific
-  # to multipleDbHosts. 
+  # to multipleDbHosts.
   MwDbCredsSecretName: ""
   TemporalDbCredsSecretName: ""
   TemporalVisibilityDbCredsSecretName: ""
