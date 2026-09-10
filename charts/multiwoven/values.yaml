@@ -51,6 +51,8 @@ multiwovenConfig:
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   openrouterApiKey: ""
+  openAiExcludeModels: ""
+  anthropicExcludeModels: ""
   privateRepo: false
   p2wLlmProvider: ""
   p2wLlmApiKey: ""

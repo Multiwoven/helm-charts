@@ -86,7 +86,9 @@ data:
   NEON_DEFAULT_REGION: {{ .Values.multiwovenConfig.neonDefaultRegion | quote }}
   NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
   OPENCODE_OTLP_ENDPOINT: {{ .Values.sandboxConfig.opencodeOtlpEndpoint | quote }}
+  OPEN_AI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.openAiExcludeModels | quote }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
+  ANTHROPIC_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.anthropicExcludeModels | quote }}
   P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
   P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}
   P2W_LLM_MODEL: {{ .Values.multiwovenConfig.p2wLlmModel | quote }}
