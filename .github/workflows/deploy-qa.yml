@@ -24,8 +24,14 @@ env:
   ARGOCD_SERVER_HOST: argocd-staging.squared.ai
 
 concurrency:
-  group: qa-deploy-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  # One shared group across every PR, not per-PR: ARGOCD_APP is a single
+  # shared resource, so two PRs' runs (e.g. PR A's restore and PR B's
+  # publish/deploy) must never execute concurrently against it -- that
+  # race is exactly how PR A's restore can reset the app to main right
+  # after PR B pointed it at its own branch. cancel-in-progress: false so
+  # a queued run waits its turn instead of two runs interleaving.
+  group: qa-deploy
+  cancel-in-progress: false
 
 jobs:
   publish_pr_chart:
