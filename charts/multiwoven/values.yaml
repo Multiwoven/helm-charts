@@ -262,6 +262,12 @@ awsIngress:
   acmCertificateArn: ""
   albScheme: internet-facing
   sslPolicy: ELBSecurityPolicy-2016-08
+  groupName: ""
+  # Anything not already modeled above goes here as raw ALB annotations, e.g.:
+  # extraAnnotations:
+  #   alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
+  #   alb.ingress.kubernetes.io/ssl-redirect: '443'
+  extraAnnotations: {}
 
 serviceAccount:
   create: false
