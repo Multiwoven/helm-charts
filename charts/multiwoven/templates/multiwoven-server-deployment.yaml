@@ -11,6 +11,14 @@ metadata:
     {{- with .Values.multiwovenServer.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
+    {{- $reloaderSecrets := list }}
+    {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.tempStoreDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.tempStoreDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
+    {{- if $reloaderSecrets }}
+    secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
+    {{- end }}
 spec:
   replicas: {{ .Values.multiwovenServer.replicas }}
   selector:
@@ -29,7 +37,7 @@ spec:
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenServer.podSecurityContext.fsGroup }}
@@ -81,29 +89,29 @@ spec:
       {{ end }}
       containers:
       - env:
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_USERNAME
-        {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+        {{ end }}
+        {{ if .Values.secretsStore.tempStoreDbSecretEnabled }}
         - name: TEMP_STORE_DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.tempStoreSecretAlias }}
+              name: {{ .Values.secretsStore.tempStoreDbSecretAlias }}
               key: TEMP_STORE_DB_USERNAME
         - name: TEMP_STORE_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.tempStoreSecretAlias }}
+              name: {{ .Values.secretsStore.tempStoreDbSecretAlias }}
               key: TEMP_STORE_DB_PASSWORD
-        {{ end }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
@@ -120,6 +128,14 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.appSecretAlias }}
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.sandboxSecretAlias }}
+        {{ end }}
         image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
@@ -153,14 +169,24 @@ spec:
         resources: {{- toYaml .Values.multiwovenServer.multiwovenServer.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: multiwoven-secrets-store
           mountPath: /run/secrets/mw-secrets
           readOnly: true
         {{ end }}
-        {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+        {{ if .Values.secretsStore.tempStoreDbSecretEnabled }}
         - name: temp-store-secrets-store
           mountPath: /run/secrets/temp-store-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - name: multiwoven-app-secrets-store
+          mountPath: /run/secrets/app-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - name: multiwoven-sandbox-secrets-store
+          mountPath: /run/secrets/sandbox-secrets
           readOnly: true
         {{ end }}
         {{ if not .Values.temporal.enabled }}
@@ -193,7 +219,7 @@ spec:
         secret:
           secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
       {{ end }}
-      {{ if .Values.secretsStore.enabled }}
+      {{ if .Values.secretsStore.mwDbSecretEnabled }}
       - name: multiwoven-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
@@ -201,13 +227,29 @@ spec:
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-mw
       {{ end }}
-      {{ if .Values.secretsStore.tempStoreSecretEnabled }}
+      {{ if .Values.secretsStore.tempStoreDbSecretEnabled }}
       - name: temp-store-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temp-store
+      {{ end }}
+      {{ if .Values.secretsStore.appSecretEnabled }}
+      - name: multiwoven-app-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-app
+      {{ end }}
+      {{ if .Values.secretsStore.sandboxSecretEnabled }}
+      - name: multiwoven-sandbox-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-sandbox
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config
