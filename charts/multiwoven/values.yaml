@@ -300,7 +300,7 @@ secretsStore:
   mwDbSecretEnabled: false
   mwDbSecretAlias: mw-f01dd256e712
   mwDbCredsSecretName: ""
-  
+
   # Temporal DBs
   temporalDbSecretEnabled: false
   temporalDbSecretAlias: temporal-f01dd256e712
