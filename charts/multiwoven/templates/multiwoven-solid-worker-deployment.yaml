@@ -11,6 +11,13 @@ metadata:
     {{- with .Values.multiwovenSolidWorker.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
+    {{- $reloaderSecrets := list }}
+    {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
+    {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
+    {{- if $reloaderSecrets }}
+    secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
+    {{- end }}
 spec:
   replicas: {{ .Values.multiwovenSolidWorker.replicas }}
   selector:
@@ -29,7 +36,7 @@ spec:
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ .Values.serviceAccount.create | ternary .Values.serviceAccount.name "default" }}
+      serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.multiwovenSolidWorker.podSecurityContext.fsGroup }}
@@ -86,16 +93,16 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
           value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_PASSWORD
         - name: DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.secretsStore.mwSecretAlias }}
+              name: {{ .Values.secretsStore.mwDbSecretAlias }}
               key: MW_DB_USERNAME
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
@@ -111,6 +118,14 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.appSecretAlias }}
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - secretRef:
+            name: {{ .Values.secretsStore.sandboxSecretAlias }}
+        {{ end }}
         image: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.repository }}:{{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
@@ -149,9 +164,19 @@ spec:
           mountPath: /certs
           readOnly: false
         {{ end }}
-        {{ if .Values.secretsStore.enabled }}
+        {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: multiwoven-secrets-store
           mountPath: /run/secrets/store
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.appSecretEnabled }}
+        - name: multiwoven-app-secrets-store
+          mountPath: /run/secrets/app-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.secretsStore.sandboxSecretEnabled }}
+        - name: multiwoven-sandbox-secrets-store
+          mountPath: /run/secrets/sandbox-secrets
           readOnly: true
         {{ end }}
         {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
@@ -179,13 +204,29 @@ spec:
         secret:
           secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
       {{ end }}
-      {{ if .Values.secretsStore.enabled }}
+      {{ if .Values.secretsStore.mwDbSecretEnabled }}
       - name: multiwoven-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
           volumeAttributes:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-mw
+      {{ end }}
+      {{ if .Values.secretsStore.appSecretEnabled }}
+      - name: multiwoven-app-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-app
+      {{ end }}
+      {{ if .Values.secretsStore.sandboxSecretEnabled }}
+      - name: multiwoven-sandbox-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-sandbox
       {{ end }}
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: rails-config
