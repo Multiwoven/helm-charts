@@ -111,6 +111,8 @@ data:
   {{ if not .Values.secretsStore.appSecretEnabled }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   {{ end }}
+  OPENAI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.openaiExcludeModels | quote }}
+  ANTHROPIC_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.anthropicExcludeModels | quote }}
   P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
   P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}
