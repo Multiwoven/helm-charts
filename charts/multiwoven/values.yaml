@@ -318,28 +318,28 @@ secretsStore:
   # "provide a username/password", and it applies just as well with the
   # default single-db-host topology -- these four fields aren't specific
   # to multipleDbHosts.
-  MwDbCredsSecretName: ""
-  TemporalDbCredsSecretName: ""
-  TemporalVisibilityDbCredsSecretName: ""
-  TempStoreDbCredsSecretName: ""
+  mwDbCredsSecretName: ""
+  temporalDbCredsSecretName: ""
+  temporalVisibilityDbCredsSecretName: ""
+  tempStoreDbCredsSecretName: ""
 
   # Everything below is a general-purpose secret bundle, not specifically
   # database credentials -- no "Db" in these names, on purpose.
   appSecretEnabled: false
   appSecretAlias: multiwoven-app-f01dd256e712
-  AppCredsSecretName: ""
+  appCredsSecretName: ""
 
   sandboxSecretEnabled: false
   sandboxSecretAlias: multiwoven-sandbox-f01dd256e712
-  SandboxCredsSecretName: ""
+  sandboxCredsSecretName: ""
 
   boxSecretEnabled: false
   boxSecretAlias: multiwoven-box-f01dd256e712
-  BoxCredsSecretName: ""
+  boxCredsSecretName: ""
 
   lightningSecretEnabled: false
   lightningSecretAlias: multiwoven-lightning-f01dd256e712
-  LightningCredsSecretName: ""
+  lightningCredsSecretName: ""
 
 securityContext:
   readOnlyRootFilesystem: false
