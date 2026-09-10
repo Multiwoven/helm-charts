@@ -288,9 +288,10 @@ secretsStore:
   temporalVisibilityDbSecretAlias: temporal-visibility-f01dd256e712
   tempStoreDbSecretAlias: temp-store-f01dd256e712
 
+  # Temp store db credentials DB
   tempStoreDbSecretEnabled: false
-  # Shared by both the temporal and temporal-visibility DB groups -- see
-  # SECRETS.md for why they're not split into two flags.
+
+  # Shared by both the temporal and temporal-visibility DB groups
   temporalDbSecretEnabled: false
 
   # Edge Case:
