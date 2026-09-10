@@ -1,0 +1,169 @@
+# Renews the *.app.squared.ai wildcard cert and writes it into the
+# appbuilder-wildcard-tls secret that the appbuilder ingress serves.
+#
+# Applied separately from the Helm chart:
+#   kubectl apply -f manifests/appbuilder-cert-rotation.yaml
+#
+# Why this exists instead of a cert-manager Certificate: a wildcard requires an
+# ACME DNS-01 challenge, and the chart's letsencrypt-prod / letsencrypt-staging
+# Issuers are http01-only. That is also why appbuilder-wildcard-tls has never
+# auto-renewed the way mw-tls-cert does.
+#
+# BEFORE APPLYING, set:
+#   - the IRSA role ARN on the ServiceAccount below
+#   - storageClassName on the PVC (or delete the field to use the cluster default)
+#   - the --email value if admin@multiwoven.com is not right
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: appbuilder-cert-rotation
+  namespace: multiwoven
+  annotations:
+    # IRSA role needs, on the app.squared.ai hosted zone:
+    #   route53:ListHostedZones, route53:GetChange, route53:ChangeResourceRecordSets
+    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_ID:role/appbuilder-cert-rotation"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: appbuilder-cert-rotation
+  namespace: multiwoven
+rules:
+  # `create` cannot be restricted by resourceNames, so it is scoped by the Role's
+  # namespace alone; every other verb is pinned to the one secret we rotate.
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["appbuilder-wildcard-tls"]
+    verbs: ["get", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: appbuilder-cert-rotation
+  namespace: multiwoven
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: appbuilder-cert-rotation
+subjects:
+  - kind: ServiceAccount
+    name: appbuilder-cert-rotation
+    namespace: multiwoven
+---
+# certbot keeps the ACME account key, the cert lineage and the renewal config under
+# /etc/letsencrypt. Without a volume every run would register a fresh ACME account
+# and re-issue from scratch, burning Let's Encrypt rate limits.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: appbuilder-cert-rotation
+  namespace: multiwoven
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp3
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: appbuilder-cert-rotation
+  namespace: multiwoven
+spec:
+  # Cron cannot express "every 80 days" — the day-of-month field is 1-31, so `*/80`
+  # silently collapses to the 1st of each month. Instead this runs weekly and
+  # --keep-until-expiring makes it a no-op until the cert enters its renewal window
+  # (default 30 days out, i.e. ~day 60 of 90). Weekly runs also mean a failed
+  # renewal — DNS blip, ACME outage — still has ~8 retries before actual expiry.
+  schedule: "0 3 * * 0"
+  timeZone: "Etc/UTC"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 3600
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: appbuilder-cert-rotation
+          # certbot writes privkey.pem as 0600 root:root, so the publish step has to
+          # run as root too — fsGroup cannot grant read on an owner-only file.
+          securityContext:
+            runAsUser: 0
+          volumes:
+            - name: letsencrypt
+              persistentVolumeClaim:
+                claimName: appbuilder-cert-rotation
+          initContainers:
+            # Renew, or on the very first run issue, the wildcard into the volume.
+            # `certonly --keep-until-expiring` covers both cases in one command and
+            # exits 0 when there is nothing to do.
+            - name: certbot
+              image: certbot/dns-route53:v3.1.0
+              imagePullPolicy: IfNotPresent
+              args:
+                - certonly
+                - --non-interactive
+                - --agree-tos
+                - --keep-until-expiring
+                - --email=admin@multiwoven.com
+                - --server=https://acme-v02.api.letsencrypt.org/directory
+                # Pins the lineage directory so the publish step has a stable path;
+                # without it a re-issue can land in `app.squared.ai-0001`.
+                - --cert-name=app.squared.ai
+                - --dns-route53
+                - --dns-route53-propagation-seconds=60
+                - -d
+                - "*.app.squared.ai"
+              env:
+                - name: AWS_REGION
+                  value: "us-east-1"
+              volumeMounts:
+                - name: letsencrypt
+                  mountPath: /etc/letsencrypt
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 128Mi
+                limits:
+                  memory: 256Mi
+          containers:
+            # Always republish, even when certbot no-op'd: `create --dry-run | apply`
+            # is idempotent, so a run that changes nothing costs nothing, and a secret
+            # that drifted from the volume gets repaired.
+            - name: publish
+              image: registry.k8s.io/kubectl:v1.31.0
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  LIVE=/etc/letsencrypt/live/app.squared.ai
+                  # fullchain.pem, not cert.pem — cert.pem omits the intermediate and
+                  # clients that do not chase AIA will fail validation.
+                  kubectl create secret tls appbuilder-wildcard-tls \
+                    --namespace multiwoven \
+                    --cert="$LIVE/fullchain.pem" \
+                    --key="$LIVE/privkey.pem" \
+                    --dry-run=client -o yaml | kubectl apply -f -
+                  echo "published appbuilder-wildcard-tls:"
+                  openssl x509 -in "$LIVE/fullchain.pem" -noout -subject -dates
+              volumeMounts:
+                - name: letsencrypt
+                  mountPath: /etc/letsencrypt
+                  readOnly: true
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 64Mi
+                limits:
+                  memory: 128Mi
