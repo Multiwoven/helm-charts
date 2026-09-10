@@ -1,4 +1,3 @@
-{{ if .Values.multipleDbHosts.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -7,6 +6,36 @@ metadata:
   labels:
   {{- include "chart.labels" . | nindent 4 }}
 data:
+  DB: {{ quote .Values.temporal.temporal.env.db }}
+  {{ if .Values.multiwovenConfig.skipDbMigration }}
+  SKIP_DB_CREATE: "true"
+  SKIP_SCHEMA_SETUP: "true"
+  {{ end }}
+  {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
+  POSTGRES_TLS_ENABLED: "true"
+  {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
+  POSTGRES_TLS_DISABLE_HOST_VERIFICATION: "true"
+  {{ end }}
+  TEMPORAL_TLS_REQUIRE_CLIENT_AUTH: "true"
+  SQL_TLS: "true"
+  SQL_TLS_ENABLED: "true"
+  {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
+  SQL_TLS_DISABLE_HOST_VERIFICATION: "true"
+  SQL_HOST_VERIFICATION: "false"
+  {{ end }}
+  {{ end }}
+  {{ if .Values.multipleDbHosts.enabled }}
+  TEMPORAL_DB_PLUGIN: {{ .Values.temporal.temporal.env.db | quote }}
+  TEMPORAL_DEFAULT_DB_NAME: {{ .Values.multipleDbHosts.temporalDbName }}
+  TEMPORAL_DEFAULT_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
+  TEMPORAL_VISIBILITY_DB_NAME: {{ .Values.multipleDbHosts.temporalVisibilityDbName }}
+  TEMPORAL_VISIBILITY_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
+  {{ end }}
+  # config_template.yaml is not envFrom-safe (its key contains a dot, so
+  # Kubernetes silently skips it as an env var name -- harmlessly, since
+  # it's only ever consumed via the volume mount by subPath in
+  # temporal-deployment.yaml, never as an env var).
+  {{ if .Values.multipleDbHosts.enabled }}
   config_template.yaml: |-
     log:
       stdout: true
@@ -159,4 +188,4 @@ data:
     dynamicConfigClient:
       filepath: "/etc/temporal/config/dynamicconfig/docker.yaml"
       pollInterval: "60s"
-{{ end }}
+  {{ end }}

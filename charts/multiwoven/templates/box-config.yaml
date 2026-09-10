@@ -5,8 +5,10 @@
 # - Storage class and snapshot class for PVC/snapshot operations
 # - Default resource limits (CPU, memory, timeout) for sandbox pods
 # - Database connection details
-# NOTE: Sensitive values (API keys, DB credentials) are stored here temporarily.
-#       A secret management solution (e.g. secrets-store CSI) should be wired in later.
+# NOTE: API keys and DB credentials are gated behind secretsStore.boxSecretEnabled
+#       and sourced from the box secret group's synced Secret when enabled (see
+#       multiwoven-secret-provider-class-box.yaml and box-deployment.yaml). The
+#       plaintext values below remain the fallback for installs without Secrets Manager.
 # Enabled via box.enabled. Disabled by default.
 {{- if .Values.box.enabled }}
 {{- $sandboxPriorityClassName := default .Values.box.priorityClass.name .Values.boxConfig.boxSandboxPriorityClassName }}
@@ -51,12 +53,16 @@ data:
   BOX_DEFAULT_IDLE_TIMEOUT: {{ .Values.boxConfig.boxDefaultIdleTimeout | quote }}
   BOX_REAPER_INTERVAL: {{ .Values.boxConfig.boxReaperInterval | quote }}
   BOX_LOG_LEVEL: {{ .Values.boxConfig.boxLogLevel | quote }}
+  {{- if not .Values.secretsStore.boxSecretEnabled }}
   BOX_API_KEY: {{ .Values.boxConfig.boxApiKey | quote }}
   BOX_ENCRYPTION_KEY: {{ .Values.boxConfig.boxEncryptionKey | quote }}
+  {{- end }}
   DB_HOST: {{ .Values.boxConfig.dbHost | quote }}
   DB_PORT: {{ .Values.boxConfig.dbPort | quote }}
+  {{- if not .Values.secretsStore.boxSecretEnabled }}
   DB_USERNAME: {{ .Values.boxConfig.dbUsername | quote }}
   DB_PASSWORD: {{ .Values.boxConfig.dbPassword | quote }}
+  {{- end }}
   DB_SSLMODE: {{ .Values.boxConfig.dbSslMode | quote }}
   BOX_DB_NAME: {{ .Values.boxConfig.boxDbName | quote }}
   # Snapshot retention (0 disables the orphan-reap age gate)

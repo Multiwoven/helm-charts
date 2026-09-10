@@ -7,6 +7,8 @@ on:
     branches: [ main ]
     types:
       - labeled
+      - unlabeled
+      - closed
 
 permissions:
   id-token: write
@@ -22,12 +24,18 @@ env:
   ARGOCD_SERVER_HOST: argocd-staging.squared.ai
 
 concurrency:
-  group: qa-deploy-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  # One shared group across every PR, not per-PR: ARGOCD_APP is a single
+  # shared resource, so two PRs' runs (e.g. PR A's restore and PR B's
+  # publish/deploy) must never execute concurrently against it -- that
+  # race is exactly how PR A's restore can reset the app to main right
+  # after PR B pointed it at its own branch. cancel-in-progress: false so
+  # a queued run waits its turn instead of two runs interleaving.
+  group: qa-deploy
+  cancel-in-progress: false
 
 jobs:
   publish_pr_chart:
-    if: ${{ github.event.label.name == 'deploy-to-qa' || contains( github.event.pull_request.labels.*.name, 'deploy-to-qa') }}
+    if: github.event.action == 'labeled' && github.event.label.name == 'deploy-to-qa'
     runs-on: ubuntu-latest
     outputs:
       ver: ${{ steps.setver.outputs.ver }}
@@ -102,12 +110,13 @@ jobs:
         working-directory: infra
         env:
           BRANCH_NAME: qa-test/pr-${{ github.event.number }}
+          CHART_VER: ${{ needs.publish_pr_chart.outputs.ver }}
         run: |
           git switch -c "$BRANCH_NAME" 2>/dev/null || git switch "$BRANCH_NAME"
           git add -A
           git -c user.name="AISQUARED-CI-BOT[bot]" \
               -c user.email="1447931+AISQUARED-CI-BOT[bot]@users.noreply.github.com" \
-              commit -m "test(qa): bump ${{ env.CHART_NAME }} to ${{ needs.publish_pr_chart.outputs.ver }}"
+              commit -m "test(qa): bump ${CHART_NAME} to ${CHART_VER}"
           git push -u origin "$BRANCH_NAME" --force
 
       - name: Flip Argo CD app to temp branch and sync
@@ -144,6 +153,8 @@ jobs:
   restore:
     if: (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-to-qa') || github.event.action == 'closed'
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: qa-test/pr-${{ github.event.number }}
     steps:
       - name: Install Argo CD CLI
         run: |
@@ -152,6 +163,17 @@ jobs:
 
       - name: Restore app to main
         run: |
+          current_rev=$(argocd app get "${{ env.ARGOCD_APP }}" \
+            --server "${{ env.ARGOCD_SERVER_HOST }}" \
+            --grpc-web \
+            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
+            -o json | jq -r '.spec.source.targetRevision')
+
+          if [ "$current_rev" != "$BRANCH_NAME" ]; then
+            echo "Argo CD app ${{ env.ARGOCD_APP }} is on revision '$current_rev', not '$BRANCH_NAME' -- another PR's QA deployment is active. Skipping restore."
+            exit 0
+          fi
+
           argocd app set "${{ env.ARGOCD_APP }}" \
             --server "${{ env.ARGOCD_SERVER_HOST }}" \
             --grpc-web \
