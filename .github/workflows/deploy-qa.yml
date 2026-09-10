@@ -147,6 +147,8 @@ jobs:
   restore:
     if: (github.event.action == 'unlabeled' && github.event.label.name == 'deploy-to-qa') || github.event.action == 'closed'
     runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: qa-test/pr-${{ github.event.number }}
     steps:
       - name: Install Argo CD CLI
         run: |
@@ -155,6 +157,17 @@ jobs:
 
       - name: Restore app to main
         run: |
+          current_rev=$(argocd app get "${{ env.ARGOCD_APP }}" \
+            --server "${{ env.ARGOCD_SERVER_HOST }}" \
+            --grpc-web \
+            --auth-token "${{ secrets.ARGOCD_STAGING_TOKEN }}" \
+            -o json | jq -r '.spec.source.targetRevision')
+
+          if [ "$current_rev" != "$BRANCH_NAME" ]; then
+            echo "Argo CD app ${{ env.ARGOCD_APP }} is on revision '$current_rev', not '$BRANCH_NAME' -- another PR's QA deployment is active. Skipping restore."
+            exit 0
+          fi
+
           argocd app set "${{ env.ARGOCD_APP }}" \
             --server "${{ env.ARGOCD_SERVER_HOST }}" \
             --grpc-web \
