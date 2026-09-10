@@ -38,6 +38,12 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/ssl-policy: {{ .Values.awsIngress.sslPolicy }}
     alb.ingress.kubernetes.io/backend-protocol: "HTTP"
+    {{- if .Values.awsIngress.groupName }}
+    alb.ingress.kubernetes.io/group.name: {{ .Values.awsIngress.groupName | quote }}
+    {{- end }}
+    {{- with .Values.awsIngress.extraAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
     {{- end }}
 spec:
   {{- if .Values.nginxIngress.enabled }}
