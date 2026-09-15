@@ -63,6 +63,9 @@ metadata:
     {{ if .Values.awsIngress.groupName }}
     alb.ingress.kubernetes.io/group.name: {{ .Values.awsIngress.groupName | quote }}
     {{ end }}
+    {{ if .Values.awsIngress.groupOrder }}
+    alb.ingress.kubernetes.io/group.order: {{ .Values.awsIngress.groupOrder | quote }}
+    {{ end }}
     {{- with .Values.awsIngress.extraAnnotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

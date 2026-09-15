@@ -9,6 +9,9 @@ appbuilderIngress:
   proxyReadTimeout: 3600
   proxySendTimeout: 3600
   proxyBuffering: "off"
+  # Higher than awsIngress.groupOrder — see that comment.
+  groupOrder: "20"
+  extraAnnotations: {}
 
 multiwovenConfig:
   activeStorageService: "microsoft"
@@ -263,6 +266,10 @@ awsIngress:
   albScheme: internet-facing
   sslPolicy: ELBSecurityPolicy-2016-08
   groupName: ""
+  # ALB rule priority in a shared group.name (lower = evaluated first).
+  # Lower than appbuilderIngress.groupOrder so exact hosts beat the
+  # appbuilder wildcard — ALB has no automatic precedence like nginx does.
+  groupOrder: "10"
   # Anything not already modeled above goes here as raw ALB annotations, e.g.:
   # extraAnnotations:
   #   alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
