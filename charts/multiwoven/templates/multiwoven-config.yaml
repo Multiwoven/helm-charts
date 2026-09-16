@@ -83,6 +83,7 @@ data:
   DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.sandboxConfig.dockerHubRegistryPassword | quote }}
   {{ end }}
   GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
+  GOOGLE_GEMINI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.googleGeminiExcludeModels | quote }}
   HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.hostedVectorDbHost | quote }}
   HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.hostedVectorDbDatabase | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
