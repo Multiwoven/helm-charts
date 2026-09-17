@@ -54,6 +54,7 @@ multiwovenConfig:
   newRelicKey: yourkey
   nginxProxyBodySize: 2m
   openrouterApiKey: ""
+  openRouterExcludeModels: ""
   openaiExcludeModels: ""
   anthropicExcludeModels: ""
   googleGeminiExcludeModels: ""
