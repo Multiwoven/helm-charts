@@ -118,7 +118,7 @@ data:
   {{ if not .Values.secretsStore.appSecretEnabled }}
   OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
   {{ end }}
-  OPEN_ROUTER_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.openRouterExcludeModels | quote }}
+  OPEN_ROUTER_EXCLUDE_PROVIDERS: {{ .Values.multiwovenConfig.openRouterExcludeProviders | quote }}
   OPENAI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.openaiExcludeModels | quote }}
   ANTHROPIC_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.anthropicExcludeModels | quote }}
   P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
