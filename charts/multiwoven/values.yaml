@@ -229,6 +229,28 @@ lightningConfig:
   xpertEndpoint: ""
   xpertModel: ""
 
+  clsPiiApiKey: ""
+  clsPiiEndpoint: ""
+  clsPiiModel: ""
+  clsPiiThreshold: ""
+
+  clsContentApiKey: ""
+  clsContentEndpoint: ""
+  clsContentModel: ""
+  clsContentThreshold: ""
+
+  clsJailbreakApiKey: ""
+  clsJailbreakEndpoint: ""
+  clsJailbreakModel: ""
+  clsJailbreakThreshold: ""
+
+  clsClientTimeoutSeconds: ""
+  clsClientMaxRetries: ""
+
+  clsRouterApiKey: ""
+  clsRouterEndpoint: ""
+  clsRouterModel: ""
+
   inferenceBackend: "huggingface"
   inferenceAwsRegion: ""
 

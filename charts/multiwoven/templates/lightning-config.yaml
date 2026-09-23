@@ -75,6 +75,36 @@ data:
   XPERT_ENDPOINT: {{ .Values.lightningConfig.xpertEndpoint | quote }}
   XPERT_MODEL: {{ .Values.lightningConfig.xpertModel | quote }}
 
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
+  CLS_PII_API_KEY: {{ .Values.lightningConfig.clsPiiApiKey | quote }}
+  {{- end }}
+  CLS_PII_ENDPOINT: {{ .Values.lightningConfig.clsPiiEndpoint | quote }}
+  CLS_PII_MODEL: {{ .Values.lightningConfig.clsPiiModel | quote }}
+  CLS_PII_THRESHOLD: {{ .Values.lightningConfig.clsPiiThreshold | quote }}
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
+  CLS_CONTENT_API_KEY: {{ .Values.lightningConfig.clsContentApiKey | quote }}
+  {{- end }}
+  CLS_CONTENT_ENDPOINT: {{ .Values.lightningConfig.clsContentEndpoint | quote }}
+  CLS_CONTENT_MODEL: {{ .Values.lightningConfig.clsContentModel | quote }}
+  CLS_CONTENT_THRESHOLD: {{ .Values.lightningConfig.clsContentThreshold | quote }}
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
+  CLS_JAILBREAK_API_KEY: {{ .Values.lightningConfig.clsJailbreakApiKey | quote }}
+  {{- end }}
+  CLS_JAILBREAK_ENDPOINT: {{ .Values.lightningConfig.clsJailbreakEndpoint | quote }}
+  CLS_JAILBREAK_MODEL: {{ .Values.lightningConfig.clsJailbreakModel | quote }}
+  CLS_JAILBREAK_THRESHOLD: {{ .Values.lightningConfig.clsJailbreakThreshold | quote }}
+
+  CLS_CLIENT_TIMEOUT_SECONDS: {{ .Values.lightningConfig.clsClientTimeoutSeconds | quote }}
+  CLS_CLIENT_MAX_RETRIES: {{ .Values.lightningConfig.clsClientMaxRetries | quote }}
+
+  {{- if not .Values.secretsStore.lightningSecretEnabled }}
+  CLS_ROUTER_API_KEY: {{ .Values.lightningConfig.clsRouterApiKey | quote }}
+  {{- end }}
+  CLS_ROUTER_ENDPOINT: {{ .Values.lightningConfig.clsRouterEndpoint | quote }}
+  CLS_ROUTER_MODEL: {{ .Values.lightningConfig.clsRouterModel | quote }}
+
   INFERENCE_BACKEND: {{ .Values.lightningConfig.inferenceBackend | quote }}
   INFERENCE_AWS_REGION: {{ .Values.lightningConfig.inferenceAwsRegion | quote }}
 
