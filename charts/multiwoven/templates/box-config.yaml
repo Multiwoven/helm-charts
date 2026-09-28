@@ -56,6 +56,7 @@ data:
   {{- if not .Values.secretsStore.boxSecretEnabled }}
   BOX_API_KEY: {{ .Values.boxConfig.boxApiKey | quote }}
   BOX_ENCRYPTION_KEY: {{ .Values.boxConfig.boxEncryptionKey | quote }}
+  CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
   {{- end }}
   DB_HOST: {{ .Values.boxConfig.dbHost | quote }}
   DB_PORT: {{ .Values.boxConfig.dbPort | quote }}
