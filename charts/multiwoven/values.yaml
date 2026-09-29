@@ -17,7 +17,7 @@ multiwovenConfig:
   activeStorageService: "microsoft"
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
-  apiHost: api.multiwoven.com
+  apiHost: api.example.com
   appRevision: unknown
   appEnv: community
   appsignalPushApiKey: yourkey
@@ -79,13 +79,13 @@ multiwovenConfig:
   skipDbMigration: "false"
   slackSignupChannelEmail: ""
   smtpAddress: smtp.yourdomain.com
-  smtpBrandName: Multiwoven
+  smtpBrandName: AI Squared
   smtpHost: yourdomain.com
   smtpPassword: yourpassword
   smtpPort: "587"
   smtpUsername: yourusername
   smtpSenderEmail: admin@yourdomain.com
-  solidWorkerHost: solid.multiwoven.com
+  solidWorkerHost: solid.example.com
   snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
   storageAccessKey: ""
   storageAccountName: ""
@@ -109,7 +109,7 @@ multiwovenConfig:
   temporalPostgresqlVersion: "13"
   temporalRootCert: /certs/temporal.key
   temporalTaskQueue: sync-dev
-  temporalUiHost: temporal.multiwoven.com
+  temporalUiHost: temporal.example.com
   temporalUiVersion: 2.23.2
   temporalVersion: 1.22.4
   temporalWorkflowThreadPoolSize: "10"
@@ -117,14 +117,14 @@ multiwovenConfig:
   textractBucketName: ""
   textractRegion: ""
   textractSecretAccessKey: ""
-  tlsAdminEmail: admin@multiwoven.com
+  tlsAdminEmail: admin@example.com
   tlsCertIssuer: letsencrypt-staging
   track: "no"
-  uiHost: app.multiwoven.com
+  uiHost: app.example.com
   userEmailVerification: "false"
-  viteApiHost: api.multiwoven.com
+  viteApiHost: api.example.com
   viteAppsignalMonitoringKey: yourkey
-  viteBrandName: "Multiwoven"
+  viteBrandName: "AI Squared"
   viteLogoUrl: ""
   viteBrandColor: ""
   viteBrandHoverColor: ""
@@ -132,7 +132,7 @@ multiwovenConfig:
   vitePublicPosthogKey: ""
   vitePublicPosthogHost: ""
 
-  workerHost: worker.multiwoven.com
+  workerHost: worker.example.com
 
 sandboxConfig:
   agenticCodingBuildToken: ""
@@ -145,7 +145,7 @@ sandboxConfig:
   agenticCodingS3Bucket: ""
   agenticCodingS3Region: "us-east-1"
   agenticCodingSandboxCpu: "2000"
-  agenticCodingSandboxDomain: "agentic-coding-sandbox.multiwoven.com"
+  agenticCodingSandboxDomain: "agentic-coding-sandbox.example.com"
   agenticCodingSandboxIdleTimeout: "1200"
   agenticCodingSandboxImage: ""
   agenticCodingSandboxMemory: "4096"
@@ -183,7 +183,7 @@ sandboxConfig:
 
 lightningConfig:
   lightningUrl: http://multiwoven-lightning:6000
-  lightningHealthHost: lightning.multiwoven.com
+  lightningHealthHost: lightning.example.com
 
   babelApiKey: ""
   babelEndpoint: ""

@@ -86,13 +86,13 @@ spec:
         resources: {{- toYaml .Values.box.box.resources | nindent 10 }}
         {{ if .Values.secretsStore.boxSecretEnabled }}
         volumeMounts:
-        - name: multiwoven-box-secrets-store
+        - name: box-secrets-store
           mountPath: /run/secrets/box-secrets
           readOnly: true
         {{ end }}
       {{ if .Values.secretsStore.boxSecretEnabled }}
       volumes:
-      - name: multiwoven-box-secrets-store
+      - name: box-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true

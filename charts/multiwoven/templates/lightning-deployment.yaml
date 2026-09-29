@@ -72,13 +72,13 @@ spec:
         resources: {{- toYaml .Values.lightning.lightning.resources | nindent 10 }}
         {{ if .Values.secretsStore.lightningSecretEnabled }}
         volumeMounts:
-        - name: multiwoven-lightning-secrets-store
+        - name: lightning-secrets-store
           mountPath: /run/secrets/lightning-secrets
           readOnly: true
         {{ end }}
       {{ if .Values.secretsStore.lightningSecretEnabled }}
       volumes:
-      - name: multiwoven-lightning-secrets-store
+      - name: lightning-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true

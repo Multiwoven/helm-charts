@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "chart.fullname" . }}-worker
+  name: {{ include "chart.fullname" . }}-solid-worker
   namespace: {{ .Values.kubernetesNamespace }}
   labels:
-    app: {{ include "chart.fullname" . }}-worker
-    io.kompose.service: {{ include "chart.fullname" . }}-worker
+    app: {{ include "chart.fullname" . }}-solid-worker
+    io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenWorker.annotations }}
-      {{ toYaml . | nindent 4 }}
-      {{- end }}
+    {{- with .Values.multiwovenSolidWorker.annotations }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
     {{- $reloaderSecrets := list }}
     {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
@@ -19,27 +19,27 @@ metadata:
     secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
     {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenWorker.replicas }}
+  replicas: {{ .Values.multiwovenSolidWorker.replicas }}
   selector:
     matchLabels:
-      app: {{ include "chart.fullname" . }}-worker
-      io.kompose.service: {{ include "chart.fullname" . }}-worker
+      app: {{ include "chart.fullname" . }}-solid-worker
+      io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ include "chart.fullname" . }}-worker
-        io.kompose.service: {{ include "chart.fullname" . }}-worker
+        app: {{ include "chart.fullname" . }}-solid-worker
+        io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenWorker.annotations }}
+        {{- with .Values.multiwovenSolidWorker.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenWorker.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.multiwovenSolidWorker.podSecurityContext.fsGroup }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
@@ -56,8 +56,8 @@ spec:
           - name: rails-config
             mountPath: /mnt/rails
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -87,12 +87,12 @@ spec:
                 - spot
       {{ end }}
       containers:
-      - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
+      - args: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.args | nindent 8 }}
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
-          value: {{ quote .Values.multiwovenWorker.healthPort }}
+          value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
@@ -111,6 +111,10 @@ spec:
         - name: DB_NAME
           value: {{ .Values.multipleDbHosts.multiwovenDBName }}
         {{ end }}
+        {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+        - name: AGENTIC_CODING_GITHUB_APP_PRIVATE_KEY_PATH
+          value: /run/secrets/github-app/private-key.pem
+        {{ end }}
         envFrom:
         - configMapRef:
             name: {{ include "chart.fullname" . }}-config
@@ -122,11 +126,11 @@ spec:
         - secretRef:
             name: {{ .Values.secretsStore.sandboxSecretAlias }}
         {{ end }}
-        image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.repository }}:{{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -140,19 +144,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.multiwovenSolidWorker.healthPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
-        name: {{ include "chart.fullname" . }}-worker
+        name: {{ include "chart.fullname" . }}-solid-worker
         ports:
-        - containerPort: {{ .Values.multiwovenWorker.healthPort }}
+        - containerPort: {{ .Values.multiwovenSolidWorker.healthPort }}
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.multiwovenSolidWorker.healthPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
+        resources: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
         {{ if not .Values.temporal.enabled }}
@@ -161,18 +165,23 @@ spec:
           readOnly: false
         {{ end }}
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
-        - name: multiwoven-secrets-store
+        - name: mw-secrets-store
           mountPath: /run/secrets/store
           readOnly: true
         {{ end }}
         {{ if .Values.secretsStore.appSecretEnabled }}
-        - name: multiwoven-app-secrets-store
+        - name: app-secrets-store
           mountPath: /run/secrets/app-secrets
           readOnly: true
         {{ end }}
         {{ if .Values.secretsStore.sandboxSecretEnabled }}
-        - name: multiwoven-sandbox-secrets-store
+        - name: sandbox-secrets-store
           mountPath: /run/secrets/sandbox-secrets
+          readOnly: true
+        {{ end }}
+        {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+        - name: github-app-private-key
+          mountPath: /run/secrets/github-app
           readOnly: true
         {{ end }}
         {{ if .Values.securityContext.readOnlyRootFilesystem }}
@@ -190,8 +199,13 @@ spec:
           - key: temporal-root-cert
             path: ./temporal.pem
       {{ end }}
+      {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+      - name: github-app-private-key
+        secret:
+          secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
+      {{ end }}
       {{ if .Values.secretsStore.mwDbSecretEnabled }}
-      - name: multiwoven-secrets-store
+      - name: mw-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -199,7 +213,7 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-mw
       {{ end }}
       {{ if .Values.secretsStore.appSecretEnabled }}
-      - name: multiwoven-app-secrets-store
+      - name: app-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -207,7 +221,7 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-app
       {{ end }}
       {{ if .Values.secretsStore.sandboxSecretEnabled }}
-      - name: multiwoven-sandbox-secrets-store
+      - name: sandbox-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true

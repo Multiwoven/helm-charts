@@ -1,3 +1,7 @@
+# AI Squared Helm Charts
+
+Helm charts for deploying the AI Squared platform.
+
 ## Quick install 
 
 ```

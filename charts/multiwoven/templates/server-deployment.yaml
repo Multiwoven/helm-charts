@@ -170,7 +170,7 @@ spec:
         imagePullPolicy: Always
         volumeMounts:
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
-        - name: multiwoven-secrets-store
+        - name: mw-secrets-store
           mountPath: /run/secrets/mw-secrets
           readOnly: true
         {{ end }}
@@ -180,12 +180,12 @@ spec:
           readOnly: true
         {{ end }}
         {{ if .Values.secretsStore.appSecretEnabled }}
-        - name: multiwoven-app-secrets-store
+        - name: app-secrets-store
           mountPath: /run/secrets/app-secrets
           readOnly: true
         {{ end }}
         {{ if .Values.secretsStore.sandboxSecretEnabled }}
-        - name: multiwoven-sandbox-secrets-store
+        - name: sandbox-secrets-store
           mountPath: /run/secrets/sandbox-secrets
           readOnly: true
         {{ end }}
@@ -220,7 +220,7 @@ spec:
           secretName: {{ .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
       {{ end }}
       {{ if .Values.secretsStore.mwDbSecretEnabled }}
-      - name: multiwoven-secrets-store
+      - name: mw-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -236,7 +236,7 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-temp-store
       {{ end }}
       {{ if .Values.secretsStore.appSecretEnabled }}
-      - name: multiwoven-app-secrets-store
+      - name: app-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
@@ -244,7 +244,7 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-app
       {{ end }}
       {{ if .Values.secretsStore.sandboxSecretEnabled }}
-      - name: multiwoven-sandbox-secrets-store
+      - name: sandbox-secrets-store
         csi:
           driver: secrets-store.csi.k8s.io
           readOnly: true
