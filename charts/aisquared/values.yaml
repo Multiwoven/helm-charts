@@ -1,3 +1,8 @@
+# Keeps resource names and selector labels identical to the pre-rename
+# "multiwoven" chart. Resource names and app.kubernetes.io/name are derived from
+# the chart name, and Deployment selectors are immutable, so removing this
+# renames/recreates every resource. Only change it as part of a planned migration.
+nameOverride: multiwoven
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: multiwoven
 

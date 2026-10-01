@@ -5,8 +5,8 @@ Helm charts for deploying the AI Squared platform.
 ## Quick install 
 
 ```
-helm repo add multiwoven https://multiwoven.github.io/helm-charts
-helm install multiwoven multiwoven/multiwoven
+helm repo add aisquared https://multiwoven.github.io/helm-charts
+helm install aisquared aisquared/aisquared
 ```
 
 ## Check detailed readme [here](https://docs.squared.ai/guides/setup/helm)
