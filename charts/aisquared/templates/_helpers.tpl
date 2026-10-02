@@ -60,3 +60,36 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Fail on values keys that were renamed in the AI Squared rebrand. Helm ignores
+unknown keys, so without this an old values file or --set flag would render
+with chart defaults (example.com hosts, default images and DB settings)
+instead of erroring.
+*/}}
+{{- define "chart.failOnRenamedValues" -}}
+{{- $topLevel := dict "multiwovenConfig" "platformConfig" "multiwovenServer" "server" "multiwovenUI" "ui" "multiwovenWorker" "worker" "multiwovenSolidWorker" "solidWorker" "multiwovenPostgresql" "postgresql" }}
+{{- range $old, $new := $topLevel }}
+{{- if hasKey $.Values $old }}
+{{- fail (printf "values key %q was renamed to %q" $old $new) }}
+{{- end }}
+{{- end }}
+{{- $nested := dict "server" "multiwovenServer" "ui" "multiwovenUI" "worker" "multiwovenWorker" "solidWorker" "multiwovenSolidWorker" "postgresql" "multiwovenPostgresql" }}
+{{- range $parent, $old := $nested }}
+{{- if hasKey (index $.Values $parent) $old }}
+{{- fail (printf "values key %q was renamed to %q" (printf "%s.%s" $parent $old) (printf "%s.%s" $parent $parent)) }}
+{{- end }}
+{{- end }}
+{{- $hpa := dict "multiwovenServer" "server" "multiwovenUI" "ui" "multiwovenWorker" "worker" "multiwovenSolidWorker" "solidWorker" }}
+{{- range $old, $new := $hpa }}
+{{- if hasKey $.Values.hpa $old }}
+{{- fail (printf "values key %q was renamed to %q" (printf "hpa.%s" $old) (printf "hpa.%s" $new)) }}
+{{- end }}
+{{- end }}
+{{- $db := dict "multiwovenDBHost" "platformDBHost" "multiwovenDBName" "platformDBName" }}
+{{- range $old, $new := $db }}
+{{- if hasKey $.Values.multipleDbHosts $old }}
+{{- fail (printf "values key %q was renamed to %q" (printf "multipleDbHosts.%s" $old) (printf "multipleDbHosts.%s" $new)) }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,4 +1,4 @@
-{{ if .Values.multiwovenPostgresql.enabled }}
+{{ if .Values.postgresql.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,11 +8,11 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql
   {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenPostgresql.annotations }}
+    {{- with .Values.postgresql.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenPostgresql.replicas }}
+  replicas: {{ .Values.postgresql.replicas }}
   selector:
     matchLabels:
       io.kompose.service: {{ include "chart.fullname" . }}-postgresql
@@ -24,7 +24,7 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-postgresql
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenPostgresql.annotations }}
+        {{- with .Values.postgresql.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
@@ -42,7 +42,7 @@ spec:
               name: {{ include "chart.fullname" . }}-config
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.repository }}:{{ .Values.multiwovenPostgresql.multiwovenPostgresql.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.postgresql.postgresql.image.repository }}:{{ .Values.postgresql.postgresql.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           initialDelaySeconds: 30
           periodSeconds: 10
@@ -56,7 +56,7 @@ spec:
           periodSeconds: 10
           tcpSocket:
             port: 5432
-        resources: {{- toYaml .Values.multiwovenPostgresql.multiwovenPostgresql.resources | nindent 10 }}
+        resources: {{- toYaml .Values.postgresql.postgresql.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           subPath: postgres

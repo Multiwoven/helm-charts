@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "aisquared chart values",
+  "description": "Only the top level is constrained: unknown keys (typos, stale keys) fail instead of being silently ignored.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "nameOverride": {
+      "type": "string"
+    },
+    "kubernetesClusterDomain": {},
+    "kubernetesNamespace": {},
+    "appbuilderIngress": {},
+    "platformConfig": {},
+    "sandboxConfig": {},
+    "lightningConfig": {},
+    "automountServiceAccountToken": {},
+    "externalDNS": {},
+    "nginxIngress": {},
+    "kongIngress": {},
+    "awsIngress": {},
+    "serviceAccount": {},
+    "secretsStore": {},
+    "securityContext": {},
+    "globalImagePullPolicy": {},
+    "multipleDbHosts": {},
+    "hpa": {},
+    "postgresql": {},
+    "server": {},
+    "ui": {},
+    "solidWorker": {},
+    "worker": {},
+    "pvc": {},
+    "temporal": {},
+    "temporalUi": {},
+    "lightning": {},
+    "box": {},
+    "boxConfig": {},
+    "fullnameOverride": {
+      "type": "string"
+    },
+    "global": {
+      "description": "Passed down by a parent chart."
+    },
+    "multiwovenConfig": {
+      "description": "Renamed to platformConfig. Accepted here only so the chart can fail with a message saying so."
+    },
+    "multiwovenServer": {
+      "description": "Renamed to server. Accepted here only so the chart can fail with a message saying so."
+    },
+    "multiwovenUI": {
+      "description": "Renamed to ui. Accepted here only so the chart can fail with a message saying so."
+    },
+    "multiwovenWorker": {
+      "description": "Renamed to worker. Accepted here only so the chart can fail with a message saying so."
+    },
+    "multiwovenSolidWorker": {
+      "description": "Renamed to solidWorker. Accepted here only so the chart can fail with a message saying so."
+    },
+    "multiwovenPostgresql": {
+      "description": "Renamed to postgresql. Accepted here only so the chart can fail with a message saying so."
+    }
+  }
+}

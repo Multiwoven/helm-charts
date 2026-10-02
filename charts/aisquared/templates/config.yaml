@@ -7,7 +7,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-config
   {{- include "chart.labels" . | nindent 4 }}
 data:
-  ACTIVE_STORAGE_SERVICE: {{ .Values.multiwovenConfig.activeStorageService | quote }}
+  ACTIVE_STORAGE_SERVICE: {{ .Values.platformConfig.activeStorageService | quote }}
   {{ if not .Values.secretsStore.sandboxSecretEnabled }}
   AGENTIC_CODING_BUILD_TOKEN: {{ .Values.sandboxConfig.agenticCodingBuildToken | quote }}
   {{ end }}
@@ -41,27 +41,27 @@ data:
   AGENTIC_CODING_STORAGE_PROVIDER: {{ .Values.sandboxConfig.agenticCodingStorageProvider | quote }}
   AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
   AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
-  ALLOWED_HOST: {{ .Values.multiwovenConfig.allowedHost | quote }}
+  ALLOWED_HOST: {{ .Values.platformConfig.allowedHost | quote }}
   APPGEN_PUBLISHED_DOMAIN: {{ .Values.appbuilderIngress.appgenPublishedDomain | quote }}
-  API_HOST: {{ .Values.multiwovenConfig.apiHost | quote }}
-  APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
-  APP_REVISION: {{ .Values.multiwovenConfig.appRevision | quote }}
-  APPSIGNAL_APP_ENV: {{ .Values.multiwovenConfig.appEnv | quote }}
+  API_HOST: {{ .Values.platformConfig.apiHost | quote }}
+  APP_ENV: {{ .Values.platformConfig.appEnv | quote }}
+  APP_REVISION: {{ .Values.platformConfig.appRevision | quote }}
+  APPSIGNAL_APP_ENV: {{ .Values.platformConfig.appEnv | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  APPSIGNAL_PUSH_API_KEY: {{ .Values.multiwovenConfig.appsignalPushApiKey | quote }}
-  AWS_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.awsAccessKeyId | quote }}
+  APPSIGNAL_PUSH_API_KEY: {{ .Values.platformConfig.appsignalPushApiKey | quote }}
+  AWS_ACCESS_KEY_ID: {{ .Values.platformConfig.awsAccessKeyId | quote }}
   {{ end }}
-  AWS_LAMBDA_API_URL: {{ .Values.multiwovenConfig.awsLambdaApiUrl | quote }}
-  AWS_REGION: {{ .Values.multiwovenConfig.awsRegion | quote }}
-  AWS_S3_BUCKET: {{ .Values.multiwovenConfig.awsS3Bucket | quote }}
+  AWS_LAMBDA_API_URL: {{ .Values.platformConfig.awsLambdaApiUrl | quote }}
+  AWS_REGION: {{ .Values.platformConfig.awsRegion | quote }}
+  AWS_S3_BUCKET: {{ .Values.platformConfig.awsS3Bucket | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  AWS_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.awsSecretAccessKey | quote }}
-  BOX_API_KEY: {{ .Values.multiwovenConfig.boxApiKey | quote }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.platformConfig.awsSecretAccessKey | quote }}
+  BOX_API_KEY: {{ .Values.platformConfig.boxApiKey | quote }}
   {{ end }}
-  BOX_BASE_URL: {{ .Values.multiwovenConfig.boxBaseUrl | quote }}
-  BRAND_NAME: {{ .Values.multiwovenConfig.smtpBrandName | quote }}
+  BOX_BASE_URL: {{ .Values.platformConfig.boxBaseUrl | quote }}
+  BRAND_NAME: {{ .Values.platformConfig.smtpBrandName | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  CODE_EXEC_SIGNING_SECRET: {{ .Values.multiwovenConfig.codeExecSigningSecret | quote }}
+  CODE_EXEC_SIGNING_SECRET: {{ .Values.platformConfig.codeExecSigningSecret | quote }}
   {{ end }}
   CODING_AGENT_PROVIDER: {{ .Values.sandboxConfig.codingAgentProvider | quote }}
   CODING_AGENT_MODEL: {{ .Values.sandboxConfig.codingAgentModel | quote }}
@@ -69,37 +69,37 @@ data:
   {{ if not .Values.secretsStore.sandboxSecretEnabled }}
   CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
   {{ end }}
-  DATABRICKS_DRIVER_PATH: {{ .Values.multiwovenConfig.databricksDriverPath | quote }}
-  ENABLE_GEO_SUBSCRIBER: {{ .Values.multiwovenConfig.enableGeoSubscriber | quote }}
-  DB_NAME: {{ .Values.multiwovenConfig.dbName | quote }}
-  DB_PORT: {{ .Values.multiwovenConfig.dbPort | quote }}
-  DB_HOST: {{ .Values.multiwovenConfig.dbHost | quote }}
+  DATABRICKS_DRIVER_PATH: {{ .Values.platformConfig.databricksDriverPath | quote }}
+  ENABLE_GEO_SUBSCRIBER: {{ .Values.platformConfig.enableGeoSubscriber | quote }}
+  DB_NAME: {{ .Values.platformConfig.dbName | quote }}
+  DB_PORT: {{ .Values.platformConfig.dbPort | quote }}
+  DB_HOST: {{ .Values.platformConfig.dbHost | quote }}
   {{ if not .Values.secretsStore.mwDbSecretEnabled }}
-  DB_PASSWORD: {{ .Values.multiwovenConfig.dbPassword | quote }}
-  DB_USERNAME: {{ .Values.multiwovenConfig.dbUsername | quote }}
+  DB_PASSWORD: {{ .Values.platformConfig.dbPassword | quote }}
+  DB_USERNAME: {{ .Values.platformConfig.dbUsername | quote }}
   {{ end }}
   {{ if not .Values.secretsStore.sandboxSecretEnabled }}
   DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.sandboxConfig.dockerHubRegistryUsername | quote }}
   DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.sandboxConfig.dockerHubRegistryPassword | quote }}
   {{ end }}
-  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.multiwovenConfig.grpcEnableForkSupport | quote }}
-  GOOGLE_GEMINI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.googleGeminiExcludeModels | quote }}
-  HOSTED_VECTOR_DB_HOST: {{ .Values.multiwovenConfig.hostedVectorDbHost | quote }}
-  HOSTED_VECTOR_DB_DATABASE: {{ .Values.multiwovenConfig.hostedVectorDbDatabase | quote }}
+  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.platformConfig.grpcEnableForkSupport | quote }}
+  GOOGLE_GEMINI_EXCLUDE_MODELS: {{ .Values.platformConfig.googleGeminiExcludeModels | quote }}
+  HOSTED_VECTOR_DB_HOST: {{ .Values.platformConfig.hostedVectorDbHost | quote }}
+  HOSTED_VECTOR_DB_DATABASE: {{ .Values.platformConfig.hostedVectorDbDatabase | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  HOSTED_VECTOR_DB_USERNAME: {{ .Values.multiwovenConfig.hostedVectorDbUsername | quote }}
-  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.multiwovenConfig.hostedVectorDbPassword | quote }}
+  HOSTED_VECTOR_DB_USERNAME: {{ .Values.platformConfig.hostedVectorDbUsername | quote }}
+  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.platformConfig.hostedVectorDbPassword | quote }}
   {{ end }}
-  HOSTED_VECTOR_DB_PORT: {{ .Values.multiwovenConfig.hostedVectorDbPort | quote }}
+  HOSTED_VECTOR_DB_PORT: {{ .Values.platformConfig.hostedVectorDbPort | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  HUBSPOT_API_KEY: {{ .Values.multiwovenConfig.hubspotApiKey | quote }}
-  JWT_SECRET: {{ .Values.multiwovenConfig.jwtSecret | quote }}
+  HUBSPOT_API_KEY: {{ .Values.platformConfig.hubspotApiKey | quote }}
+  JWT_SECRET: {{ .Values.platformConfig.jwtSecret | quote }}
   {{ end }}
-  LEAD_CAPTURE_ENABLED: {{ .Values.multiwovenConfig.leadCaptureEnabled | quote }}
+  LEAD_CAPTURE_ENABLED: {{ .Values.platformConfig.leadCaptureEnabled | quote }}
   LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
-  MAXMIND_ACCOUNT_ID: {{ .Values.multiwovenConfig.maxmindAccountId | quote }}
+  MAXMIND_ACCOUNT_ID: {{ .Values.platformConfig.maxmindAccountId | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  MAXMIND_LICENSE_KEY: {{ .Values.multiwovenConfig.maxmindLicenseKey | quote }}
+  MAXMIND_LICENSE_KEY: {{ .Values.platformConfig.maxmindLicenseKey | quote }}
   {{ end }}
   {{ if not .Values.secretsStore.sandboxSecretEnabled }}
   MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
@@ -107,101 +107,101 @@ data:
   {{ end }}
   MODAL_ENVIRONMENT: {{ .Values.sandboxConfig.modalEnvironment | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  NEON_API_KEY: {{ .Values.multiwovenConfig.neonApiKey | quote }}
+  NEON_API_KEY: {{ .Values.platformConfig.neonApiKey | quote }}
   {{ end }}
-  NEON_API_BASE_URL: {{ .Values.multiwovenConfig.neonApiBaseUrl | quote }}
-  NEON_DEFAULT_REGION: {{ .Values.multiwovenConfig.neonDefaultRegion | quote }}
+  NEON_API_BASE_URL: {{ .Values.platformConfig.neonApiBaseUrl | quote }}
+  NEON_DEFAULT_REGION: {{ .Values.platformConfig.neonDefaultRegion | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  NEW_RELIC_KEY: {{ .Values.multiwovenConfig.newRelicKey | quote }}
+  NEW_RELIC_KEY: {{ .Values.platformConfig.newRelicKey | quote }}
   {{ end }}
   OPENCODE_OTLP_ENDPOINT: {{ .Values.sandboxConfig.opencodeOtlpEndpoint | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  OPENROUTER_API_KEY: {{ .Values.multiwovenConfig.openrouterApiKey | quote }}
+  OPENROUTER_API_KEY: {{ .Values.platformConfig.openrouterApiKey | quote }}
   {{ end }}
-  OPEN_ROUTER_EXCLUDE_PROVIDERS: {{ .Values.multiwovenConfig.openRouterExcludeProviders | quote }}
-  OPENAI_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.openaiExcludeModels | quote }}
-  ANTHROPIC_EXCLUDE_MODELS: {{ .Values.multiwovenConfig.anthropicExcludeModels | quote }}
-  P2W_LLM_PROVIDER: {{ .Values.multiwovenConfig.p2wLlmProvider | quote }}
+  OPEN_ROUTER_EXCLUDE_PROVIDERS: {{ .Values.platformConfig.openRouterExcludeProviders | quote }}
+  OPENAI_EXCLUDE_MODELS: {{ .Values.platformConfig.openaiExcludeModels | quote }}
+  ANTHROPIC_EXCLUDE_MODELS: {{ .Values.platformConfig.anthropicExcludeModels | quote }}
+  P2W_LLM_PROVIDER: {{ .Values.platformConfig.p2wLlmProvider | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  P2W_LLM_API_KEY: {{ .Values.multiwovenConfig.p2wLlmApiKey | quote }}
+  P2W_LLM_API_KEY: {{ .Values.platformConfig.p2wLlmApiKey | quote }}
   {{ end }}
-  P2W_LLM_MODEL: {{ .Values.multiwovenConfig.p2wLlmModel | quote }}
-  P2W_LLM_TEMPERATURE: {{ .Values.multiwovenConfig.p2wLlmTemperature | quote }}
+  P2W_LLM_MODEL: {{ .Values.platformConfig.p2wLlmModel | quote }}
+  P2W_LLM_TEMPERATURE: {{ .Values.platformConfig.p2wLlmTemperature | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  PROMETHEUS_METRICS_PASSWORD: {{ .Values.multiwovenConfig.prometheusMetricsPassword | quote }}
-  PROMETHEUS_METRICS_USERNAME: {{ .Values.multiwovenConfig.prometheusMetricsUsername | quote }}
+  PROMETHEUS_METRICS_PASSWORD: {{ .Values.platformConfig.prometheusMetricsPassword | quote }}
+  PROMETHEUS_METRICS_USERNAME: {{ .Values.platformConfig.prometheusMetricsUsername | quote }}
   {{ end }}
-  PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.multiwovenConfig.promptToWorkflowProvider | quote }}
-  PROMPT_TO_WORKFLOW_MODEL: {{ .Values.multiwovenConfig.promptToWorkflowModel | quote }}
-  PROMPT_TO_WORKFLOW_API_URL: {{ .Values.multiwovenConfig.promptToWorkflowApiUrl | quote }}
+  PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.platformConfig.promptToWorkflowProvider | quote }}
+  PROMPT_TO_WORKFLOW_MODEL: {{ .Values.platformConfig.promptToWorkflowModel | quote }}
+  PROMPT_TO_WORKFLOW_API_URL: {{ .Values.platformConfig.promptToWorkflowApiUrl | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  PROMPT_TO_WORKFLOW_API_KEY: {{ .Values.multiwovenConfig.promptToWorkflowApiKey | quote }}
+  PROMPT_TO_WORKFLOW_API_KEY: {{ .Values.platformConfig.promptToWorkflowApiKey | quote }}
   {{ end }}
-  RAILS_ENV: {{ .Values.multiwovenConfig.railsEnv | quote }}
-  RAILS_LOG_LEVEL: {{ .Values.multiwovenConfig.railsLogLevel | quote }}
-  REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.multiwovenConfig.remoteCodeExecutionProvider | quote }}
-  S3_SSE_TYPE: {{ .Values.multiwovenConfig.s3SseType | quote }}
-  S3_KMS_KEY_ID: {{ .Values.multiwovenConfig.s3KmsKeyId | quote }}
+  RAILS_ENV: {{ .Values.platformConfig.railsEnv | quote }}
+  RAILS_LOG_LEVEL: {{ .Values.platformConfig.railsLogLevel | quote }}
+  REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.platformConfig.remoteCodeExecutionProvider | quote }}
+  S3_SSE_TYPE: {{ .Values.platformConfig.s3SseType | quote }}
+  S3_KMS_KEY_ID: {{ .Values.platformConfig.s3KmsKeyId | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  SECRET_KEY_BASE: {{ .Values.multiwovenConfig.secretKeyBase | quote }}
+  SECRET_KEY_BASE: {{ .Values.platformConfig.secretKeyBase | quote }}
   {{ end }}
-  SKIP_DB_MIGRATION: {{ .Values.multiwovenConfig.skipDbMigration | quote }}
-  SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.multiwovenConfig.slackSignupChannelEmail | quote }}
-  SMTP_ADDRESS: {{ .Values.multiwovenConfig.smtpAddress | quote }}
-  SMTP_HOST: {{ .Values.multiwovenConfig.smtpHost | quote }}
+  SKIP_DB_MIGRATION: {{ .Values.platformConfig.skipDbMigration | quote }}
+  SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.platformConfig.slackSignupChannelEmail | quote }}
+  SMTP_ADDRESS: {{ .Values.platformConfig.smtpAddress | quote }}
+  SMTP_HOST: {{ .Values.platformConfig.smtpHost | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  SMTP_PASSWORD: {{ .Values.multiwovenConfig.smtpPassword | quote }}
+  SMTP_PASSWORD: {{ .Values.platformConfig.smtpPassword | quote }}
   {{ end }}
-  SMTP_PORT: {{ .Values.multiwovenConfig.smtpPort | quote }}
+  SMTP_PORT: {{ .Values.platformConfig.smtpPort | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  SMTP_USERNAME: {{ .Values.multiwovenConfig.smtpUsername | quote }}
+  SMTP_USERNAME: {{ .Values.platformConfig.smtpUsername | quote }}
   {{ end }}
-  SMTP_SENDER_EMAIL: {{ .Values.multiwovenConfig.smtpSenderEmail | quote }}
-  SNOWFLAKE_DRIVER_PATH: {{ .Values.multiwovenConfig.snowflakeDriverPath | quote }}
+  SMTP_SENDER_EMAIL: {{ .Values.platformConfig.smtpSenderEmail | quote }}
+  SNOWFLAKE_DRIVER_PATH: {{ .Values.platformConfig.snowflakeDriverPath | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  STORAGE_ACCESS_KEY: {{ .Values.multiwovenConfig.storageAccessKey }}
+  STORAGE_ACCESS_KEY: {{ .Values.platformConfig.storageAccessKey }}
   {{ end }}
-  STORAGE_ACCOUNT_NAME: {{ .Values.multiwovenConfig.storageAccountName }}
-  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.multiwovenConfig.syncExtractorBatchSize | quote }}
-  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncExtractorThreadPoolSize | quote }}
-  SYNC_LOADER_BATCH_SIZE: {{ .Values.multiwovenConfig.syncLoaderBatchSize | quote }}
-  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.syncLoaderThreadPoolSize | quote }}
-  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalActivityThreadPoolSize | quote }}
-  TEMPORAL_CLIENT_CHAIN: {{ .Values.multiwovenConfig.temporalClientChain | quote }}
-  TEMPORAL_CLIENT_KEY: {{ .Values.multiwovenConfig.temporalClientKey | quote }}
-  TEMPORAL_HOST: {{ .Values.multiwovenConfig.temporalHost | quote }}
-  TEMPORAL_NAMESPACE: {{ .Values.multiwovenConfig.temporalNamespace | quote }}
-  TEMPORAL_PORT: {{ .Values.multiwovenConfig.temporalPort | quote }}
-  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.multiwovenConfig.temporalPostgresDefaultPort | quote }}
+  STORAGE_ACCOUNT_NAME: {{ .Values.platformConfig.storageAccountName }}
+  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.platformConfig.syncExtractorBatchSize | quote }}
+  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.platformConfig.syncExtractorThreadPoolSize | quote }}
+  SYNC_LOADER_BATCH_SIZE: {{ .Values.platformConfig.syncLoaderBatchSize | quote }}
+  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.platformConfig.syncLoaderThreadPoolSize | quote }}
+  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalActivityThreadPoolSize | quote }}
+  TEMPORAL_CLIENT_CHAIN: {{ .Values.platformConfig.temporalClientChain | quote }}
+  TEMPORAL_CLIENT_KEY: {{ .Values.platformConfig.temporalClientKey | quote }}
+  TEMPORAL_HOST: {{ .Values.platformConfig.temporalHost | quote }}
+  TEMPORAL_NAMESPACE: {{ .Values.platformConfig.temporalNamespace | quote }}
+  TEMPORAL_PORT: {{ .Values.platformConfig.temporalPort | quote }}
+  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.platformConfig.temporalPostgresDefaultPort | quote }}
   {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
-  TEMPORAL_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalPostgresUser | quote }}
-  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalPostgresPassword | quote }}
-  TEMPORAL_VISIBILITY_POSTGRES_USER: {{ .Values.multiwovenConfig.temporalVisibilityPostgresUser | quote }}
-  TEMPORAL_VISIBILITY_POSTGRES_PASSWORD: {{ .Values.multiwovenConfig.temporalVisibilityPostgresPassword | quote }}
+  TEMPORAL_POSTGRES_USER: {{ .Values.platformConfig.temporalPostgresUser | quote }}
+  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.platformConfig.temporalPostgresPassword | quote }}
+  TEMPORAL_VISIBILITY_POSTGRES_USER: {{ .Values.platformConfig.temporalVisibilityPostgresUser | quote }}
+  TEMPORAL_VISIBILITY_POSTGRES_PASSWORD: {{ .Values.platformConfig.temporalVisibilityPostgresPassword | quote }}
   {{ end }}
-  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.multiwovenConfig.temporalPostgresqlVersion | quote }}
-  TEMPORAL_ROOT_CERT: {{ .Values.multiwovenConfig.temporalRootCert | quote }}
-  TEMPORAL_TASK_QUEUE: {{ .Values.multiwovenConfig.temporalTaskQueue | quote }}
-  TEMPORAL_UI_VERSION: {{ .Values.multiwovenConfig.temporalUiVersion | quote }}
-  TEMPORAL_VERSION: {{ .Values.multiwovenConfig.temporalVersion | quote }}
-  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.multiwovenConfig.temporalWorkflowThreadPoolSize | quote }}
+  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.platformConfig.temporalPostgresqlVersion | quote }}
+  TEMPORAL_ROOT_CERT: {{ .Values.platformConfig.temporalRootCert | quote }}
+  TEMPORAL_TASK_QUEUE: {{ .Values.platformConfig.temporalTaskQueue | quote }}
+  TEMPORAL_UI_VERSION: {{ .Values.platformConfig.temporalUiVersion | quote }}
+  TEMPORAL_VERSION: {{ .Values.platformConfig.temporalVersion | quote }}
+  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalWorkflowThreadPoolSize | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  TEXTRACT_ACCESS_KEY_ID: {{ .Values.multiwovenConfig.textractAccessKeyId | quote }}
+  TEXTRACT_ACCESS_KEY_ID: {{ .Values.platformConfig.textractAccessKeyId | quote }}
   {{ end }}
-  TEXTRACT_BUCKET_NAME: {{ .Values.multiwovenConfig.textractBucketName | quote }}
-  TEXTRACT_REGION: {{ .Values.multiwovenConfig.textractRegion | quote }}
+  TEXTRACT_BUCKET_NAME: {{ .Values.platformConfig.textractBucketName | quote }}
+  TEXTRACT_REGION: {{ .Values.platformConfig.textractRegion | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
-  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.multiwovenConfig.textractSecretAccessKey | quote }}
+  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.platformConfig.textractSecretAccessKey | quote }}
   {{ end }}
-  TRACK: {{ .Values.multiwovenConfig.track | quote }}
-  UI_HOST: {{ .Values.multiwovenConfig.uiHost | quote }}
-  USER_EMAIL_VERIFICATION: {{ .Values.multiwovenConfig.userEmailVerification | quote }}
-  VITE_API_HOST: {{ .Values.multiwovenConfig.viteApiHost | quote }}
-  VITE_APPSIGNAL_MONITORING_KEY: {{ .Values.multiwovenConfig.viteAppsignalMonitoringKey | quote }}
-  VITE_BRAND_NAME: {{ .Values.multiwovenConfig.viteBrandName | quote }}
-  VITE_LOGO_URL: {{ .Values.multiwovenConfig.viteLogoUrl | quote }}
-  VITE_BRAND_COLOR: {{ .Values.multiwovenConfig.viteBrandColor | quote }}
-  VITE_BRAND_HOVER_COLOR: {{ .Values.multiwovenConfig.viteBrandHoverColor | quote }}
-  VITE_FAV_ICON_URL: {{ .Values.multiwovenConfig.viteFavIconUrl | quote }}
-  VITE_PUBLIC_POSTHOG_KEY: {{ .Values.multiwovenConfig.vitePublicPosthogKey | quote }}
-  VITE_PUBLIC_POSTHOG_HOST: {{ .Values.multiwovenConfig.vitePublicPosthogHost | quote }}
+  TRACK: {{ .Values.platformConfig.track | quote }}
+  UI_HOST: {{ .Values.platformConfig.uiHost | quote }}
+  USER_EMAIL_VERIFICATION: {{ .Values.platformConfig.userEmailVerification | quote }}
+  VITE_API_HOST: {{ .Values.platformConfig.viteApiHost | quote }}
+  VITE_APPSIGNAL_MONITORING_KEY: {{ .Values.platformConfig.viteAppsignalMonitoringKey | quote }}
+  VITE_BRAND_NAME: {{ .Values.platformConfig.viteBrandName | quote }}
+  VITE_LOGO_URL: {{ .Values.platformConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.platformConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.platformConfig.viteBrandHoverColor | quote }}
+  VITE_FAV_ICON_URL: {{ .Values.platformConfig.viteFavIconUrl | quote }}
+  VITE_PUBLIC_POSTHOG_KEY: {{ .Values.platformConfig.vitePublicPosthogKey | quote }}
+  VITE_PUBLIC_POSTHOG_HOST: {{ .Values.platformConfig.vitePublicPosthogHost | quote }}

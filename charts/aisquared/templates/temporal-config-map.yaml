@@ -7,19 +7,19 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   DB: {{ quote .Values.temporal.temporal.env.db }}
-  {{ if .Values.multiwovenConfig.skipDbMigration }}
+  {{ if .Values.platformConfig.skipDbMigration }}
   SKIP_DB_CREATE: "true"
   SKIP_SCHEMA_SETUP: "true"
   {{ end }}
-  {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
+  {{ if .Values.platformConfig.temporalPostgresSsl }}
   POSTGRES_TLS_ENABLED: "true"
-  {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
+  {{ if .Values.platformConfig.temporalPostgresTlsDisableHostVerification }}
   POSTGRES_TLS_DISABLE_HOST_VERIFICATION: "true"
   {{ end }}
   TEMPORAL_TLS_REQUIRE_CLIENT_AUTH: "true"
   SQL_TLS: "true"
   SQL_TLS_ENABLED: "true"
-  {{ if .Values.multiwovenConfig.temporalPostgresTlsDisableHostVerification }}
+  {{ if .Values.platformConfig.temporalPostgresTlsDisableHostVerification }}
   SQL_TLS_DISABLE_HOST_VERIFICATION: "true"
   SQL_HOST_VERIFICATION: "false"
   {{ end }}
