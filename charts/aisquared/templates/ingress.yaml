@@ -162,6 +162,13 @@ spec:
               number: {{ (index .Values.lightning.ports 0).port }}
         path: /health
         pathType: Prefix
+      - backend:
+          service:
+            name: '{{ include "chart.fullname" . }}-lightning'
+            port:
+              number: {{ (index .Values.lightning.ports 0).port }}
+        path: /model_status_check
+        pathType: Prefix
 {{ end }}
 {{ if and .Values.box.enabled .Values.boxConfig.boxAdminHost }}
   - host: {{ .Values.boxConfig.boxAdminHost }}
