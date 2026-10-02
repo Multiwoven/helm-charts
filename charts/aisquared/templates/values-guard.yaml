@@ -1,0 +1,2 @@
+{{- /* Renders nothing; fails the render if renamed values keys are used. */ -}}
+{{- include "chart.failOnRenamedValues" . -}}

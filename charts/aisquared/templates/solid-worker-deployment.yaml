@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenSolidWorker.annotations }}
+    {{- with .Values.solidWorker.annotations }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
     {{- $reloaderSecrets := list }}
@@ -19,7 +19,7 @@ metadata:
     secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
     {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenSolidWorker.replicas }}
+  replicas: {{ .Values.solidWorker.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-solid-worker
@@ -32,18 +32,18 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenSolidWorker.annotations }}
+        {{- with .Values.solidWorker.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenSolidWorker.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.solidWorker.podSecurityContext.fsGroup }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.server.server.image.repository }}:{{ .Values.server.server.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
@@ -56,8 +56,8 @@ spec:
           - name: rails-config
             mountPath: /mnt/rails
         securityContext:
-          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.solidWorker.solidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.solidWorker.solidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -69,7 +69,7 @@ spec:
             {{- end }}
             {{- end }}
       {{ end }}
-      {{ if .Values.multiwovenConfig.azureSpot }}
+      {{ if .Values.platformConfig.azureSpot }}
       tolerations:
       - key: "kubernetes.azure.com/scalesetpriority"
         operator: "Equal"
@@ -87,12 +87,12 @@ spec:
                 - spot
       {{ end }}
       containers:
-      - args: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.args | nindent 8 }}
+      - args: {{- toYaml .Values.solidWorker.solidWorker.args | nindent 8 }}
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
-          value: {{ quote .Values.multiwovenSolidWorker.healthPort }}
+          value: {{ quote .Values.solidWorker.healthPort }}
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
@@ -107,9 +107,9 @@ spec:
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
-          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+          value: {{ .Values.multipleDbHosts.platformDBHost }}
         - name: DB_NAME
-          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+          value: {{ .Values.multipleDbHosts.platformDBName }}
         {{ end }}
         {{ if .Values.sandboxConfig.agenticCodingGithubAppPrivateKeyPath }}
         - name: AGENTIC_CODING_GITHUB_APP_PRIVATE_KEY_PATH
@@ -126,11 +126,11 @@ spec:
         - secretRef:
             name: {{ .Values.secretsStore.sandboxSecretAlias }}
         {{ end }}
-        image: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.repository }}:{{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.solidWorker.solidWorker.image.repository }}:{{ .Values.solidWorker.solidWorker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenSolidWorker.multiwovenSolidWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.solidWorker.solidWorker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.solidWorker.solidWorker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -144,19 +144,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenSolidWorker.healthPort }}
+            port: {{ .Values.solidWorker.healthPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-solid-worker
         ports:
-        - containerPort: {{ .Values.multiwovenSolidWorker.healthPort }}
+        - containerPort: {{ .Values.solidWorker.healthPort }}
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenSolidWorker.healthPort }}
+            port: {{ .Values.solidWorker.healthPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenSolidWorker.multiwovenSolidWorker.resources | nindent 10 }}
+        resources: {{- toYaml .Values.solidWorker.solidWorker.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
         {{ if not .Values.temporal.enabled }}
@@ -233,7 +233,7 @@ spec:
         emptyDir: {}
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.platformConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.platformConfig.registrySecretName }}
       {{ end }}

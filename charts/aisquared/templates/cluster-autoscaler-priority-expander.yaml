@@ -1,4 +1,4 @@
-{{ if .Values.multiwovenConfig.azureSpot }}
+{{ if .Values.platformConfig.azureSpot }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

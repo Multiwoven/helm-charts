@@ -86,8 +86,8 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-lightning
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.platformConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.platformConfig.registrySecretName }}
       {{ end }}
 {{ end }}
