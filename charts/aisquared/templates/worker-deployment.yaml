@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: {{ include "chart.fullname" . }}-worker
     {{- include "chart.labels" . | nindent 4 }}
   annotations:
-    {{- with .Values.multiwovenWorker.annotations }}
+    {{- with .Values.worker.annotations }}
       {{ toYaml . | nindent 4 }}
       {{- end }}
     {{- $reloaderSecrets := list }}
@@ -19,7 +19,7 @@ metadata:
     secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
     {{- end }}
 spec:
-  replicas: {{ .Values.multiwovenWorker.replicas }}
+  replicas: {{ .Values.worker.replicas }}
   selector:
     matchLabels:
       app: {{ include "chart.fullname" . }}-worker
@@ -32,18 +32,18 @@ spec:
         io.kompose.service: {{ include "chart.fullname" . }}-worker
       {{- include "chart.selectorLabels" . | nindent 8 }}
       annotations:
-        {{- with .Values.multiwovenWorker.annotations }}
+        {{- with .Values.worker.annotations }}
         {{ toYaml . | nindent 8 }}
         {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
-        fsGroup: {{ .Values.multiwovenWorker.podSecurityContext.fsGroup }}
+        fsGroup: {{ .Values.worker.podSecurityContext.fsGroup }}
       initContainers:
       {{ if .Values.securityContext.readOnlyRootFilesystem }}
       - name: copy-config
-        image: {{ .Values.multiwovenServer.multiwovenServer.image.repository }}:{{ .Values.multiwovenServer.multiwovenServer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.server.server.image.repository }}:{{ .Values.server.server.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         command:
           - /bin/sh
@@ -56,8 +56,8 @@ spec:
           - name: rails-config
             mountPath: /mnt/rails
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.worker.worker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.worker.worker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -69,7 +69,7 @@ spec:
             {{- end }}
             {{- end }}
       {{ end }}
-      {{ if .Values.multiwovenConfig.azureSpot }}
+      {{ if .Values.platformConfig.azureSpot }}
       tolerations:
       - key: "kubernetes.azure.com/scalesetpriority"
         operator: "Equal"
@@ -87,12 +87,12 @@ spec:
                 - spot
       {{ end }}
       containers:
-      - args: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.args | nindent 8 }}
+      - args: {{- toYaml .Values.worker.worker.args | nindent 8 }}
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
-          value: {{ quote .Values.multiwovenWorker.healthPort }}
+          value: {{ quote .Values.worker.healthPort }}
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
@@ -107,9 +107,9 @@ spec:
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: DB_HOST
-          value: {{ .Values.multipleDbHosts.multiwovenDBHost }}
+          value: {{ .Values.multipleDbHosts.platformDBHost }}
         - name: DB_NAME
-          value: {{ .Values.multipleDbHosts.multiwovenDBName }}
+          value: {{ .Values.multipleDbHosts.platformDBName }}
         {{ end }}
         envFrom:
         - configMapRef:
@@ -122,11 +122,11 @@ spec:
         - secretRef:
             name: {{ .Values.secretsStore.sandboxSecretAlias }}
         {{ end }}
-        image: {{ .Values.multiwovenWorker.multiwovenWorker.image.repository }}:{{ .Values.multiwovenWorker.multiwovenWorker.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.worker.worker.image.repository }}:{{ .Values.worker.worker.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: {{ .Values.globalImagePullPolicy }}
         securityContext:
-          runAsUser: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsUser }}
-          runAsGroup: {{ .Values.multiwovenWorker.multiwovenWorker.containerSecurityContext.runAsGroup }}
+          runAsUser: {{ .Values.worker.worker.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.worker.worker.containerSecurityContext.runAsGroup }}
           privileged: false
           allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
           readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
@@ -140,19 +140,19 @@ spec:
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.worker.healthPort }}
           initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-worker
         ports:
-        - containerPort: {{ .Values.multiwovenWorker.healthPort }}
+        - containerPort: {{ .Values.worker.healthPort }}
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.multiwovenWorker.healthPort }}
+            port: {{ .Values.worker.healthPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.multiwovenWorker.multiwovenWorker.resources | nindent 10 }}
+        resources: {{- toYaml .Values.worker.worker.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
         {{ if not .Values.temporal.enabled }}
@@ -219,7 +219,7 @@ spec:
         emptyDir: {}
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.platformConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.platformConfig.registrySecretName }}
       {{ end }}

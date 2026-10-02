@@ -12,36 +12,36 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "chart.fullname" . }}-server
-  minReplicas: {{ .Values.hpa.multiwovenServer.minReplicas }}
-  maxReplicas: {{ .Values.hpa.multiwovenServer.maxReplicas }}
+  minReplicas: {{ .Values.hpa.server.minReplicas }}
+  maxReplicas: {{ .Values.hpa.server.maxReplicas }}
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.stabilizationWindowSeconds }}
+      stabilizationWindowSeconds: {{ .Values.hpa.server.behavior.scaleDown.stabilizationWindowSeconds }}
       policies:
-      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.type }}
-        value: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.server.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.server.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.server.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
     scaleUp:
-      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.stabilizationWindowSeconds }}
+      stabilizationWindowSeconds: {{ .Values.hpa.server.behavior.scaleUp.stabilizationWindowSeconds }}
       policies:
-      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.type }}
-        value: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
-      - type: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.type }}
-        value: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.podPolicy.periodSeconds }}
-      selectPolicy: {{ .Values.hpa.multiwovenServer.behavior.scaleUp.policies.selectPolicy }}
+      - type: {{ .Values.hpa.server.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.server.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.server.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.server.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.server.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.server.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.server.behavior.scaleUp.policies.selectPolicy }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenServer.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.server.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenServer.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.server.memoryAverageUtilizationPercentageThreshold }}
 {{ end }}

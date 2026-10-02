@@ -97,14 +97,14 @@ spec:
               key: TP_DB_USERNAME
             {{ end }}
         {{ end }}
-        {{ if .Values.multiwovenConfig.temporalPostgresSsl }}
+        {{ if .Values.platformConfig.temporalPostgresSsl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         {{ end }}
         {{ if .Values.multipleDbHosts.enabled }}
         - name: TEMPORAL_DEFAULT_USER
           {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
-          value: {{ .Values.multiwovenConfig.temporalPostgresUser }}
+          value: {{ .Values.platformConfig.temporalPostgresUser }}
           {{ end }}
           {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
@@ -114,7 +114,7 @@ spec:
           {{end }}
         - name: TEMPORAL_DEFAULT_PASSWORD
           {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
-          value: {{ .Values.multiwovenConfig.temporalPostgresPassword }}
+          value: {{ .Values.platformConfig.temporalPostgresPassword }}
           {{ end }}
           {{ if .Values.secretsStore.temporalDbSecretEnabled }}
           valueFrom:
@@ -129,7 +129,7 @@ spec:
                 name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
                 key: TPV_DB_USERNAME
           {{ else }}
-          value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresUser }}
+          value: {{ .Values.platformConfig.temporalVisibilityPostgresUser }}
           {{end }}
         - name: TEMPORAL_VISIBILITY_PASSWORD
           {{ if .Values.secretsStore.temporalDbSecretEnabled }}
@@ -138,7 +138,7 @@ spec:
                 name: {{ .Values.secretsStore.temporalVisibilityDbSecretAlias }}
                 key: TPV_DB_PASSWORD
           {{ else }}
-          value: {{ .Values.multiwovenConfig.temporalVisibilityPostgresPassword }}
+          value: {{ .Values.platformConfig.temporalVisibilityPostgresPassword }}
           {{end }}
         {{ end }}
         envFrom:
@@ -207,8 +207,8 @@ spec:
           name: "{{ include "chart.fullname" . }}-temporal-config"
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.platformConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.platformConfig.registrySecretName }}
       {{ end }}
 {{ end }}

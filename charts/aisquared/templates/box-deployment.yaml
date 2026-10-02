@@ -100,8 +100,8 @@ spec:
             secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-box
       {{ end }}
       restartPolicy: Always
-      {{ if .Values.multiwovenConfig.privateRepo }}
+      {{ if .Values.platformConfig.privateRepo }}
       imagePullSecrets:
-        - name: {{ .Values.multiwovenConfig.registrySecretName }}
+        - name: {{ .Values.platformConfig.registrySecretName }}
       {{ end }}
 {{ end }}

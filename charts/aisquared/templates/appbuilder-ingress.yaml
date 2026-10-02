@@ -75,5 +75,5 @@ spec:
           service:
             name: '{{ include "chart.fullname" . }}-server'
             port:
-              number: {{ (index .Values.multiwovenServer.ports 0).port }}
+              number: {{ (index .Values.server.ports 0).port }}
 {{- end }}

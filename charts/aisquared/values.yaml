@@ -18,7 +18,7 @@ appbuilderIngress:
   groupOrder: "20"
   extraAnnotations: {}
 
-multiwovenConfig:
+platformConfig:
   activeStorageService: "microsoft"
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
@@ -384,8 +384,8 @@ globalImagePullPolicy: IfNotPresent
 multipleDbHosts:
   enabled: false
 
-  multiwovenDBHost: ""
-  multiwovenDBName: ""
+  platformDBHost: ""
+  platformDBName: ""
 
   temporalDbName: ""
   temporalDbHost: ""
@@ -395,7 +395,7 @@ multipleDbHosts:
 
 hpa:
   enabled: true
-  multiwovenUI:
+  ui:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -425,7 +425,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenServer:
+  server:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -455,7 +455,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenSolidWorker:
+  solidWorker:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -485,7 +485,7 @@ hpa:
             value: 4
             periodSeconds: 15
           selectPolicy: Max
-  multiwovenWorker:
+  worker:
     minReplicas: 1
     maxReplicas: 10
     cpuAverageUtilizationPercentageThreshold: 80
@@ -576,10 +576,10 @@ hpa:
             periodSeconds: 15
           selectPolicy: Max
 
-multiwovenPostgresql:
+postgresql:
   enabled: true
   annotations: {}
-  multiwovenPostgresql:
+  postgresql:
     image:
       repository: postgres
       tag: "13"
@@ -596,11 +596,11 @@ multiwovenPostgresql:
       targetPort: 5432
   replicas: 1
   type: ClusterIP
-multiwovenServer:
+server:
   annotations: {}
   podSecurityContext:
     fsGroup: 1000
-  multiwovenServer:
+  server:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -620,11 +620,11 @@ multiwovenServer:
       targetPort: 3000
   replicas: 1
   type: ClusterIP
-multiwovenUI:
+ui:
   annotations: {}
   podSecurityContext:
     fsGroup: 1000
-  multiwovenUI:
+  ui:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -644,12 +644,12 @@ multiwovenUI:
       targetPort: 8000
   replicas: 1
   type: ClusterIP
-multiwovenSolidWorker:
+solidWorker:
   annotations: {}
   healthPort: 9999
   podSecurityContext:
     fsGroup: 1000
-  multiwovenSolidWorker:
+  solidWorker:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
@@ -674,12 +674,12 @@ multiwovenSolidWorker:
       targetPort: 9999
   replicas: 1
   type: ClusterIP
-multiwovenWorker:
+worker:
   annotations: {}
   healthPort: 4567
   podSecurityContext:
     fsGroup: 1000
-  multiwovenWorker:
+  worker:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000

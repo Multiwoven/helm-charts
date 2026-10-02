@@ -12,36 +12,36 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "chart.fullname" . }}-solid-worker
-  minReplicas: {{ .Values.hpa.multiwovenSolidWorker.minReplicas }}
-  maxReplicas: {{ .Values.hpa.multiwovenSolidWorker.maxReplicas }}
+  minReplicas: {{ .Values.hpa.solidWorker.minReplicas }}
+  maxReplicas: {{ .Values.hpa.solidWorker.maxReplicas }}
   behavior:
     scaleDown:
-      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleDown.stabilizationWindowSeconds }}
+      stabilizationWindowSeconds: {{ .Values.hpa.solidWorker.behavior.scaleDown.stabilizationWindowSeconds }}
       policies:
-      - type: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleDown.policies.percentPolicy.type }}
-        value: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleDown.policies.percentPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.solidWorker.behavior.scaleDown.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.solidWorker.behavior.scaleDown.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.solidWorker.behavior.scaleDown.policies.percentPolicy.periodSeconds }}
     scaleUp:
-      stabilizationWindowSeconds: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.stabilizationWindowSeconds }}
+      stabilizationWindowSeconds: {{ .Values.hpa.solidWorker.behavior.scaleUp.stabilizationWindowSeconds }}
       policies:
-      - type: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.percentPolicy.type }}
-        value: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.percentPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
-      - type: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.podPolicy.type }}
-        value: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.podPolicy.value }}
-        periodSeconds: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.podPolicy.periodSeconds }}
-      selectPolicy: {{ .Values.hpa.multiwovenSolidWorker.behavior.scaleUp.policies.selectPolicy }}
+      - type: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.percentPolicy.type }}
+        value: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.percentPolicy.value }}
+        periodSeconds: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.percentPolicy.periodSeconds }}
+      - type: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.podPolicy.type }}
+        value: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.podPolicy.value }}
+        periodSeconds: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.podPolicy.periodSeconds }}
+      selectPolicy: {{ .Values.hpa.solidWorker.behavior.scaleUp.policies.selectPolicy }}
   metrics:
   - type: Resource
     resource:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenSolidWorker.cpuAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.solidWorker.cpuAverageUtilizationPercentageThreshold }}
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: {{ .Values.hpa.multiwovenSolidWorker.memoryAverageUtilizationPercentageThreshold }}
+        averageUtilization: {{ .Values.hpa.solidWorker.memoryAverageUtilizationPercentageThreshold }}
 {{ end }}
