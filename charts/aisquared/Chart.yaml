@@ -1,0 +1,15 @@
+apiVersion: v2
+name: aisquared
+description: |
+  Helm chart for deploying the AI Squared platform.
+# kubeVersion: ">=1.16.0"
+type: application
+version: 0.115.0
+appVersion: "0.115.0"
+home: https://squared.ai
+sources:
+  - https://docs.squared.ai/open-source/guides/setup/helm
+maintainers:
+  - name: RafaelOAiSquared
+  - name: AngeloB-AIS
+  - name: hassimnaseef

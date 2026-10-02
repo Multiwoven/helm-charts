@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-config
+  {{- include "chart.labels" . | nindent 4 }}
+data:
+  ACTIVE_STORAGE_SERVICE: {{ .Values.platformConfig.activeStorageService | quote }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  AGENTIC_CODING_BUILD_TOKEN: {{ .Values.sandboxConfig.agenticCodingBuildToken | quote }}
+  {{ end }}
+  AGENTIC_CODING_DB_PROVIDER: {{ .Values.sandboxConfig.agenticCodingDbProvider | quote }}
+  AGENTIC_CODING_DEPLOY_CPU: {{ .Values.sandboxConfig.agenticCodingDeployCpu | quote }}
+  AGENTIC_CODING_DEPLOYMENT_ENV: {{ .Values.sandboxConfig.agenticCodingDeploymentEnv | quote }}
+  AGENTIC_CODING_DEPLOY_ROTATE_ENABLED: {{ .Values.sandboxConfig.agenticCodingDeployRotateEnabled | quote }}
+  AGENTIC_CODING_DEPLOY_MEMORY: {{ .Values.sandboxConfig.agenticCodingDeployMemory | quote }}
+  AGENTIC_CODING_GITHUB_APP_CLIENT_ID: {{ .Values.sandboxConfig.agenticCodingGithubAppClientId | quote }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  AGENTIC_CODING_GITHUB_APP_CLIENT_SECRET: {{ .Values.sandboxConfig.agenticCodingGithubAppClientSecret | quote }}
+  {{ end }}
+  AGENTIC_CODING_GITHUB_APP_ID: {{ .Values.sandboxConfig.agenticCodingGithubAppId | quote }}
+  AGENTIC_CODING_GITHUB_APP_SLUG: {{ .Values.sandboxConfig.agenticCodingGithubAppSlug | quote }}
+  AGENTIC_CODING_GITHUB_BOT_EMAIL: {{ .Values.sandboxConfig.agenticCodingGithubBotEmail | quote }}
+  AGENTIC_CODING_GITHUB_BOT_NAME: {{ .Values.sandboxConfig.agenticCodingGithubBotName | quote }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  AGENTIC_CODING_GITHUB_WEBHOOK_SECRET: {{ .Values.sandboxConfig.agenticCodingGithubWebhookSecret | quote }}
+  {{ end }}
+  AGENTIC_CODING_IDLE_THRESHOLD: {{ .Values.sandboxConfig.agenticCodingIdleThreshold | quote }}
+  AGENTIC_CODING_S3_BUCKET: {{ .Values.sandboxConfig.agenticCodingS3Bucket | quote }}
+  AGENTIC_CODING_S3_REGION: {{ .Values.sandboxConfig.agenticCodingS3Region | quote }}
+  AGENTIC_CODING_SANDBOX_CPU: {{ .Values.sandboxConfig.agenticCodingSandboxCpu | quote }}
+  AGENTIC_CODING_SANDBOX_DOMAIN: {{ .Values.sandboxConfig.agenticCodingSandboxDomain | quote }}
+  AGENTIC_CODING_SANDBOX_IDLE_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxIdleTimeout | quote }}
+  AGENTIC_CODING_SANDBOX_IMAGE: {{ .Values.sandboxConfig.agenticCodingSandboxImage | quote }}
+  AGENTIC_CODING_SANDBOX_MEMORY: {{ .Values.sandboxConfig.agenticCodingSandboxMemory | quote}}
+  AGENTIC_CODING_SANDBOX_PROVIDER: {{ .Values.sandboxConfig.agenticCodingSandboxProvider | quote }}
+  AGENTIC_CODING_SANDBOX_TIMEOUT: {{ .Values.sandboxConfig.agenticCodingSandboxTimeout | quote }}
+  AGENTIC_CODING_SNAPSHOT_INTERVAL: {{ .Values.sandboxConfig.agenticCodingSnapshotInterval | quote }}
+  AGENTIC_CODING_STORAGE_PROVIDER: {{ .Values.sandboxConfig.agenticCodingStorageProvider | quote }}
+  AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
+  AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
+  ALLOWED_HOST: {{ .Values.platformConfig.allowedHost | quote }}
+  APPGEN_PUBLISHED_DOMAIN: {{ .Values.appbuilderIngress.appgenPublishedDomain | quote }}
+  API_HOST: {{ .Values.platformConfig.apiHost | quote }}
+  APP_ENV: {{ .Values.platformConfig.appEnv | quote }}
+  APP_REVISION: {{ .Values.platformConfig.appRevision | quote }}
+  APPSIGNAL_APP_ENV: {{ .Values.platformConfig.appEnv | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  APPSIGNAL_PUSH_API_KEY: {{ .Values.platformConfig.appsignalPushApiKey | quote }}
+  AWS_ACCESS_KEY_ID: {{ .Values.platformConfig.awsAccessKeyId | quote }}
+  {{ end }}
+  AWS_LAMBDA_API_URL: {{ .Values.platformConfig.awsLambdaApiUrl | quote }}
+  AWS_REGION: {{ .Values.platformConfig.awsRegion | quote }}
+  AWS_S3_BUCKET: {{ .Values.platformConfig.awsS3Bucket | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  AWS_SECRET_ACCESS_KEY: {{ .Values.platformConfig.awsSecretAccessKey | quote }}
+  BOX_API_KEY: {{ .Values.platformConfig.boxApiKey | quote }}
+  {{ end }}
+  BOX_BASE_URL: {{ .Values.platformConfig.boxBaseUrl | quote }}
+  BRAND_NAME: {{ .Values.platformConfig.smtpBrandName | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  CODE_EXEC_SIGNING_SECRET: {{ .Values.platformConfig.codeExecSigningSecret | quote }}
+  {{ end }}
+  CODING_AGENT_PROVIDER: {{ .Values.sandboxConfig.codingAgentProvider | quote }}
+  CODING_AGENT_MODEL: {{ .Values.sandboxConfig.codingAgentModel | quote }}
+  CODING_AGENT_BEDROCK_MODEL_ID: {{ .Values.sandboxConfig.codingAgentBedrockModelId | quote }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
+  {{ end }}
+  DATABRICKS_DRIVER_PATH: {{ .Values.platformConfig.databricksDriverPath | quote }}
+  ENABLE_GEO_SUBSCRIBER: {{ .Values.platformConfig.enableGeoSubscriber | quote }}
+  DB_NAME: {{ .Values.platformConfig.dbName | quote }}
+  DB_PORT: {{ .Values.platformConfig.dbPort | quote }}
+  DB_HOST: {{ .Values.platformConfig.dbHost | quote }}
+  {{ if not .Values.secretsStore.mwDbSecretEnabled }}
+  DB_PASSWORD: {{ .Values.platformConfig.dbPassword | quote }}
+  DB_USERNAME: {{ .Values.platformConfig.dbUsername | quote }}
+  {{ end }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  DOCKER_HUB_REGISTRY_USERNAME: {{ .Values.sandboxConfig.dockerHubRegistryUsername | quote }}
+  DOCKER_HUB_REGISTRY_PASSWORD: {{ .Values.sandboxConfig.dockerHubRegistryPassword | quote }}
+  {{ end }}
+  GRPC_ENABLE_FORK_SUPPORT: {{ .Values.platformConfig.grpcEnableForkSupport | quote }}
+  GOOGLE_GEMINI_EXCLUDE_MODELS: {{ .Values.platformConfig.googleGeminiExcludeModels | quote }}
+  HOSTED_VECTOR_DB_HOST: {{ .Values.platformConfig.hostedVectorDbHost | quote }}
+  HOSTED_VECTOR_DB_DATABASE: {{ .Values.platformConfig.hostedVectorDbDatabase | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  HOSTED_VECTOR_DB_USERNAME: {{ .Values.platformConfig.hostedVectorDbUsername | quote }}
+  HOSTED_VECTOR_DB_PASSWORD: {{ .Values.platformConfig.hostedVectorDbPassword | quote }}
+  {{ end }}
+  HOSTED_VECTOR_DB_PORT: {{ .Values.platformConfig.hostedVectorDbPort | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  HUBSPOT_API_KEY: {{ .Values.platformConfig.hubspotApiKey | quote }}
+  JWT_SECRET: {{ .Values.platformConfig.jwtSecret | quote }}
+  {{ end }}
+  LEAD_CAPTURE_ENABLED: {{ .Values.platformConfig.leadCaptureEnabled | quote }}
+  LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
+  MAXMIND_ACCOUNT_ID: {{ .Values.platformConfig.maxmindAccountId | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  MAXMIND_LICENSE_KEY: {{ .Values.platformConfig.maxmindLicenseKey | quote }}
+  {{ end }}
+  {{ if not .Values.secretsStore.sandboxSecretEnabled }}
+  MODAL_TOKEN_ID: {{ .Values.sandboxConfig.modalTokenId | quote }}
+  MODAL_TOKEN_SECRET: {{ .Values.sandboxConfig.modalTokenSecret | quote }}
+  {{ end }}
+  MODAL_ENVIRONMENT: {{ .Values.sandboxConfig.modalEnvironment | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  NEON_API_KEY: {{ .Values.platformConfig.neonApiKey | quote }}
+  {{ end }}
+  NEON_API_BASE_URL: {{ .Values.platformConfig.neonApiBaseUrl | quote }}
+  NEON_DEFAULT_REGION: {{ .Values.platformConfig.neonDefaultRegion | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  NEW_RELIC_KEY: {{ .Values.platformConfig.newRelicKey | quote }}
+  {{ end }}
+  OPENCODE_OTLP_ENDPOINT: {{ .Values.sandboxConfig.opencodeOtlpEndpoint | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  OPENROUTER_API_KEY: {{ .Values.platformConfig.openrouterApiKey | quote }}
+  {{ end }}
+  OPEN_ROUTER_EXCLUDE_PROVIDERS: {{ .Values.platformConfig.openRouterExcludeProviders | quote }}
+  OPENAI_EXCLUDE_MODELS: {{ .Values.platformConfig.openaiExcludeModels | quote }}
+  ANTHROPIC_EXCLUDE_MODELS: {{ .Values.platformConfig.anthropicExcludeModels | quote }}
+  P2W_LLM_PROVIDER: {{ .Values.platformConfig.p2wLlmProvider | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  P2W_LLM_API_KEY: {{ .Values.platformConfig.p2wLlmApiKey | quote }}
+  {{ end }}
+  P2W_LLM_MODEL: {{ .Values.platformConfig.p2wLlmModel | quote }}
+  P2W_LLM_TEMPERATURE: {{ .Values.platformConfig.p2wLlmTemperature | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  PROMETHEUS_METRICS_PASSWORD: {{ .Values.platformConfig.prometheusMetricsPassword | quote }}
+  PROMETHEUS_METRICS_USERNAME: {{ .Values.platformConfig.prometheusMetricsUsername | quote }}
+  {{ end }}
+  PROMPT_TO_WORKFLOW_PROVIDER: {{ .Values.platformConfig.promptToWorkflowProvider | quote }}
+  PROMPT_TO_WORKFLOW_MODEL: {{ .Values.platformConfig.promptToWorkflowModel | quote }}
+  PROMPT_TO_WORKFLOW_API_URL: {{ .Values.platformConfig.promptToWorkflowApiUrl | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  PROMPT_TO_WORKFLOW_API_KEY: {{ .Values.platformConfig.promptToWorkflowApiKey | quote }}
+  {{ end }}
+  RAILS_ENV: {{ .Values.platformConfig.railsEnv | quote }}
+  RAILS_LOG_LEVEL: {{ .Values.platformConfig.railsLogLevel | quote }}
+  REMOTE_CODE_EXECUTION_PROVIDER: {{ .Values.platformConfig.remoteCodeExecutionProvider | quote }}
+  S3_SSE_TYPE: {{ .Values.platformConfig.s3SseType | quote }}
+  S3_KMS_KEY_ID: {{ .Values.platformConfig.s3KmsKeyId | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  SECRET_KEY_BASE: {{ .Values.platformConfig.secretKeyBase | quote }}
+  {{ end }}
+  SKIP_DB_MIGRATION: {{ .Values.platformConfig.skipDbMigration | quote }}
+  SLACK_SIGNUP_CHANNEL_EMAIL: {{ .Values.platformConfig.slackSignupChannelEmail | quote }}
+  SMTP_ADDRESS: {{ .Values.platformConfig.smtpAddress | quote }}
+  SMTP_HOST: {{ .Values.platformConfig.smtpHost | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  SMTP_PASSWORD: {{ .Values.platformConfig.smtpPassword | quote }}
+  {{ end }}
+  SMTP_PORT: {{ .Values.platformConfig.smtpPort | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  SMTP_USERNAME: {{ .Values.platformConfig.smtpUsername | quote }}
+  {{ end }}
+  SMTP_SENDER_EMAIL: {{ .Values.platformConfig.smtpSenderEmail | quote }}
+  SNOWFLAKE_DRIVER_PATH: {{ .Values.platformConfig.snowflakeDriverPath | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  STORAGE_ACCESS_KEY: {{ .Values.platformConfig.storageAccessKey }}
+  {{ end }}
+  STORAGE_ACCOUNT_NAME: {{ .Values.platformConfig.storageAccountName }}
+  SYNC_EXTRACTOR_BATCH_SIZE: {{ .Values.platformConfig.syncExtractorBatchSize | quote }}
+  SYNC_EXTRACTOR_THREAD_POOL_SIZE: {{ .Values.platformConfig.syncExtractorThreadPoolSize | quote }}
+  SYNC_LOADER_BATCH_SIZE: {{ .Values.platformConfig.syncLoaderBatchSize | quote }}
+  SYNC_LOADER_THREAD_POOL_SIZE: {{ .Values.platformConfig.syncLoaderThreadPoolSize | quote }}
+  TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalActivityThreadPoolSize | quote }}
+  TEMPORAL_CLIENT_CHAIN: {{ .Values.platformConfig.temporalClientChain | quote }}
+  TEMPORAL_CLIENT_KEY: {{ .Values.platformConfig.temporalClientKey | quote }}
+  TEMPORAL_HOST: {{ .Values.platformConfig.temporalHost | quote }}
+  TEMPORAL_NAMESPACE: {{ .Values.platformConfig.temporalNamespace | quote }}
+  TEMPORAL_PORT: {{ .Values.platformConfig.temporalPort | quote }}
+  TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.platformConfig.temporalPostgresDefaultPort | quote }}
+  {{ if not .Values.secretsStore.temporalDbSecretEnabled }}
+  TEMPORAL_POSTGRES_USER: {{ .Values.platformConfig.temporalPostgresUser | quote }}
+  TEMPORAL_POSTGRES_PASSWORD: {{ .Values.platformConfig.temporalPostgresPassword | quote }}
+  TEMPORAL_VISIBILITY_POSTGRES_USER: {{ .Values.platformConfig.temporalVisibilityPostgresUser | quote }}
+  TEMPORAL_VISIBILITY_POSTGRES_PASSWORD: {{ .Values.platformConfig.temporalVisibilityPostgresPassword | quote }}
+  {{ end }}
+  TEMPORAL_POSTGRESQL_VERSION: {{ .Values.platformConfig.temporalPostgresqlVersion | quote }}
+  TEMPORAL_ROOT_CERT: {{ .Values.platformConfig.temporalRootCert | quote }}
+  TEMPORAL_TASK_QUEUE: {{ .Values.platformConfig.temporalTaskQueue | quote }}
+  TEMPORAL_UI_VERSION: {{ .Values.platformConfig.temporalUiVersion | quote }}
+  TEMPORAL_VERSION: {{ .Values.platformConfig.temporalVersion | quote }}
+  TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalWorkflowThreadPoolSize | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  TEXTRACT_ACCESS_KEY_ID: {{ .Values.platformConfig.textractAccessKeyId | quote }}
+  {{ end }}
+  TEXTRACT_BUCKET_NAME: {{ .Values.platformConfig.textractBucketName | quote }}
+  TEXTRACT_REGION: {{ .Values.platformConfig.textractRegion | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.platformConfig.textractSecretAccessKey | quote }}
+  {{ end }}
+  TRACK: {{ .Values.platformConfig.track | quote }}
+  UI_HOST: {{ .Values.platformConfig.uiHost | quote }}
+  USER_EMAIL_VERIFICATION: {{ .Values.platformConfig.userEmailVerification | quote }}
+  VITE_API_HOST: {{ .Values.platformConfig.viteApiHost | quote }}
+  VITE_APPSIGNAL_MONITORING_KEY: {{ .Values.platformConfig.viteAppsignalMonitoringKey | quote }}
+  VITE_BRAND_NAME: {{ .Values.platformConfig.viteBrandName | quote }}
+  VITE_LOGO_URL: {{ .Values.platformConfig.viteLogoUrl | quote }}
+  VITE_BRAND_COLOR: {{ .Values.platformConfig.viteBrandColor | quote }}
+  VITE_BRAND_HOVER_COLOR: {{ .Values.platformConfig.viteBrandHoverColor | quote }}
+  VITE_FAV_ICON_URL: {{ .Values.platformConfig.viteFavIconUrl | quote }}
+  VITE_PUBLIC_POSTHOG_KEY: {{ .Values.platformConfig.vitePublicPosthogKey | quote }}
+  VITE_PUBLIC_POSTHOG_HOST: {{ .Values.platformConfig.vitePublicPosthogHost | quote }}
