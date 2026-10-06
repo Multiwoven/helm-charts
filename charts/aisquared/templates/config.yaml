@@ -68,6 +68,9 @@ data:
   CODING_AGENT_BEDROCK_MODEL_ID: {{ .Values.sandboxConfig.codingAgentBedrockModelId | quote }}
   {{ if not .Values.secretsStore.sandboxSecretEnabled }}
   CODING_AGENT_MODEL_API_KEY: {{ .Values.sandboxConfig.codingAgentModelApiKey | quote }}
+  CODING_AGENT_OPENAI_API_KEY: {{ .Values.sandboxConfig.codingAgentOpenaiApiKey | quote }}
+  CODING_AGENT_XAI_API_KEY: {{ .Values.sandboxConfig.codingAgentXaiApiKey | quote }}
+  CODING_AGENT_GOOGLE_API_KEY: {{ .Values.sandboxConfig.codingAgentGoogleApiKey | quote }}
   {{ end }}
   DATABRICKS_DRIVER_PATH: {{ .Values.platformConfig.databricksDriverPath | quote }}
   ENABLE_GEO_SUBSCRIBER: {{ .Values.platformConfig.enableGeoSubscriber | quote }}
