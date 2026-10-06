@@ -1,0 +1,911 @@
+# Keeps resource names and selector labels identical to the pre-rename
+# "multiwoven" chart. Resource names and app.kubernetes.io/name are derived from
+# the chart name, and Deployment selectors are immutable, so removing this
+# renames/recreates every resource. Only change it as part of a planned migration.
+nameOverride: multiwoven
+kubernetesClusterDomain: cluster.local
+kubernetesNamespace: multiwoven
+
+appbuilderIngress:
+  enabled: false
+  appgenPublishedDomain: "appbuilder.qa.squared.ai"
+  tlsSecretName: appbuilder-wildcard-tls
+  proxyBodySize: 100m
+  proxyReadTimeout: 3600
+  proxySendTimeout: 3600
+  proxyBuffering: "off"
+  # Higher than awsIngress.groupOrder — see that comment.
+  groupOrder: "20"
+  extraAnnotations: {}
+
+platformConfig:
+  activeStorageService: "microsoft"
+  allowedHost: ""
+  allowedSourceIP: "0.0.0.0/0"
+  apiHost: api.example.com
+  appRevision: unknown
+  appEnv: community
+  appsignalPushApiKey: yourkey
+  awsAccessKeyId: ""
+  awsLambdaApiUrl: ""
+  awsS3Bucket: ""
+  awsRegion: ""
+  awsSecretAccessKey: ""
+  azureSpot: false
+  boxApiKey: ""
+  boxBaseUrl: ""
+  codeExecSigningSecret: ""
+  databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
+  enableGeoSubscriber: "false"
+  dbHost: multiwoven-postgresql
+  dbPassword: password
+  dbPort: "5432"
+  dbUsername: multiwoven
+  dbName: multiwoven_server_production
+  grpcEnableForkSupport: 1
+  hostedVectorDbHost: ""
+  hostedVectorDbDatabase: ""
+  hostedVectorDbUsername: ""
+  hostedVectorDbPassword: ""
+  hostedVectorDbPort: "5432"
+  hubspotApiKey: ""
+  jwtSecret: ""
+  leadCaptureEnabled: "false"
+  maxmindAccountId: ""
+  maxmindLicenseKey: ""
+  neonApiKey: ""
+  neonApiBaseUrl: ""
+  neonDefaultRegion: ""
+  newRelicKey: yourkey
+  nginxProxyBodySize: 2m
+  openrouterApiKey: ""
+  openRouterExcludeProviders: ""
+  openaiExcludeModels: ""
+  anthropicExcludeModels: ""
+  googleGeminiExcludeModels: ""
+  privateRepo: false
+  p2wLlmProvider: ""
+  p2wLlmApiKey: ""
+  p2wLlmModel: ""
+  p2wLlmTemperature: ""
+  prometheusMetricsPassword: ""
+  prometheusMetricsUsername: ""
+  promptToWorkflowProvider: ""
+  promptToWorkflowModel: ""
+  promptToWorkflowApiUrl: ""
+  promptToWorkflowApiKey: ""
+  railsEnv: development
+  railsLogLevel: info
+  registrySecretName: mwregistrysecret
+  remoteCodeExecutionProvider: ""
+  s3SseType: "AES256"  # optional: "none", "AES256", or "aws:kms - case-sensitive"
+  s3KmsKeyId: ""  # optional: full ARN if using aws:kms
+  secretKeyBase: ""
+  skipDbMigration: false
+  slackSignupChannelEmail: ""
+  smtpAddress: smtp.yourdomain.com
+  smtpBrandName: AI Squared
+  smtpHost: yourdomain.com
+  smtpPassword: yourpassword
+  smtpPort: "587"
+  smtpUsername: yourusername
+  smtpSenderEmail: admin@yourdomain.com
+  solidWorkerHost: solid.example.com
+  snowflakeDriverPath: /usr/lib/snowflake/odbc/lib/libSnowflake.so
+  storageAccessKey: ""
+  storageAccountName: ""
+  syncExtractorBatchSize: "1000"
+  syncExtractorThreadPoolSize: "10"
+  syncLoaderBatchSize: "1000"
+  syncLoaderThreadPoolSize: "10"
+  temporalActivityThreadPoolSize: "20"
+  temporalClientChain: /certs/temporal.chain.pem
+  temporalClientKey: /certs/temporal.pem
+  temporalHost: multiwoven-temporal
+  temporalNamespace: multiwoven-dev
+  temporalPort: "7233"
+  temporalPostgresDefaultPort: "5432"
+  temporalPostgresPassword: password
+  temporalPostgresSsl: false
+  temporalPostgresTlsDisableHostVerification: false
+  temporalPostgresUser: multiwoven
+  temporalVisibilityPostgresUser: ""
+  temporalVisibilityPostgresPassword: ""
+  temporalPostgresqlVersion: "13"
+  temporalRootCert: /certs/temporal.key
+  temporalTaskQueue: sync-dev
+  temporalUiHost: temporal.example.com
+  temporalUiVersion: 2.23.2
+  temporalVersion: 1.22.4
+  temporalWorkflowThreadPoolSize: "10"
+  textractAccessKeyId: ""
+  textractBucketName: ""
+  textractRegion: ""
+  textractSecretAccessKey: ""
+  tlsAdminEmail: admin@example.com
+  tlsCertIssuer: letsencrypt-staging
+  track: "no"
+  uiHost: app.example.com
+  userEmailVerification: "false"
+  viteApiHost: api.example.com
+  viteAppsignalMonitoringKey: yourkey
+  viteBrandName: "AI Squared"
+  viteLogoUrl: ""
+  viteBrandColor: ""
+  viteBrandHoverColor: ""
+  viteFavIconUrl: ""
+  vitePublicPosthogKey: ""
+  vitePublicPosthogHost: ""
+
+  workerHost: worker.example.com
+
+sandboxConfig:
+  agenticCodingBuildToken: ""
+  agenticCodingDbProvider: ""
+  agenticCodingDeployCpu: "1000"
+  agenticCodingDeploymentEnv: "staging"
+  agenticCodingDeployRotateEnabled: "false"
+  agenticCodingDeployMemory: "2048"
+  agenticCodingIdleThreshold: "10"
+  agenticCodingS3Bucket: ""
+  agenticCodingS3Region: "us-east-1"
+  agenticCodingSandboxCpu: "2000"
+  agenticCodingSandboxDomain: "agentic-coding-sandbox.example.com"
+  agenticCodingSandboxIdleTimeout: "1200"
+  agenticCodingSandboxImage: ""
+  agenticCodingSandboxMemory: "4096"
+  agenticCodingSandboxProvider: "modal"
+  agenticCodingSandboxTimeout: "3600"
+  agenticCodingSnapshotInterval: "*/10 * * * *"
+  agenticCodingStorageProvider: "aws"
+  agenticCodingStsDuration: "43200"
+  agenticCodingStsRoleName: ""
+  codingAgentProvider: "opencode"
+  codingAgentModel: "anthropic/claude-sonnet-4-20250514"
+  codingAgentModelApiKey: ""
+  codingAgentOpenaiApiKey: ""
+  codingAgentXaiApiKey: ""
+  codingAgentGoogleApiKey: ""
+  codingAgentBedrockModelId: "us.anthropic.claude-opus-4-6-v1"
+  modalTokenId: ""
+  modalTokenSecret: ""
+  modalEnvironment: ""
+  opencodeOtlpEndpoint: ""
+  dockerHubRegistryUsername: ""
+  dockerHubRegistryPassword: ""
+  agenticCodingGithubAppSlug: ""
+  agenticCodingGithubAppId: ""
+  agenticCodingGithubAppClientId: ""
+  agenticCodingGithubAppClientSecret: ""
+  agenticCodingGithubWebhookSecret: ""
+  agenticCodingGithubBotEmail: "appbuilder-bot@example.com"
+  agenticCodingGithubBotName: "AppBuilder Bot"
+
+  # GitHub App private key: not stored here. Create a Kubernetes Secret
+  # out-of-band with the PEM under key "private-key.pem", e.g.:
+  #   kubectl create secret generic agentic-coding-github-app-key \
+  #     --from-file=private-key.pem=./github-app.pem -n <namespace>
+  # then set the name below. The chart mounts it and points
+  # AGENTIC_CODING_GITHUB_APP_PRIVATE_KEY_PATH at it. Leave blank to omit.
+  agenticCodingGithubAppPrivateKeyPath: ""
+
+lightningConfig:
+  lightningUrl: http://multiwoven-lightning:6000
+  lightningHealthHost: lightning.example.com
+
+  babelApiKey: ""
+  babelEndpoint: ""
+  babelModel: ""
+
+  polyApiKey: ""
+  polyEndpoint: ""
+  polyModel: ""
+
+  chatApiKey: ""
+  chatEndpoint: ""
+  chatModel: ""
+
+  embeddingApiKey: ""
+  embeddingEndpoint: ""
+  embeddingModel: ""
+
+  judyApiKey: ""
+  judyEndpoint: ""
+  judyModel: ""
+
+  multimodalChatApiKey: ""
+  multimodalChatEndpoint: ""
+  multimodalChatModel: ""
+
+  pathfinderApiKey: ""
+  pathfinderEndpoint: ""
+  pathfinderModel: ""
+
+  seemoreApiKey: ""
+  seemoreEndpoint: ""
+  seemoreVlm: ""
+
+  sentinelApiKey: ""
+  sentinelEndpoint: ""
+  sentinelModel: ""
+
+  structuredExtractionApiKey: ""
+  structuredExtractionModel: ""
+  structuredExtractionEndpoint: ""
+
+  xpertApiKey: ""
+  xpertEndpoint: ""
+  xpertModel: ""
+
+  clsPiiApiKey: ""
+  clsPiiEndpoint: ""
+  clsPiiModel: ""
+  clsPiiThreshold: ""
+
+  clsContentApiKey: ""
+  clsContentEndpoint: ""
+  clsContentModel: ""
+  clsContentThreshold: ""
+
+  clsJailbreakApiKey: ""
+  clsJailbreakEndpoint: ""
+  clsJailbreakModel: ""
+  clsJailbreakThreshold: ""
+
+  clsClientTimeoutSeconds: ""
+  clsClientMaxRetries: ""
+
+  clsRouterApiKey: ""
+  clsRouterEndpoint: ""
+  clsRouterModel: ""
+
+  inferenceBackend: "huggingface"
+  inferenceAwsRegion: ""
+
+  chatSagemakerEndpoint: ""
+  embeddingSagemakerEndpoint: ""
+  judySagemakerEndpoint: ""
+  multimodalChatSagemakerEndpoint: ""
+  pathfinderSagemakerEndpoint: ""
+  polySagemakerEndpoint: ""
+  seemoreSagemakerEndpoint: ""
+  sentinelSagemakerEndpoint: ""
+  structuredExtractionSagemakerEndpoint: ""
+
+
+automountServiceAccountToken:
+  enabled: true
+
+externalDNS:
+  enabled: false
+
+nginxIngress:
+  enabled: true
+  enableMetrics: false
+  proxyReadTimeout: 300
+  proxySendTimeout: 300
+  proxyBuffering: "on"
+
+kongIngress:
+  enabled: false
+  plugins:
+    prometheus:
+      enabled: false
+
+awsIngress:
+  enabled: false
+  acmCertificateArn: ""
+  albScheme: internet-facing
+  sslPolicy: ELBSecurityPolicy-2016-08
+  groupName: ""
+  # ALB rule priority in a shared group.name (lower = evaluated first).
+  # Lower than appbuilderIngress.groupOrder so exact hosts beat the
+  # appbuilder wildcard — ALB has no automatic precedence like nginx does.
+  groupOrder: "10"
+  # Anything not already modeled above goes here as raw ALB annotations, e.g.:
+  # extraAnnotations:
+  #   alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=3600
+  #   alb.ingress.kubernetes.io/ssl-redirect: '443'
+  extraAnnotations: {}
+
+serviceAccount:
+  create: false
+  name: multiwoven-service-account
+  # Example:
+  #   annotations:
+  #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
+  annotations: {}
+
+secretsStore:
+  # The four *DbSecret* groups below hold actual database credentials
+  # (username/password pairs); the "Db" in every field name here is
+  # deliberate, to visually separate them from the general-purpose secret
+  # bundles further down (app/sandbox/box/lightning), which are not
+  # necessarily database credentials at all.
+
+  # AWS region the Secrets Manager secrets live in. Every SecretProviderClass
+  # in this chart passes this through as the AWS provider's `region`
+  # parameter -- without it, the provider falls back to guessing the region
+  # (IMDS lookup, then a hardcoded list) and fails closed with "Failed to
+  # fetch secret from all regions" the first time a pod actually tries to
+  # mount, rather than at install/lint time.
+  secretRegion: us-east-1
+
+  # DB Secret Toggles -- temporalDbSecretEnabled is shared by both the
+  # temporal and temporal-visibility DB groups, since they're rarely
+  # rotated independently in practice.
+
+  # MW DB
+  mwDbSecretEnabled: false
+  mwDbSecretAlias: mw-f01dd256e712
+  mwDbCredsSecretName: ""
+
+  # Temporal DBs
+  temporalDbSecretEnabled: false
+  temporalDbSecretAlias: temporal-f01dd256e712
+  temporalDbCredsSecretName: ""
+
+  temporalVisibilityDbSecretAlias: temporal-visibility-f01dd256e712
+  temporalVisibilityDbCredsSecretName: ""
+
+  # (Optional) Temp Store DB
+  tempStoreDbSecretEnabled: false
+  tempStoreDbSecretAlias: temp-store-f01dd256e712
+  tempStoreDbCredsSecretName: ""
+
+  # Everything below is a general-purpose secret bundle, not specifically
+  # database credentials -- no "Db" in these names, on purpose.
+
+  # General Purpose Secret Toggles -- each is fully independent; unlike
+  # temporalDbSecretEnabled above, none of these are shared across groups.
+  appSecretEnabled: false
+  appSecretAlias: multiwoven-app-f01dd256e712
+  appCredsSecretName: ""
+
+  sandboxSecretEnabled: false
+  sandboxSecretAlias: multiwoven-sandbox-f01dd256e712
+  sandboxCredsSecretName: ""
+
+  boxSecretEnabled: false
+  boxSecretAlias: multiwoven-box-f01dd256e712
+  boxCredsSecretName: ""
+
+  lightningSecretEnabled: false
+  lightningSecretAlias: multiwoven-lightning-f01dd256e712
+  lightningCredsSecretName: ""
+
+securityContext:
+  readOnlyRootFilesystem: false
+  allowPrivilegeEscalation: true
+  capabilities:
+    drop:
+      permissions:
+        - "ALL"
+
+globalImagePullPolicy: IfNotPresent
+
+multipleDbHosts:
+  enabled: false
+
+  platformDBHost: ""
+  platformDBName: ""
+
+  temporalDbName: ""
+  temporalDbHost: ""
+
+  temporalVisibilityDbName: ""
+  temporalVisibilityDbHost: ""
+
+hpa:
+  enabled: true
+  ui:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 75
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  server:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  solidWorker:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  worker:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 50
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  lightning:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+  box:
+    minReplicas: 1
+    maxReplicas: 10
+    cpuAverageUtilizationPercentageThreshold: 80
+    memoryAverageUtilizationPercentageThreshold: 60
+    behavior:
+      scaleDown:
+        stabilizationWindowSeconds: 300
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          selectPolicy: Max
+      scaleUp:
+        stabilizationWindowSeconds: 45
+        policies:
+          percentPolicy:
+            type: Percent
+            value: 100
+            periodSeconds: 15
+          podPolicy:
+            type: Pods
+            value: 4
+            periodSeconds: 15
+          selectPolicy: Max
+
+postgresql:
+  enabled: true
+  annotations: {}
+  postgresql:
+    image:
+      repository: postgres
+      tag: "13"
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+  replicas: 1
+  type: ClusterIP
+server:
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  server:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/multiwoven-server
+      tag: latest
+    resources:
+      limits:
+        cpu: "2"
+        memory: "3Gi"
+      requests:
+        cpu: "1"
+        memory: "1Gi"
+  ports:
+    - name: "3000"
+      port: 3000
+      targetPort: 3000
+  replicas: 1
+  type: ClusterIP
+ui:
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ui:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/multiwoven-ui
+      tag: latest
+    resources:
+      limits:
+        cpu: "200m"
+        memory: "512Mi"
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
+  ports:
+    - name: "8000"
+      port: 8000
+      targetPort: 8000
+  replicas: 1
+  type: ClusterIP
+solidWorker:
+  annotations: {}
+  healthPort: 9999
+  podSecurityContext:
+    fsGroup: 1000
+  solidWorker:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    args:
+      - sh
+      - -c
+      - |
+        ./app/solid_queue/cli/worker
+    image:
+      repository: multiwoven/multiwoven-server
+      tag: latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: "500m"
+        memory: 1Gi
+  ports:
+    - name: "9999"
+      port: 9999
+      targetPort: 9999
+  replicas: 1
+  type: ClusterIP
+worker:
+  annotations: {}
+  healthPort: 4567
+  podSecurityContext:
+    fsGroup: 1000
+  worker:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    args:
+      - sh
+      - -c
+      - |
+        ./app/temporal/cli/register_namespace && ./app/temporal/cli/worker
+    image:
+      repository: multiwoven/multiwoven-server
+      tag: latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: "500m"
+        memory: 1Gi
+  ports:
+    - name: "4567"
+      port: 4567
+      targetPort: 4567
+  replicas: 1
+  type: ClusterIP
+pvc:
+  pvc:
+    storageRequest: 100Mi
+    storageClassName: "default"
+temporal:
+  enabled: true
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "7233"
+      port: 7233
+      targetPort: 7233
+  replicas: 1
+  temporal:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    env:
+      db: postgresql
+    image:
+      repository: temporalio/auto-setup
+      tag: 1.22.4
+    initContainer:
+      image:
+        repository: temporalio/auto-setup
+        tag: 1.22.4
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  type: ClusterIP
+temporalUi:
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 5000
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  replicas: 1
+  temporalUi:
+    containerSecurityContext:
+      runAsUser: 5000
+      runAsGroup: 5000
+    env:
+      temporalAddress: multiwoven-temporal:7233
+      temporalCorsOrigins: http://localhost:3000
+      temporalUiPort: "8080"
+    image:
+      repository: temporalio/ui
+      tag: 2.22.3
+    initContainer:
+      image:
+        repository: temporalio/ui
+        tag: 2.22.3
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "256Mi"
+      limits:
+        cpu: "500m"
+        memory: "512Mi"
+  type: ClusterIP
+lightning:
+  enabled: true
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "6000"
+      port: 6000
+      targetPort: 6000
+  replicas: 1
+  lightning:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/lightning
+      tag: "latest"
+    resources:
+      limits:
+        cpu: "2"
+        memory: "3Gi"
+      requests:
+        cpu: "1"
+        memory: "1Gi"
+  type: ClusterIP
+
+box:
+  enabled: false
+  # Deliberately separate from the top-level serviceAccount.annotations --
+  # box-controller carries its own, more narrowly-scoped IAM role (its RBAC
+  # in box-rbac.yaml is already broader/more sensitive than the main app's,
+  # so its AWS access should be narrower, not shared with it). See
+  # docs/SECRETS.md for the box-controller-specific policy/role.
+  serviceAccount:
+    # Example:
+    #   annotations:
+    #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<box-role>
+    annotations: {}
+  rbac:
+    create: true
+  priorityClass:
+    create: true
+    name: "box-critical"
+    value: 1000000000
+    preemptionPolicy: "PreemptLowerPriority"
+    globalDefault: false
+    description: "Highest priority for Box sandbox and release workloads"
+  namespaces:
+    create: true
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  replicas: 1
+  box:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      repository: multiwoven/box
+      tag: "latest"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+  type: ClusterIP
+
+boxConfig:
+  boxPort: "8080"
+  boxK8sInCluster: "true"
+  boxK8sNamespace: "box-sandboxes"
+  boxReleasesNamespace: "box-releases"
+  boxIngressDomain: ""
+  boxIngressClass: "nginx"
+  boxIngressNamespace: "ingress-nginx"
+  boxImagePullSecret: ""
+  boxImageRegistry: ""
+  boxSandboxBaseImage: ""
+  boxStorageClass: "standard"
+  boxSnapshotClass: "csi-hostpath-snapclass"
+  boxPvcSize: "10Gi"
+  boxDefaultCpu: "2000"
+  boxDefaultMemoryMb: "4096"
+  # Dev sandbox resources.
+  boxDevCpuLimit: "4000"
+  boxDevCpuRequest: "2000"
+  boxDevMemoryLimitMb: "6144"
+  boxDevMemoryRequestMb: "4096"
+  boxSandboxPriorityClassName: "box-critical"
+  # Released-app (deploy) resources.
+  boxReleaseCpuLimit: "2000"
+  boxReleaseCpuRequest: "1000"
+  boxReleaseMemoryLimitMb: "2048"
+  boxReleaseMemoryRequestMb: "1024"
+  boxReleasePriorityClassName: "box-critical"
+  boxReleaseReadyTimeout: "180s"
+  boxDefaultTimeout: "3600"
+  boxDefaultIdleTimeout: "300"
+  boxReaperInterval: "60s"
+  boxProvisioningTimeout: "90s"
+  boxReapSnapshotTimeout: "180s"
+  boxStaleSecretMaxAge: "24h"
+  # Snapshot retention: age floor for orphan-reap (0 disables the age gate).
+  boxSnapshotMaxAgeHours: "0"
+  # Container ports — runtime contract with the sandbox/release image.
+  boxAgentPort: "4096"
+  boxVitePort: "5173"
+  # Release probe tuning (startup gates Vite cold-start).
+  boxReleaseStartupProbeFailureThreshold: "20"
+  # Server-side default handler timeouts (caller may override per-request).
+  boxDeployDefaultTimeoutSecs: "120"
+  boxSnapshotFsDefaultTimeoutSecs: "300"
+  # HTTP server hardening / lifecycle.
+  boxShutdownTimeout: "30s"
+  # Postgres connection pool (boxDbMaxIdleConns should stay <= boxDbMaxOpenConns).
+  boxDbMaxOpenConns: "25"
+  boxDbMaxIdleConns: "10"
+  boxDbConnMaxLifetime: "5m"
+  # Admin API.
+  boxAdminEnabled: "true"
+  boxLogLevel: "info"
+  boxApiKey: ""
+  boxEncryptionKey: ""
+  dbHost: ""
+  dbPort: "5432"
+  dbUsername: ""
+  dbPassword: ""
+  dbSslMode: "disable"
+  boxDbName: "box_production"
