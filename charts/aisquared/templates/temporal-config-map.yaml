@@ -7,7 +7,8 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 data:
   DB: {{ quote .Values.temporal.temporal.env.db }}
-  {{ if .Values.platformConfig.skipDbMigration }}
+  {{- /* toString: a quoted "false" would otherwise count as true */}}
+  {{ if eq (toString .Values.platformConfig.skipDbMigration) "true" }}
   SKIP_DB_CREATE: "true"
   SKIP_SCHEMA_SETUP: "true"
   {{ end }}
@@ -26,9 +27,9 @@ data:
   {{ end }}
   {{ if .Values.multipleDbHosts.enabled }}
   TEMPORAL_DB_PLUGIN: {{ .Values.temporal.temporal.env.db | quote }}
-  TEMPORAL_DEFAULT_DB_NAME: {{ .Values.multipleDbHosts.temporalDbName }}
+  TEMPORAL_DEFAULT_DB_NAME: {{ .Values.multipleDbHosts.temporalDbName | quote }}
   TEMPORAL_DEFAULT_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
-  TEMPORAL_VISIBILITY_DB_NAME: {{ .Values.multipleDbHosts.temporalVisibilityDbName }}
+  TEMPORAL_VISIBILITY_DB_NAME: {{ .Values.multipleDbHosts.temporalVisibilityDbName | quote }}
   TEMPORAL_VISIBILITY_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
   {{ end }}
   # config_template.yaml is not envFrom-safe (its key contains a dot, so
