@@ -3,7 +3,7 @@ name: Deploy chart to qa env
 on:
   pull_request:
     paths:
-      - "charts/multiwoven/**"
+      - "charts/aisquared/**"
     branches: [ main ]
     types:
       - labeled
@@ -16,8 +16,8 @@ permissions:
 
 env:
   CHARTS_DIR: charts
-  CHART_PATH: charts/multiwoven
-  CHART_NAME: multiwoven
+  CHART_PATH: charts/aisquared
+  CHART_NAME: aisquared
   INFRA_REPO: Multiwoven/aisquared-infra
   INFRA_PATH: kubernetes/qa/aisquared
   ARGOCD_APP: aisquared-qa
@@ -103,6 +103,10 @@ jobs:
         working-directory: infra/${{ env.INFRA_PATH }}
         run: |
           export ver="${{ needs.publish_pr_chart.outputs.ver }}"
+          if [ "$(yq '[.dependencies[] | select(.name == strenv(CHART_NAME))] | length' Chart.yaml)" != "1" ]; then
+            echo "::error::Expected exactly one dependency named '${CHART_NAME}' in ${INFRA_PATH}/Chart.yaml"
+            exit 1
+          fi
           yq -i '(.dependencies[] | select(.name == strenv(CHART_NAME))).version = strenv(ver)' Chart.yaml
           cat Chart.yaml
 
