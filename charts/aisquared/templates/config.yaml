@@ -76,7 +76,7 @@ data:
   ENABLE_GEO_SUBSCRIBER: {{ .Values.platformConfig.enableGeoSubscriber | quote }}
   DB_NAME: {{ .Values.platformConfig.dbName | quote }}
   DB_PORT: {{ .Values.platformConfig.dbPort | quote }}
-  DB_HOST: {{ .Values.platformConfig.dbHost | quote }}
+  DB_HOST: {{ .Values.platformConfig.dbHost | default (printf "%s-postgresql" (include "chart.fullname" .)) | quote }}
   {{ if not .Values.secretsStore.mwDbSecretEnabled }}
   DB_PASSWORD: {{ .Values.platformConfig.dbPassword | quote }}
   DB_USERNAME: {{ .Values.platformConfig.dbUsername | quote }}
@@ -99,7 +99,7 @@ data:
   JWT_SECRET: {{ .Values.platformConfig.jwtSecret | quote }}
   {{ end }}
   LEAD_CAPTURE_ENABLED: {{ .Values.platformConfig.leadCaptureEnabled | quote }}
-  LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | quote }}
+  LIGHTNING_URL: {{ .Values.lightningConfig.lightningUrl | default (printf "http://%s-lightning:%v" (include "chart.fullname" .) (index .Values.lightning.ports 0).port) | quote }}
   MAXMIND_ACCOUNT_ID: {{ .Values.platformConfig.maxmindAccountId | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
   MAXMIND_LICENSE_KEY: {{ .Values.platformConfig.maxmindLicenseKey | quote }}
@@ -172,7 +172,7 @@ data:
   TEMPORAL_ACTIVITY_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalActivityThreadPoolSize | quote }}
   TEMPORAL_CLIENT_CHAIN: {{ .Values.platformConfig.temporalClientChain | quote }}
   TEMPORAL_CLIENT_KEY: {{ .Values.platformConfig.temporalClientKey | quote }}
-  TEMPORAL_HOST: {{ .Values.platformConfig.temporalHost | quote }}
+  TEMPORAL_HOST: {{ .Values.platformConfig.temporalHost | default (printf "%s-temporal" (include "chart.fullname" .)) | quote }}
   TEMPORAL_NAMESPACE: {{ .Values.platformConfig.temporalNamespace | quote }}
   TEMPORAL_PORT: {{ .Values.platformConfig.temporalPort | quote }}
   TEMPORAL_POSTGRES_DEFAULT_PORT: {{ .Values.platformConfig.temporalPostgresDefaultPort | quote }}

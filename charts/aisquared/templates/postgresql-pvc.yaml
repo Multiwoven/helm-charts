@@ -4,6 +4,10 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "chart.fullname" . }}-postgresql-pvc
   namespace: {{ .Values.kubernetesNamespace }}
+  annotations:
+    # Never delete the database volume on upgrade or uninstall, e.g. when a
+    # rename (nameOverride, release name) would otherwise drop it.
+    helm.sh/resource-policy: keep
   labels:
     io.kompose.service: {{ include "chart.fullname" . }}-postgresql-pvc
   {{- include "chart.labels" . | nindent 4 }}
