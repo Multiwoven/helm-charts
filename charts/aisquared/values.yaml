@@ -1,8 +1,8 @@
-# Keeps resource names and selector labels identical to the pre-rename
-# "multiwoven" chart. Resource names and app.kubernetes.io/name are derived from
-# the chart name, and Deployment selectors are immutable, so removing this
-# renames/recreates every resource. Only change it as part of a planned migration.
-nameOverride: multiwoven
+# Resource names and the app.kubernetes.io/name selector label come from the
+# chart name ("aisquared") unless this is set. Installs created by the old
+# "multiwoven" chart must set nameOverride: multiwoven to keep their existing
+# resource names. See the README, "Upgrading from the multiwoven chart".
+nameOverride: ""
 kubernetesClusterDomain: cluster.local
 kubernetesNamespace: aisquared
 
