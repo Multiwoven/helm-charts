@@ -37,7 +37,9 @@ platformConfig:
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   enableGeoSubscriber: "false"
-  # Empty: this release's own postgresql Service (<fullname>-postgresql).
+  # Leave empty to use the PostgreSQL Service this release creates,
+  # e.g. aisquared-postgresql for a release named "aisquared".
+  # Set it only to point at a database running elsewhere.
   dbHost: ""
   dbPassword: password
   dbPort: "5432"
@@ -102,7 +104,9 @@ platformConfig:
   temporalActivityThreadPoolSize: "20"
   temporalClientChain: /certs/temporal.chain.pem
   temporalClientKey: /certs/temporal.pem
-  # Empty: this release's own temporal Service (<fullname>-temporal).
+  # Leave empty to use the Temporal Service this release creates,
+  # e.g. aisquared-temporal for a release named "aisquared".
+  # Set it only to point at a Temporal running elsewhere (e.g. Temporal Cloud).
   temporalHost: ""
   temporalNamespace: aisquared-dev
   temporalPort: "7233"
@@ -192,7 +196,9 @@ sandboxConfig:
   agenticCodingGithubAppPrivateKeyPath: ""
 
 lightningConfig:
-  # Empty: this release's own lightning Service (http://<fullname>-lightning:<lightning port>).
+  # Leave empty to use the Lightning Service this release creates,
+  # e.g. http://aisquared-lightning:6000 for a release named "aisquared".
+  # Set it only to point at a Lightning running elsewhere.
   lightningUrl: ""
   lightningHealthHost: lightning.example.com
 
@@ -759,7 +765,9 @@ temporalUi:
       runAsUser: 5000
       runAsGroup: 5000
     env:
-      # Empty: this release's own temporal Service (<fullname>-temporal:<temporal port>).
+      # Leave empty to use the Temporal Service this release creates,
+      # e.g. aisquared-temporal:7233 for a release named "aisquared".
+      # Set it only to point at a Temporal running elsewhere.
       temporalAddress: ""
       temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
