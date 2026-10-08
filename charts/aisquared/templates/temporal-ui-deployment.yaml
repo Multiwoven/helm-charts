@@ -63,7 +63,7 @@ spec:
       containers:
       - env:
         - name: TEMPORAL_ADDRESS
-          value: {{ quote .Values.temporalUi.temporalUi.env.temporalAddress }}
+          value: {{ .Values.temporalUi.temporalUi.env.temporalAddress | default (printf "%s-temporal:%v" (include "chart.fullname" .) (index .Values.temporal.ports 0).port) | quote }}
         - name: TEMPORAL_CORS_ORIGINS
           value: {{ quote .Values.temporalUi.temporalUi.env.temporalCorsOrigins }}
         - name: TEMPORAL_UI_PORT

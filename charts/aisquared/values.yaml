@@ -4,7 +4,7 @@
 # renames/recreates every resource. Only change it as part of a planned migration.
 nameOverride: multiwoven
 kubernetesClusterDomain: cluster.local
-kubernetesNamespace: multiwoven
+kubernetesNamespace: aisquared
 
 appbuilderIngress:
   enabled: false
@@ -37,11 +37,12 @@ platformConfig:
   codeExecSigningSecret: ""
   databricksDriverPath: /opt/simba/spark/lib/64/libsparkodbc_sb64.so
   enableGeoSubscriber: "false"
-  dbHost: multiwoven-postgresql
+  # Empty: this release's own postgresql Service (<fullname>-postgresql).
+  dbHost: ""
   dbPassword: password
   dbPort: "5432"
-  dbUsername: multiwoven
-  dbName: multiwoven_server_production
+  dbUsername: aisquared
+  dbName: aisquared_server_production
   grpcEnableForkSupport: 1
   hostedVectorDbHost: ""
   hostedVectorDbDatabase: ""
@@ -101,14 +102,15 @@ platformConfig:
   temporalActivityThreadPoolSize: "20"
   temporalClientChain: /certs/temporal.chain.pem
   temporalClientKey: /certs/temporal.pem
-  temporalHost: multiwoven-temporal
-  temporalNamespace: multiwoven-dev
+  # Empty: this release's own temporal Service (<fullname>-temporal).
+  temporalHost: ""
+  temporalNamespace: aisquared-dev
   temporalPort: "7233"
   temporalPostgresDefaultPort: "5432"
   temporalPostgresPassword: password
   temporalPostgresSsl: false
   temporalPostgresTlsDisableHostVerification: false
-  temporalPostgresUser: multiwoven
+  temporalPostgresUser: aisquared
   temporalVisibilityPostgresUser: ""
   temporalVisibilityPostgresPassword: ""
   temporalPostgresqlVersion: "13"
@@ -190,7 +192,8 @@ sandboxConfig:
   agenticCodingGithubAppPrivateKeyPath: ""
 
 lightningConfig:
-  lightningUrl: http://multiwoven-lightning:6000
+  # Empty: this release's own lightning Service (http://<fullname>-lightning:<lightning port>).
+  lightningUrl: ""
   lightningHealthHost: lightning.example.com
 
   babelApiKey: ""
@@ -310,7 +313,7 @@ awsIngress:
 
 serviceAccount:
   create: false
-  name: multiwoven-service-account
+  name: aisquared-service-account
   # Example:
   #   annotations:
   #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<role-name>
@@ -359,19 +362,19 @@ secretsStore:
   # General Purpose Secret Toggles -- each is fully independent; unlike
   # temporalDbSecretEnabled above, none of these are shared across groups.
   appSecretEnabled: false
-  appSecretAlias: multiwoven-app-f01dd256e712
+  appSecretAlias: aisquared-app-f01dd256e712
   appCredsSecretName: ""
 
   sandboxSecretEnabled: false
-  sandboxSecretAlias: multiwoven-sandbox-f01dd256e712
+  sandboxSecretAlias: aisquared-sandbox-f01dd256e712
   sandboxCredsSecretName: ""
 
   boxSecretEnabled: false
-  boxSecretAlias: multiwoven-box-f01dd256e712
+  boxSecretAlias: aisquared-box-f01dd256e712
   boxCredsSecretName: ""
 
   lightningSecretEnabled: false
-  lightningSecretAlias: multiwoven-lightning-f01dd256e712
+  lightningSecretAlias: aisquared-lightning-f01dd256e712
   lightningCredsSecretName: ""
 
 securityContext:
@@ -756,7 +759,8 @@ temporalUi:
       runAsUser: 5000
       runAsGroup: 5000
     env:
-      temporalAddress: multiwoven-temporal:7233
+      # Empty: this release's own temporal Service (<fullname>-temporal:<temporal port>).
+      temporalAddress: ""
       temporalCorsOrigins: http://localhost:3000
       temporalUiPort: "8080"
     image:

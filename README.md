@@ -23,11 +23,8 @@ lightningConfig:
 
 ```
 helm repo add aisquared https://multiwoven.github.io/helm-charts
-helm install multiwoven aisquared/aisquared -f my-values.yaml
+helm install aisquared aisquared/aisquared -f my-values.yaml
 ```
-
-Keep the release name `multiwoven`: the chart's default in-cluster addresses (`dbHost`, `temporalHost`,
-`lightningUrl`) assume the resource names that release name produces.
 
 ## Check detailed readme [here](https://docs.squared.ai/guides/setup/helm)
 
