@@ -1,0 +1,22 @@
+{{- if .Values.caddy.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "chart.fullname" . }}-caddy-data
+  namespace: {{ .Values.kubernetesNamespace }}
+  annotations:
+    # Never delete the certificate cache on upgrade/uninstall -- losing it
+    # means every customer domain re-issues its Let's Encrypt certificate
+    # from scratch (rate limits) instead of just resuming from cache.
+    helm.sh/resource-policy: keep
+  labels:
+    io.kompose.service: {{ include "chart.fullname" . }}-caddy-data
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.caddy.pvc.storageRequest | quote }}
+  storageClassName: {{ .Values.caddy.pvc.storageClassName | default "standard" | quote }}
+{{- end }}
