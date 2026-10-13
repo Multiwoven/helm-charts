@@ -1018,7 +1018,7 @@ caddy:
       targetPort: 443
   pvc:
     storageRequest: "1Gi"
-    storageClassName: "standard"
+    storageClassName: ""
   nlb:
     scheme: "internet-facing"
     # Set only if the NLB's EXTERNAL-IP stays <pending> -- comma-separated
@@ -1030,7 +1030,6 @@ caddy:
     extraAnnotations: {}
   caddy:
     image:
-      # Stock image -- nothing to build or push for Caddy itself.
       repository: caddy
       tag: "2"
     resources:

@@ -18,5 +18,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.caddy.pvc.storageRequest | quote }}
-  storageClassName: {{ .Values.caddy.pvc.storageClassName | default "standard" | quote }}
+  {{- with .Values.caddy.pvc.storageClassName }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
 {{- end }}

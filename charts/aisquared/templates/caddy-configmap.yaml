@@ -55,7 +55,7 @@ data:
             # Captures the first DNS label of the Host header as {re.label.1},
             # used below to rebuild the app's published subdomain.
             @custom_domain_host {
-                header_regexp label Host ^([a-z0-9-]+)\.
+                header_regexp label Host (?i)^([a-z0-9-]+)\.
             }
 
             reverse_proxy @custom_domain_host {{ required "caddyConfig.originAlbHostname is required when caddy.enabled is true" .Values.caddyConfig.originAlbHostname }}:443 {
