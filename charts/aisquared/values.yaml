@@ -383,6 +383,11 @@ secretsStore:
   lightningSecretAlias: aisquared-lightning-f01dd256e712
   lightningCredsSecretName: ""
 
+  # Custom Domains DB/API secrets -- same shape as box's group above.
+  customDomainsSecretEnabled: false
+  customDomainsSecretAlias: aisquared-custom-domains-f01dd256e712
+  customDomainsCredsSecretName: ""
+
 securityContext:
   readOnlyRootFilesystem: false
   allowPrivilegeEscalation: true
@@ -921,3 +926,133 @@ boxConfig:
   dbPassword: ""
   dbSslMode: "disable"
   boxDbName: "box_production"
+
+# custom-domains owns its domains table backing the Caddy-based
+# custom-domains feature; see custom-domains-deployment.yaml for the request
+# flow. Unlike box, it needs no Kubernetes RBAC, so there's no
+# customDomains.rbac block.
+customDomains:
+  enabled: false
+  # Deliberately separate from the top-level serviceAccount.annotations --
+  # only relevant if secretsStore.customDomainsSecretEnabled is true.
+  serviceAccount:
+    # Example:
+    #   annotations:
+    #     eks.amazonaws.com/role-arn: arn:aws:iam::<account-id>:role/<custom-domains-role>
+    annotations: {}
+  annotations: {}
+  podSecurityContext:
+    fsGroup: 1000
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  replicas: 1
+  customDomains:
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+    image:
+      # TODO: confirm the real registry path once custom-domains images are
+      # built and pushed -- placeholder, mirrors box's naming convention.
+      repository: multiwoven/custom-domains
+      tag: "latest"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+  type: ClusterIP
+
+# Env vars for the custom-domains container -- names match its
+# internal/config/config.go exactly.
+# NOTE: apiKey/railsWebhookSecret/dbUsername/dbPassword below are the
+# plaintext fallback, ignored when secretsStore.customDomainsSecretEnabled
+# is true.
+customDomainsConfig:
+  dbHost: ""
+  dbPort: "5432"
+  dbName: "custom_domains_production"
+  dbSslMode: "disable"
+  # Postgres connection pool (dbMaxIdleConns should stay <= dbMaxOpenConns).
+  dbMaxOpenConns: "10"
+  dbMaxIdleConns: "5"
+  dbConnMaxLifetime: "5m"
+  port: "8080"
+  # Defaults to this release's Rails Service and custom-domain webhook path.
+  # Set explicitly when Rails is hosted elsewhere.
+  railsWebhookUrl: ""
+  webhookTimeout: "15s"
+  # Warm-up + retry loop -- see custom-domains's config.go doc comment.
+  warmupTimeout: "20s"
+  reconcileInterval: "30s"
+  reconcileMaxAttempts: "20"
+  shutdownTimeout: "30s"
+  logLevel: "info"
+  dbUsername: ""
+  dbPassword: ""
+  apiKey: ""
+  railsWebhookSecret: ""
+
+# Caddy is the public-facing reverse proxy that terminates TLS for
+# arbitrary customer domains via on_demand_tls, reconnecting to the shared
+# ALB under a known-good identity so its certificate still matches. Like
+# custom-domains, it calls no Kubernetes/AWS API, so no RBAC block here.
+caddy:
+  enabled: false
+  serviceAccount:
+    annotations: {}
+  annotations: {}
+  # Keep at 1: Caddy's on-disk cert cache under /data is per-pod, so >1
+  # replica means duplicate Let's Encrypt issuance, not real HA.
+  replicas: 1
+  # Reused as both the container's ports and the NLB Service's ports.
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+    - name: https
+      port: 443
+      targetPort: 443
+  pvc:
+    storageRequest: "1Gi"
+    storageClassName: ""
+  nlb:
+    scheme: "internet-facing"
+    # Set only if the NLB's EXTERNAL-IP stays <pending> -- comma-separated
+    # subnet IDs, the same public subnets the existing shared ALB uses.
+    subnets: ""
+    # e.g. "service.k8s.aws/nlb" -- only needed if another controller on
+    # this cluster could also claim this Service. Left unset by default.
+    loadBalancerClass: ""
+    extraAnnotations: {}
+  caddy:
+    image:
+      repository: caddy
+      tag: "2"
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
+
+# Caddyfile templating inputs (see caddy-configmap.yaml). Staging/production
+# each have their own ALB and identity, so both must come from values.
+caddyConfig:
+  # Customer CNAME target. Must resolve to Caddy's NLB, not the origin ALB.
+  # ExternalDNS publishes it when externalDNS.enabled is true; otherwise
+  # create the DNS record manually using the NLB's assigned hostname.
+  cnameTarget: ""
+  # TODO: set per environment to the shared ALB's actual AWS-assigned
+  # hostname. Left blank rather than guessed.
+  originAlbHostname: ""
+  # Published-app domain suffix Caddy appends to the visitor's app slug to
+  # rebuild the Host/TLS SNI it presents to the origin ALB. Left blank to
+  # fall back to appbuilderIngress.appgenPublishedDomain; set explicitly
+  # only if Caddy should present a different suffix.
+  originHostIdentity: ""
+  debug: false

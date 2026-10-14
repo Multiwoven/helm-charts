@@ -15,6 +15,7 @@ metadata:
     {{- if .Values.secretsStore.mwDbSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.mwDbSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.appSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.appSecretAlias }}{{ end }}
     {{- if .Values.secretsStore.sandboxSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.sandboxSecretAlias }}{{ end }}
+    {{- if and .Values.customDomains.enabled .Values.secretsStore.customDomainsSecretEnabled }}{{ $reloaderSecrets = append $reloaderSecrets .Values.secretsStore.customDomainsSecretAlias }}{{ end }}
     {{- if $reloaderSecrets }}
     secret.reloader.stakater.com/reload: {{ join "," $reloaderSecrets | quote }}
     {{- end }}
@@ -93,6 +94,32 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         - name: MULTIWOVEN_WORKER_HEALTH_CHECK_PORT
           value: {{ quote .Values.solidWorker.healthPort }}
+        {{- if .Values.caddy.enabled }}
+        - name: APPGEN_CUSTOM_DOMAIN_CNAME_TARGET
+          value: {{ required "caddyConfig.cnameTarget is required when caddy.enabled is true" .Values.caddyConfig.cnameTarget | quote }}
+        {{- end }}
+        {{- if .Values.customDomains.enabled }}
+        - name: CUSTOM_DOMAINS_BASE_URL
+          {{- /* The Service's own port, not the pod's targetPort/listening port -- this is a client reaching the Service, which may remap ports. */}}
+          value: {{ printf "http://%s-custom-domains:%s" (include "chart.fullname" .) ((index .Values.customDomains.ports 0).port | toString) | quote }}
+        {{- if .Values.secretsStore.customDomainsSecretEnabled }}
+        - name: CUSTOM_DOMAINS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.customDomainsSecretAlias }}
+              key: CUSTOM_DOMAINS_API_KEY
+        - name: CUSTOM_DOMAINS_WEBHOOK_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.secretsStore.customDomainsSecretAlias }}
+              key: CUSTOM_DOMAINS_RAILS_WEBHOOK_SECRET
+        {{- else }}
+        - name: CUSTOM_DOMAINS_API_KEY
+          value: {{ .Values.customDomainsConfig.apiKey | quote }}
+        - name: CUSTOM_DOMAINS_WEBHOOK_SECRET
+          value: {{ .Values.customDomainsConfig.railsWebhookSecret | quote }}
+        {{- end }}
+        {{- end }}
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
         - name: DB_PASSWORD
           valueFrom:
