@@ -11,7 +11,9 @@ metadata:
     {{- if .Values.externalDNS.enabled }}
     external-dns.alpha.kubernetes.io/hostname: {{ $cnameTarget | quote }}
     {{- end }}
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    # Explicitly select AWS Load Balancer Controller even when its Service
+    # mutating webhook is disabled. "nlb" selects the legacy cloud provider.
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
     service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
     service.beta.kubernetes.io/aws-load-balancer-scheme: {{ .Values.caddy.nlb.scheme | quote }}
     # Always on: NLB routing is per-AZ by default, and with caddy.replicas
@@ -26,10 +28,8 @@ metadata:
 spec:
   type: LoadBalancer
   {{- with .Values.caddy.nlb.loadBalancerClass }}
-  # Opt-in: annotation-based provisioning (above) already works against this
-  # cluster's controller. Set this only if the cluster also runs a legacy
-  # in-tree/other LoadBalancer controller that could otherwise race the AWS
-  # Load Balancer Controller for this Service.
+  # Optional explicit controller class; the "external" annotation above
+  # already selects AWS Load Balancer Controller without webhook defaults.
   loadBalancerClass: {{ . | quote }}
   {{- end }}
   selector:

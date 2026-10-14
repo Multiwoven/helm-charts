@@ -69,3 +69,35 @@ helm upgrade multiwoven aisquared/aisquared -f my-values.yaml
 
 ## Questions? Feedback?
 [Join our slack](https://join.slack.com/t/multiwoven/shared_invite/zt-2bnjye26u-~lu_FFOMLpChOYxvovep7g)
+
+## Custom-domain local checks
+
+Run these checks from this repository without a Kubernetes cluster:
+
+```sh
+helm lint charts/aisquared
+ruby tests/custom_domains_test.rb
+python3 tests/caddy_routing_test.py
+```
+
+The render tests require Helm and Ruby 3.1 or later. They check disabled defaults,
+plaintext and SecretProviderClass credential wiring, service port remapping,
+ExternalDNS annotations, the retained certificate volume, AWS NLB controller
+selection, and invalid feature configurations. The routing tests also require
+Caddy, Python 3, and Ruby's standard YAML library; they use temporary loopback
+servers and a private CA without installing certificates in system trust or
+contacting public certificate authorities.
+
+Caddy's NLB Service explicitly selects AWS Load Balancer Controller using
+`service.beta.kubernetes.io/aws-load-balancer-type: external` and IP targets.
+See the [controller's Service annotation contract](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/service/annotations/#traffic-routing).
+If a Service has already been provisioned with another controller, plan its
+migration separately; these local checks do not modify any existing Service.
+
+Enable `customDomains.enabled` and `caddy.enabled` together and supply the
+custom-domains database host, API key, webhook secret, and Caddy origin hostname
+and customer CNAME target. The custom-domains database must be separate from
+Rails because their migration tables use different formats. Configure the origin
+suffix to match the published-app ingress and Rails `APPGEN_PUBLISHED_DOMAIN`.
+Public DNS, AWS provisioning, origin certificates, and public ACME issuance still
+require validation in the target environment.
