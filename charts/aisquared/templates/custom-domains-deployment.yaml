@@ -1,0 +1,146 @@
+{{- if .Values.customDomains.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-custom-domains
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.customDomains.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if .Values.secretsStore.customDomainsSecretEnabled }}
+    secret.reloader.stakater.com/reload: {{ .Values.secretsStore.customDomainsSecretAlias | quote }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.customDomains.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-custom-domains
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-custom-domains
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.customDomains.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.customDomains.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "chart.fullname" . }}-custom-domains
+      containers:
+      - name: {{ include "chart.fullname" . }}-custom-domains
+        image: {{ .Values.customDomains.customDomains.image.repository }}:{{ .Values.customDomains.customDomains.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
+        securityContext:
+          runAsUser: {{ .Values.customDomains.customDomains.containerSecurityContext.runAsUser }}
+          runAsGroup: {{ .Values.customDomains.customDomains.containerSecurityContext.runAsGroup }}
+          privileged: false
+          allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+          readOnlyRootFilesystem: {{ .Values.securityContext.readOnlyRootFilesystem }}
+          capabilities:
+            drop:
+            {{- if .Values.securityContext.capabilities.drop.permissions }}
+            {{- range .Values.securityContext.capabilities.drop.permissions }}
+              - {{ . }}
+            {{- end }}
+            {{- end }}
+        {{- if lt (len .Values.customDomains.ports) 1 }}
+        {{- fail "customDomains.ports must contain at least one entry" }}
+        {{- end }}
+        {{- /* targetPort is the pod's real listening port -- port is only the Service's
+        own client-facing exposure and may legitimately differ (port remapping). */}}
+        {{- $customDomainsPort := (index .Values.customDomains.ports 0).targetPort }}
+        {{- if ne ($customDomainsPort | toString) (.Values.customDomainsConfig.port | toString) }}
+        {{- fail (printf "customDomains.ports[0].targetPort (%v) must match customDomainsConfig.port (%v) -- the container port/probes and the binary's actual listening port must agree" $customDomainsPort .Values.customDomainsConfig.port) }}
+        {{- end }}
+        env:
+        - name: CUSTOM_DOMAINS_DB_HOST
+          value: {{ required "customDomainsConfig.dbHost is required when customDomains.enabled is true" .Values.customDomainsConfig.dbHost | quote }}
+        - name: CUSTOM_DOMAINS_DB_PORT
+          value: {{ .Values.customDomainsConfig.dbPort | quote }}
+        - name: CUSTOM_DOMAINS_DB_NAME
+          value: {{ .Values.customDomainsConfig.dbName | quote }}
+        - name: CUSTOM_DOMAINS_DB_SSLMODE
+          value: {{ .Values.customDomainsConfig.dbSslMode | quote }}
+        - name: CUSTOM_DOMAINS_DB_MAX_OPEN_CONNS
+          value: {{ .Values.customDomainsConfig.dbMaxOpenConns | quote }}
+        - name: CUSTOM_DOMAINS_DB_MAX_IDLE_CONNS
+          value: {{ .Values.customDomainsConfig.dbMaxIdleConns | quote }}
+        - name: CUSTOM_DOMAINS_DB_CONN_MAX_LIFETIME
+          value: {{ .Values.customDomainsConfig.dbConnMaxLifetime | quote }}
+        - name: CUSTOM_DOMAINS_PORT
+          value: {{ .Values.customDomainsConfig.port | quote }}
+        - name: CUSTOM_DOMAINS_RAILS_WEBHOOK_URL
+          value: {{ .Values.customDomainsConfig.railsWebhookUrl | default (printf "http://%s-server:%v/enterprise/api/v1/agentic_coding/custom_domains/webhook" (include "chart.fullname" .) (index .Values.server.ports 0).port) | quote }}
+        - name: CUSTOM_DOMAINS_WEBHOOK_TIMEOUT
+          value: {{ .Values.customDomainsConfig.webhookTimeout | quote }}
+        - name: CUSTOM_DOMAINS_WARMUP_TIMEOUT
+          value: {{ .Values.customDomainsConfig.warmupTimeout | quote }}
+        - name: CUSTOM_DOMAINS_RECONCILE_INTERVAL
+          value: {{ .Values.customDomainsConfig.reconcileInterval | quote }}
+        - name: CUSTOM_DOMAINS_RECONCILE_MAX_ATTEMPTS
+          value: {{ .Values.customDomainsConfig.reconcileMaxAttempts | quote }}
+        - name: CUSTOM_DOMAINS_RECONCILE_CONCURRENCY
+          value: {{ .Values.customDomainsConfig.reconcileConcurrency | quote }}
+        - name: CUSTOM_DOMAINS_SHUTDOWN_TIMEOUT
+          value: {{ .Values.customDomainsConfig.shutdownTimeout | quote }}
+        - name: CUSTOM_DOMAINS_LOG_LEVEL
+          value: {{ .Values.customDomainsConfig.logLevel | quote }}
+        {{- if not .Values.secretsStore.customDomainsSecretEnabled }}
+        - name: CUSTOM_DOMAINS_DB_USERNAME
+          value: {{ required "customDomainsConfig.dbUsername is required without custom-domains secrets" .Values.customDomainsConfig.dbUsername | quote }}
+        - name: CUSTOM_DOMAINS_DB_PASSWORD
+          value: {{ .Values.customDomainsConfig.dbPassword | quote }}
+        - name: CUSTOM_DOMAINS_API_KEY
+          value: {{ required "customDomainsConfig.apiKey is required without custom-domains secrets" .Values.customDomainsConfig.apiKey | quote }}
+        - name: CUSTOM_DOMAINS_RAILS_WEBHOOK_SECRET
+          value: {{ required "customDomainsConfig.railsWebhookSecret is required without custom-domains secrets" .Values.customDomainsConfig.railsWebhookSecret | quote }}
+        {{- end }}
+        {{- if .Values.secretsStore.customDomainsSecretEnabled }}
+        envFrom:
+        - secretRef:
+            name: {{ .Values.secretsStore.customDomainsSecretAlias }}
+        {{- end }}
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          httpGet:
+            path: /healthz
+            port: {{ $customDomainsPort }}
+        ports:
+        - containerPort: {{ $customDomainsPort }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          httpGet:
+            path: /readyz
+            port: {{ $customDomainsPort }}
+        resources: {{- toYaml .Values.customDomains.customDomains.resources | nindent 10 }}
+        {{- if .Values.secretsStore.customDomainsSecretEnabled }}
+        volumeMounts:
+        - name: custom-domains-secrets-store
+          mountPath: /run/secrets/custom-domains-secrets
+          readOnly: true
+        {{- end }}
+      {{- if .Values.secretsStore.customDomainsSecretEnabled }}
+      volumes:
+      - name: custom-domains-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: {{ include "chart.fullname" . }}-secret-provider-class-custom-domains
+      {{- end }}
+      restartPolicy: Always
+      {{ if .Values.platformConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.platformConfig.registrySecretName }}
+      {{ end }}
+{{- end }}

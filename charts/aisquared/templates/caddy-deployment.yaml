@@ -1,0 +1,94 @@
+{{- if .Values.caddy.enabled }}
+{{- if ne (.Values.caddy.replicas | int) 1 }}
+{{- fail "caddy.replicas must be 1 while the certificate cache uses a single ReadWriteOnce PVC" }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-caddy
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    configmap.reloader.stakater.com/reload: {{ include "chart.fullname" . }}-caddy-config
+    {{- with .Values.caddy.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  replicas: {{ .Values.caddy.replicas }}
+  # The /data cert cache is a single RWO volume: RollingUpdate can schedule
+  # the new pod before the old one releases it, especially across nodes, and
+  # stall on FailedMount. Recreate accepts a brief gap instead.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-caddy
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "chart.fullname" . }}-caddy
+        {{- include "chart.selectorLabels" . | nindent 8 }}
+      annotations:
+        {{- with .Values.caddy.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "chart.fullname" . }}-caddy
+      containers:
+      - name: {{ include "chart.fullname" . }}-caddy
+        image: {{ .Values.caddy.caddy.image.repository }}:{{ .Values.caddy.caddy.image.tag }}
+        imagePullPolicy: {{ .Values.globalImagePullPolicy }}
+        {{- if lt (len .Values.caddy.ports) 1 }}
+        {{- fail "caddy.ports must contain at least one entry" }}
+        {{- end }}
+        {{- $httpPortFound := false }}
+        {{- $httpsPortFound := false }}
+        {{- range .Values.caddy.ports }}
+        {{- if ne (.port | toString) (.targetPort | toString) }}
+        {{- fail "caddy.ports must expose 80 and 443 on matching targetPorts for browser HTTPS and certificate validation" }}
+        {{- end }}
+        {{- if eq (.targetPort | toString) "80" }}{{ $httpPortFound = true }}{{ end }}
+        {{- if eq (.targetPort | toString) "443" }}{{ $httpsPortFound = true }}{{ end }}
+        {{- if and (ne (.targetPort | toString) "80") (ne (.targetPort | toString) "443") }}
+        {{- fail "caddy.ports targetPort must be 80 or 443 to match the Caddyfile listeners" }}
+        {{- end }}
+        {{- end }}
+        {{- if not (and $httpPortFound $httpsPortFound) }}
+        {{- fail "caddy.ports must expose both HTTP (targetPort 80) and HTTPS (targetPort 443)" }}
+        {{- end }}
+        ports:
+        {{- range .Values.caddy.ports }}
+        - name: {{ .name }}
+          containerPort: {{ .targetPort }}
+        {{- end }}
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.caddy.ports 0).targetPort }}
+        readinessProbe:
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          tcpSocket:
+            port: {{ (index .Values.caddy.ports 0).targetPort }}
+        resources: {{- toYaml .Values.caddy.caddy.resources | nindent 10 }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/caddy
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "chart.fullname" . }}-caddy-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "chart.fullname" . }}-caddy-data
+      restartPolicy: Always
+      {{ if .Values.platformConfig.privateRepo }}
+      imagePullSecrets:
+        - name: {{ .Values.platformConfig.registrySecretName }}
+      {{ end }}
+{{- end }}

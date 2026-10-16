@@ -1,0 +1,40 @@
+{{- if .Values.caddy.enabled }}
+{{- $cnameTarget := required "caddyConfig.cnameTarget is required when caddy.enabled is true (it must resolve to Caddy's NLB)" .Values.caddyConfig.cnameTarget }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chart.fullname" . }}-caddy-nlb
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.externalDNS.enabled }}
+    external-dns.alpha.kubernetes.io/hostname: {{ $cnameTarget | quote }}
+    {{- end }}
+    # Explicitly select AWS Load Balancer Controller even when its Service
+    # mutating webhook is disabled. "nlb" selects the legacy cloud provider.
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: {{ .Values.caddy.nlb.scheme | quote }}
+    # Always on: NLB routing is per-AZ by default, and with caddy.replicas
+    # pinned to 1, the single pod lives in only one AZ.
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+    {{- if .Values.caddy.nlb.subnets }}
+    service.beta.kubernetes.io/aws-load-balancer-subnets: {{ .Values.caddy.nlb.subnets | quote }}
+    {{- end }}
+    {{- with .Values.caddy.nlb.extraAnnotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: LoadBalancer
+  {{- with .Values.caddy.nlb.loadBalancerClass }}
+  # Optional explicit controller class; the "external" annotation above
+  # already selects AWS Load Balancer Controller without webhook defaults.
+  loadBalancerClass: {{ . | quote }}
+  {{- end }}
+  selector:
+    app: {{ include "chart.fullname" . }}-caddy
+    {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+    {{- toYaml .Values.caddy.ports | nindent 4 }}
+{{- end }}

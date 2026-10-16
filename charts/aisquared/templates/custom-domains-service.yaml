@@ -1,0 +1,16 @@
+{{- if .Values.customDomains.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chart.fullname" . }}-custom-domains
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.customDomains.type }}
+  selector:
+    app: {{ include "chart.fullname" . }}-custom-domains
+    {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+    {{- toYaml .Values.customDomains.ports | nindent 4 }}
+{{- end }}
