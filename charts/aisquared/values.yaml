@@ -8,7 +8,7 @@ kubernetesNamespace: aisquared
 
 appbuilderIngress:
   enabled: false
-  appgenPublishedDomain: "appbuilder.qa.squared.ai"
+  appgenPublishedDomain: ""
   tlsSecretName: appbuilder-wildcard-tls
   proxyBodySize: 100m
   proxyReadTimeout: 3600
@@ -147,6 +147,8 @@ platformConfig:
 
 sandboxConfig:
   agenticCodingBuildToken: ""
+  # Exposes custom tools through the AIS MCP server; only the exact string "true" enables them.
+  agenticCodingCustomToolsEnabled: "true"
   agenticCodingDbProvider: ""
   agenticCodingDeployCpu: "1000"
   agenticCodingDeploymentEnv: "staging"
@@ -865,6 +867,7 @@ box:
   type: ClusterIP
 
 boxConfig:
+  boxAdminHost: ""
   boxPort: "8080"
   boxK8sInCluster: "true"
   boxK8sNamespace: "box-sandboxes"
