@@ -2,7 +2,7 @@
 
 Helm charts for deploying the AI Squared platform.
 
-## Quick install 
+## Quick install
 
 The chart's hostnames default to `example.com` placeholders and NGINX ingress is enabled by default, so set
 hostnames on a domain you control (with DNS pointing at your ingress controller) before installing:
@@ -70,23 +70,7 @@ helm upgrade multiwoven aisquared/aisquared -f my-values.yaml
 ## Questions? Feedback?
 [Join our slack](https://join.slack.com/t/multiwoven/shared_invite/zt-2bnjye26u-~lu_FFOMLpChOYxvovep7g)
 
-## Custom-domain local checks
-
-Run these checks from this repository without a Kubernetes cluster:
-
-```sh
-helm lint charts/aisquared
-ruby tests/custom_domains_test.rb
-python3 tests/caddy_routing_test.py
-```
-
-The render tests require Helm and Ruby 3.1 or later. They check disabled defaults,
-plaintext and SecretProviderClass credential wiring, service port remapping,
-ExternalDNS annotations, the retained certificate volume, AWS NLB controller
-selection, and invalid feature configurations. The routing tests also require
-Caddy, Python 3, and Ruby's standard YAML library; they use temporary loopback
-servers and a private CA without installing certificates in system trust or
-contacting public certificate authorities.
+## Custom-domain
 
 Caddy's NLB Service explicitly selects AWS Load Balancer Controller using
 `service.beta.kubernetes.io/aws-load-balancer-type: external` and IP targets.
