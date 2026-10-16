@@ -989,6 +989,7 @@ customDomainsConfig:
   warmupTimeout: "20s"
   reconcileInterval: "30s"
   reconcileMaxAttempts: "20"
+  reconcileConcurrency: "10"
   shutdownTimeout: "30s"
   logLevel: "info"
   dbUsername: ""

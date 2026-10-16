@@ -52,6 +52,17 @@ data:
             # so it's present on every response, not just header_up.
             header X-Appbuilder-Edge "caddy"
 
+            # custom-domains's warmup check (internal/warmup/client.go) hits
+            # this path and answers directly here, never reaching the app via
+            # reverse_proxy below -- otherwise its timeout budget is coupled
+            # to the app's own response latency, not just DNS/TLS/cert-issuance/
+            # routing, which is all a warm-up is meant to prove. Must match
+            # warmup.WarmupPath exactly.
+            @custom_domain_warmup {
+                path /.well-known/appbuilder-custom-domain-warmup
+            }
+            respond @custom_domain_warmup "" 200
+
             # Captures the first DNS label of the Host header as {re.label.1},
             # used below to rebuild the app's published subdomain.
             @custom_domain_host {

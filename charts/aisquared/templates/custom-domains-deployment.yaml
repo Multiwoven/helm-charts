@@ -87,6 +87,8 @@ spec:
           value: {{ .Values.customDomainsConfig.reconcileInterval | quote }}
         - name: CUSTOM_DOMAINS_RECONCILE_MAX_ATTEMPTS
           value: {{ .Values.customDomainsConfig.reconcileMaxAttempts | quote }}
+        - name: CUSTOM_DOMAINS_RECONCILE_CONCURRENCY
+          value: {{ .Values.customDomainsConfig.reconcileConcurrency | quote }}
         - name: CUSTOM_DOMAINS_SHUTDOWN_TIMEOUT
           value: {{ .Values.customDomainsConfig.shutdownTimeout | quote }}
         - name: CUSTOM_DOMAINS_LOG_LEVEL
