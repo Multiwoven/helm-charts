@@ -2,7 +2,7 @@
 
 Helm charts for deploying the AI Squared platform.
 
-## Quick install 
+## Quick install
 
 The chart's hostnames default to `example.com` placeholders and NGINX ingress is enabled by default, so set
 hostnames on a domain you control (with DNS pointing at your ingress controller) before installing:
