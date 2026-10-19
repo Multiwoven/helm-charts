@@ -3,6 +3,23 @@ entries:
   aisquared:
   - apiVersion: v2
     appVersion: 0.119.0
+    created: "2026-10-19T13:14:50.700597654Z"
+    description: 'Helm chart for deploying the AI Squared platform. '
+    digest: 930b3153d8a0dc1c4c408cae7d6e0fe4cd4918dbdaf46f6f2ad1ebce31f0faa4
+    home: https://squared.ai
+    maintainers:
+    - name: RafaelOAiSquared
+    - name: AngeloB-AIS
+    - name: hassimnaseef
+    name: aisquared
+    sources:
+    - https://docs.squared.ai/open-source/guides/setup/helm
+    type: application
+    urls:
+    - https://github.com/Multiwoven/helm-charts/releases/download/aisquared-0.119.0/aisquared-0.119.0.tgz
+    version: 0.119.0
+  - apiVersion: v2
+    appVersion: 0.119.0
     created: "2026-10-19T10:58:08.883651521Z"
     description: 'Helm chart for deploying the AI Squared platform. '
     digest: 61100e79c445ed0a6d763c2e04ef2ecd8a64879c96da43fe9d39763535d547fc
@@ -2588,4 +2605,4 @@ entries:
     urls:
     - https://github.com/Multiwoven/helm-charts/releases/download/multiwoven-0.1.0/multiwoven-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-19T10:58:08.883785392Z"
+generated: "2026-10-19T13:14:50.700849872Z"
