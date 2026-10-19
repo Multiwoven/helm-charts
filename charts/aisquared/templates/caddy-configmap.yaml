@@ -1,0 +1,83 @@
+{{- if .Values.caddy.enabled }}
+{{- if not .Values.customDomains.enabled }}
+{{- fail "caddy.enabled requires customDomains.enabled -- Caddy's on_demand_tls.ask target (GET /v1/domains/allowed) is custom-domains's Service, see caddy-configmap.yaml" }}
+{{- end }}
+{{- if lt (len .Values.customDomains.ports) 1 }}
+{{- fail "customDomains.ports must contain at least one entry" }}
+{{- end }}
+{{- $customDomainsPort := (index .Values.customDomains.ports 0).port }}
+{{- $publishedDomainSuffix := .Values.caddyConfig.originHostIdentity | default .Values.appbuilderIngress.appgenPublishedDomain }}
+{{- if not $publishedDomainSuffix }}
+{{- fail "caddyConfig.originHostIdentity (or its fallback, appbuilderIngress.appgenPublishedDomain) must not be empty when caddy.enabled is true" }}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-caddy-config
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  Caddyfile: |
+    {
+        {{- if .Values.caddyConfig.debug }}
+        debug
+        {{- end }}
+        on_demand_tls {
+            ask http://{{ include "chart.fullname" . }}-custom-domains:{{ $customDomainsPort }}/v1/domains/allowed
+        }
+    }
+
+    https:// {
+        tls {
+            on_demand
+        }
+
+        route {
+            # route is required: Caddy doesn't run directives in the order
+            # written, so without it `respond` below runs before reverse_proxy
+            # and 400s every request.
+
+            # Ask also runs per request: cached certificates must not keep a
+            # deleted registration routing traffic to the app.
+            forward_auth http://{{ include "chart.fullname" . }}-custom-domains:{{ $customDomainsPort }} {
+                uri /v1/domains/allowed?domain={http.request.host}
+                transport http {
+                    dial_timeout 3s
+                    response_header_timeout 5s
+                }
+            }
+
+            # Required by custom-domains's warmup check; set unconditionally
+            # so it's present on every response, not just header_up.
+            header X-Appbuilder-Edge "caddy"
+
+            # custom-domains's warmup check (internal/warmup/client.go) hits
+            # this path and answers directly here, never reaching the app via
+            # reverse_proxy below -- otherwise its timeout budget is coupled
+            # to the app's own response latency, not just DNS/TLS/cert-issuance/
+            # routing, which is all a warm-up is meant to prove. Must match
+            # warmup.WarmupPath exactly.
+            @custom_domain_warmup {
+                path /.well-known/appbuilder-custom-domain-warmup
+            }
+            respond @custom_domain_warmup "" 200
+
+            # Captures the first DNS label of the Host header as {re.label.1},
+            # used below to rebuild the app's published subdomain.
+            @custom_domain_host {
+                header_regexp label Host (?i)^([a-z0-9-]+)\.
+            }
+
+            reverse_proxy @custom_domain_host {{ required "caddyConfig.originAlbHostname is required when caddy.enabled is true" .Values.caddyConfig.originAlbHostname }}:443 {
+                header_up Host "{re.label.1}.{{ $publishedDomainSuffix }}"
+                transport http {
+                    tls
+                    tls_server_name "{re.label.1}.{{ $publishedDomainSuffix }}"
+                }
+            }
+
+            respond "invalid host" 400
+        }
+    }
+{{- end }}

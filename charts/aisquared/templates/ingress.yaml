@@ -26,7 +26,7 @@ metadata:
         {{- $hosts = append $hosts .Values.boxConfig.boxAdminHost }}
       {{- end }}
 
-      external-dns.alpha.kubernetes.io/hostname: "{{ join "," $hosts }}"
+    external-dns.alpha.kubernetes.io/hostname: "{{ join "," $hosts }}"
     {{- end }}
     
     {{ if .Values.kongIngress.enabled }}
