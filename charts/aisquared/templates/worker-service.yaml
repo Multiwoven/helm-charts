@@ -10,6 +10,13 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.32.0 (HEAD)
+    {{- if .Values.awsIngress.enabled }}
+    # The worker's health server (Utils::HealthChecker) only serves /health.
+    # Without these the ALB checks / and counts the 404 as healthy through the
+    # ingress-wide success-codes; Service annotations override the ingress.
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/success-codes: "200"
+    {{- end }}
 spec:
   type: {{ .Values.worker.type }}
   selector:
