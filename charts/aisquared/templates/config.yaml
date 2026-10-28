@@ -42,6 +42,10 @@ data:
   AGENTIC_CODING_STORAGE_PROVIDER: {{ .Values.sandboxConfig.agenticCodingStorageProvider | quote }}
   AGENTIC_CODING_STS_DURATION: {{ .Values.sandboxConfig.agenticCodingStsDuration | quote }}
   AGENTIC_CODING_STS_ROLE_NAME: {{ .Values.sandboxConfig.agenticCodingStsRoleName | quote }}
+  {{ if not .Values.secretsStore.appSecretEnabled }}
+  AISQUARED_BOLT_API_KEY: {{ .Values.platformConfig.aisquaredBoltApiKey | quote }}
+  {{ end }}
+  AISQUARED_CHAT_ENDPOINT_URL: {{ .Values.platformConfig.aisquaredChatEndpointUrl | quote }}
   ALLOWED_HOST: {{ .Values.platformConfig.allowedHost | quote }}
   APPGEN_PUBLISHED_DOMAIN: {{ .Values.appbuilderIngress.appgenPublishedDomain | quote }}
   API_HOST: {{ .Values.platformConfig.apiHost | quote }}
