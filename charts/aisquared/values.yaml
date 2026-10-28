@@ -20,6 +20,8 @@ appbuilderIngress:
 
 platformConfig:
   activeStorageService: "microsoft"
+  aisquaredBoltApiKey: ""
+  aisquaredChatEndpointUrl: ""
   allowedHost: ""
   allowedSourceIP: "0.0.0.0/0"
   apiHost: api.example.com
