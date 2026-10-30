@@ -1,0 +1,18 @@
+{{- if .Values.solidWorker.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "chart.fullname" . }}-solid-worker-pdb
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: solid-worker-pdb
+spec:
+  maxUnavailable: {{ .Values.solidWorker.pdb.maxUnavailable }}
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-solid-worker
+      io.kompose.service: {{ include "chart.fullname" . }}-solid-worker
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+{{- end }}

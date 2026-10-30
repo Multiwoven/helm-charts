@@ -88,6 +88,10 @@ spec:
                 values:
                 - spot
       {{ end }}
+      {{- with .Values.server.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- include "chart.topologySpreadConstraints" (dict "context" $ "component" "server" "constraints" .) | nindent 8 }}
+      {{- end }}
       containers:
       - env:
         {{ if .Values.secretsStore.mwDbSecretEnabled }}
