@@ -33,6 +33,10 @@ spec:
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
+      {{- with .Values.lightning.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- include "chart.topologySpreadConstraints" (dict "context" $ "component" "lightning" "constraints" .) | nindent 8 }}
+      {{- end }}
       containers:
       - envFrom:
         - configMapRef:

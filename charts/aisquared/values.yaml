@@ -640,6 +640,10 @@ server:
       port: 3000
       targetPort: 3000
   replicas: 1
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+  topologySpreadConstraints: []
   type: ClusterIP
 ui:
   annotations: {}
@@ -664,6 +668,10 @@ ui:
       port: 8000
       targetPort: 8000
   replicas: 1
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+  topologySpreadConstraints: []
   type: ClusterIP
 solidWorker:
   annotations: {}
@@ -694,6 +702,10 @@ solidWorker:
       port: 9999
       targetPort: 9999
   replicas: 1
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+  topologySpreadConstraints: []
   type: ClusterIP
 worker:
   annotations: {}
@@ -724,6 +736,10 @@ worker:
       port: 4567
       targetPort: 4567
   replicas: 1
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+  topologySpreadConstraints: []
   type: ClusterIP
 pvc:
   pvc:
@@ -805,6 +821,10 @@ lightning:
       port: 6000
       targetPort: 6000
   replicas: 1
+  pdb:
+    enabled: false
+    maxUnavailable: 1
+  topologySpreadConstraints: []
   lightning:
     containerSecurityContext:
       runAsUser: 1000

@@ -86,6 +86,10 @@ spec:
                 values:
                 - spot
       {{ end }}
+      {{- with .Values.worker.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- include "chart.topologySpreadConstraints" (dict "context" $ "component" "worker" "constraints" .) | nindent 8 }}
+      {{- end }}
       containers:
       - args: {{- toYaml .Values.worker.worker.args | nindent 8 }}
         env:

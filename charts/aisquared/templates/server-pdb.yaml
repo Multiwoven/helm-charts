@@ -1,0 +1,18 @@
+{{- if .Values.server.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "chart.fullname" . }}-server-pdb
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: server-pdb
+spec:
+  maxUnavailable: {{ .Values.server.pdb.maxUnavailable }}
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      app: {{ include "chart.fullname" . }}-server
+      io.kompose.service: {{ include "chart.fullname" . }}-server
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+{{- end }}
