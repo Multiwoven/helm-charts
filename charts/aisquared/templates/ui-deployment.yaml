@@ -32,6 +32,10 @@ spec:
       automountServiceAccountToken: {{ .Values.automountServiceAccountToken.enabled }}
       securityContext:
         fsGroup: {{ .Values.ui.podSecurityContext.fsGroup }}
+      {{- with .Values.ui.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- include "chart.topologySpreadConstraints" (dict "context" $ "component" "ui" "constraints" .) | nindent 8 }}
+      {{- end }}
       containers:
       - env:
         envFrom:

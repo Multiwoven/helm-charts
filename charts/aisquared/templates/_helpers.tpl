@@ -62,6 +62,26 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+A component's topologySpreadConstraints. A constraint without a labelSelector
+gets one matching that component's pods, so values files don't have to repeat
+the release-specific labels.
+Usage: include "chart.topologySpreadConstraints" (dict "context" $ "component" "server" "constraints" .Values.server.topologySpreadConstraints)
+*/}}
+{{- define "chart.topologySpreadConstraints" -}}
+{{- $matchLabels := include "chart.selectorLabels" .context | fromYaml }}
+{{- $_ := set $matchLabels "io.kompose.service" (printf "%s-%s" (include "chart.fullname" .context) .component) }}
+{{- $constraints := list }}
+{{- range .constraints }}
+{{- $constraint := deepCopy . }}
+{{- if not (hasKey $constraint "labelSelector") }}
+{{- $_ := set $constraint "labelSelector" (dict "matchLabels" $matchLabels) }}
+{{- end }}
+{{- $constraints = append $constraints $constraint }}
+{{- end }}
+{{- toYaml $constraints }}
+{{- end }}
+
+{{/*
 Fail on values keys that were renamed in the AI Squared rebrand. Helm ignores
 unknown keys, so without this an old values file or --set flag would render
 with chart defaults (example.com hosts, default images and DB settings)

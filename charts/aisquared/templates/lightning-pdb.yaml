@@ -1,0 +1,17 @@
+{{- if and .Values.lightning.enabled .Values.lightning.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "chart.fullname" . }}-lightning-pdb
+  namespace: {{ .Values.kubernetesNamespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: lightning-pdb
+spec:
+  maxUnavailable: {{ .Values.lightning.pdb.maxUnavailable }}
+  unhealthyPodEvictionPolicy: AlwaysAllow
+  selector:
+    matchLabels:
+      io.kompose.service: {{ include "chart.fullname" . }}-lightning
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+{{- end }}
