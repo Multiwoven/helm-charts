@@ -200,7 +200,7 @@ spec:
             path: /
             port: {{ (index .Values.server.ports 0).port }}
           periodSeconds: 5
-          failureThreshold: 120
+          failureThreshold: 60
         resources: {{- toYaml .Values.server.server.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
