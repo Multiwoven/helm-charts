@@ -186,7 +186,6 @@ spec:
           httpGet:
             path: /
             port: {{ (index .Values.server.ports 0).port }}
-          initialDelaySeconds: 15
           periodSeconds: 10
         name: {{ include "chart.fullname" . }}-server
         ports:
@@ -195,8 +194,13 @@ spec:
           httpGet:
             path: /
             port: {{ (index .Values.server.ports 0).port }}
-          initialDelaySeconds: 10
           periodSeconds: 10
+        startupProbe:
+          httpGet:
+            path: /
+            port: {{ (index .Values.server.ports 0).port }}
+          periodSeconds: 5
+          failureThreshold: 60
         resources: {{- toYaml .Values.server.server.resources | nindent 10 }}
         imagePullPolicy: Always
         volumeMounts:
