@@ -4,8 +4,8 @@ description: |
   Helm chart for deploying the AI Squared platform.
 # kubeVersion: ">=1.16.0"
 type: application
-version: 0.123.1
-appVersion: "0.123.1"
+version: 0.123.2
+appVersion: "0.123.2"
 home: https://squared.ai
 sources:
   - https://docs.squared.ai/open-source/guides/setup/helm
