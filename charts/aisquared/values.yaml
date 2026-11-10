@@ -190,6 +190,8 @@ sandboxConfig:
   agenticCodingGithubWebhookSecret: ""
   agenticCodingGithubBotEmail: "appbuilder-bot@example.com"
   agenticCodingGithubBotName: "AppBuilder Bot"
+  agenticCodingFigmaClientId: ""
+  agenticCodingFigmaClientSecret: ""
 
   # GitHub App private key: not stored here. Create a Kubernetes Secret
   # out-of-band with the PEM under key "private-key.pem", e.g.:
