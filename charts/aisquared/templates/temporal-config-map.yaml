@@ -31,6 +31,8 @@ data:
   TEMPORAL_DEFAULT_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalDbHost }}:5432"
   TEMPORAL_VISIBILITY_DB_NAME: {{ .Values.multipleDbHosts.temporalVisibilityDbName | quote }}
   TEMPORAL_VISIBILITY_CONNECT_ADDR: "{{ .Values.multipleDbHosts.temporalVisibilityDbHost }}:5432"
+  {{ else }}
+  DB_PORT: {{ .Values.platformConfig.temporalPostgresDefaultPort | quote }}
   {{ end }}
   # config_template.yaml is not envFrom-safe (its key contains a dot, so
   # Kubernetes silently skips it as an env var name -- harmlessly, since
