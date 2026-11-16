@@ -197,14 +197,6 @@ data:
   TEMPORAL_UI_VERSION: {{ .Values.platformConfig.temporalUiVersion | quote }}
   TEMPORAL_VERSION: {{ .Values.platformConfig.temporalVersion | quote }}
   TEMPORAL_WORKFLOW_THREAD_POOL_SIZE: {{ .Values.platformConfig.temporalWorkflowThreadPoolSize | quote }}
-  {{ if not .Values.secretsStore.appSecretEnabled }}
-  TEXTRACT_ACCESS_KEY_ID: {{ .Values.platformConfig.textractAccessKeyId | quote }}
-  {{ end }}
-  TEXTRACT_BUCKET_NAME: {{ .Values.platformConfig.textractBucketName | quote }}
-  TEXTRACT_REGION: {{ .Values.platformConfig.textractRegion | quote }}
-  {{ if not .Values.secretsStore.appSecretEnabled }}
-  TEXTRACT_SECRET_ACCESS_KEY: {{ .Values.platformConfig.textractSecretAccessKey | quote }}
-  {{ end }}
   TRACK: {{ .Values.platformConfig.track | quote }}
   UI_HOST: {{ .Values.platformConfig.uiHost | quote }}
   USER_EMAIL_VERIFICATION: {{ .Values.platformConfig.userEmailVerification | quote }}
