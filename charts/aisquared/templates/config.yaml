@@ -61,6 +61,7 @@ data:
   AWS_ACCESS_KEY_ID: {{ .Values.platformConfig.awsAccessKeyId | quote }}
   {{ end }}
   AWS_LAMBDA_API_URL: {{ .Values.platformConfig.awsLambdaApiUrl | quote }}
+  AWS_LAMBDA_FUNCTION_NAME: {{ .Values.platformConfig.awsLambdaFunctionName | quote }}
   AWS_REGION: {{ .Values.platformConfig.awsRegion | quote }}
   AWS_S3_BUCKET: {{ .Values.platformConfig.awsS3Bucket | quote }}
   {{ if not .Values.secretsStore.appSecretEnabled }}
